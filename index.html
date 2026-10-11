@@ -1,0 +1,2624 @@
+
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>MIND LAB — Архив расследований</title>
+<style>
+:root {
+  --bg:#090b10; --panel:#11151e; --panel2:#171d29;
+  --line:#293143; --text:#edf0f7; --muted:#8c97ad;
+  --red:#ff4d67; --cyan:#69e0dc; --gold:#f0c674;
+}
+* { box-sizing:border-box }
+body {
+  margin:0; min-height:100vh; background:
+    radial-gradient(ellipse at 50% -20%,#283149 0,transparent 55%),var(--bg);
+  color:var(--text); font:15px/1.6 system-ui,-apple-system,Segoe UI,sans-serif;
+}
+button { font:inherit; cursor:pointer }
+button:focus-visible { outline:2px solid var(--cyan); outline-offset:3px }
+button:disabled { opacity:.4; cursor:not-allowed }
+.topbar {
+  display:flex; justify-content:space-between; align-items:center;
+  gap:12px; padding:17px clamp(16px,4vw,52px);
+  border-bottom:1px solid var(--line); background:#090b10d9;
+  position:sticky; top:0; z-index:5; backdrop-filter:blur(12px);
+}
+.brand { font-weight:900; letter-spacing:.18em; font-size:16px }
+.brand span { color:var(--red) }
+.top-actions { display:flex; gap:8px; flex-wrap:wrap }
+.small-btn,.btn {
+  border:1px solid var(--line); background:var(--panel2); color:var(--text);
+  padding:9px 13px; border-radius:9px;
+}
+.small-btn:hover,.btn:hover { border-color:var(--cyan) }
+main { width:min(1120px,92%); margin:auto; padding:34px 0 70px }
+.eyebrow { color:var(--cyan); font-size:11px; font-weight:800; letter-spacing:.2em; text-transform:uppercase }
+h1 { font-size:clamp(30px,5vw,55px); line-height:1.08; letter-spacing:-.04em; margin:10px 0 15px }
+h2 { font-size:clamp(23px,3vw,32px); line-height:1.2; margin:8px 0 14px }
+h3 { margin:0 0 7px; font-size:17px }
+p { margin:8px 0 15px }
+.muted { color:var(--muted) }
+.hero {
+  min-height:300px; border:1px solid var(--line); border-radius:20px;
+  padding:clamp(23px,5vw,55px); position:relative; overflow:hidden;
+  display:flex; align-items:center;
+  background:linear-gradient(90deg,#0b0e16 0%,#0b0e16ed 44%,#0b0e1640 100%),
+  url('https://images.unsplash.com/photo-1519608487953-e999c86e7455?auto=format&fit=crop&w=1600&q=85') center/cover;
+}
+.hero-copy { max-width:640px; position:relative }
+.hero .muted { max-width:540px }
+.btn-primary { background:var(--red); color:white; border-color:var(--red); font-weight:800 }
+.btn-primary:hover { background:#ff6b80; border-color:#ff6b80 }
+.btn-cyan { border-color:#397b7a; color:var(--cyan) }
+.section-head { display:flex; justify-content:space-between; align-items:end; gap:12px; margin:34px 0 17px }
+.case-grid { display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:16px }
+.case-card {
+  border:1px solid var(--line); border-radius:16px; overflow:hidden;
+  background:var(--panel); transition:transform .2s,border-color .2s;
+}
+.case-card:hover { transform:translateY(-4px); border-color:#68758d }
+.cover {
+  height:155px; padding:15px; display:flex; align-items:flex-end;
+  background-position:center; background-size:cover; position:relative;
+}
+.cover:after { content:""; position:absolute; inset:0; background:linear-gradient(transparent,#090b10e8) }
+.cover-label { position:relative; z-index:1; font-size:11px; letter-spacing:.16em; font-weight:900 }
+.cover-one { background-image:linear-gradient(120deg,#25394b77,#090b1088),url('https://images.unsplash.com/photo-1519608487953-e999c86e7455?auto=format&fit=crop&w=900&q=80') }
+.cover-two { background-image:linear-gradient(120deg,#52392a55,#090b10a8),url('https://images.unsplash.com/photo-1511818966892-d7d671e672a2?auto=format&fit=crop&w=900&q=80') }
+.cover-three { background-image:linear-gradient(120deg,#193f4f55,#090b10a8),url('https://images.unsplash.com/photo-1518770660439-4636190af475?auto=format&fit=crop&w=900&q=80') }
+.card-body { padding:18px }
+.card-body p { color:var(--muted); font-size:13px; min-height:63px }
+.meta { display:flex; gap:7px; flex-wrap:wrap; margin:12px 0 }
+.tag { border:1px solid var(--line); border-radius:5px; padding:3px 7px; font-size:11px; color:var(--muted) }
+.card-foot { display:flex; justify-content:space-between; align-items:center; gap:8px; margin-top:14px }
+.progress { height:4px; background:#252c3a; border-radius:4px; overflow:hidden; margin-top:12px }
+.progress > div { height:100%; background:var(--cyan); transition:width .3s }
+.stats { display:grid; grid-template-columns:repeat(3,1fr); gap:12px; margin-top:18px }
+.stat { background:var(--panel); border:1px solid var(--line); padding:16px; border-radius:12px }
+.stat strong { display:block; font-size:25px }
+.stat span { color:var(--muted); font-size:12px }
+.panel { background:var(--panel); border:1px solid var(--line); border-radius:15px; padding:clamp(17px,3vw,27px) }
+.game-layout { display:grid; grid-template-columns:minmax(0,1.55fr) minmax(255px,.8fr); gap:18px; align-items:start }
+.story-top { display:flex; justify-content:space-between; gap:10px; flex-wrap:wrap; margin-bottom:18px }
+.chapter-label { color:var(--gold); font-size:11px; letter-spacing:.15em; font-weight:800 }
+.story-text { font-size:16px; line-height:1.85; white-space:pre-line }
+.divider { height:1px; background:var(--line); margin:20px 0 }
+.clue-list,.suspect-list,.choice-list { display:grid; gap:9px }
+.clue,.suspect,.choice {
+  width:100%; text-align:left; color:var(--text); background:var(--panel2);
+  border:1px solid var(--line); border-radius:10px; padding:12px 14px;
+}
+.clue:hover,.suspect:hover,.choice:hover { border-color:var(--cyan) }
+.clue.found { border-color:#397b7a; background:#142526 }
+.clue small,.suspect small { display:block; color:var(--muted); margin-top:3px; font-size:12px }
+.clue small { display:none }
+.clue.found small { display:block }
+.choice { padding:15px; line-height:1.5 }
+.choice strong { display:block; margin-bottom:4px }
+.choice span { color:var(--muted); font-size:13px }
+.badge { display:inline-block; color:var(--cyan); font-size:11px; letter-spacing:.1em; font-weight:800 }
+.notice { padding:13px 15px; background:#1c202b; border-left:3px solid var(--gold); border-radius:5px; color:#d8dbea; margin:16px 0 }
+.footer-actions { display:flex; gap:9px; flex-wrap:wrap; margin-top:22px }
+.ending { text-align:center; padding:clamp(24px,6vw,60px) 10px }
+.ending-mark { font-size:48px; color:var(--gold) }
+.ending p { max-width:680px; margin:14px auto; color:#c3cada; line-height:1.85 }
+.hidden { display:none!important }
+.toast { position:fixed; bottom:20px; left:50%; transform:translateX(-50%);
+  background:#202838; border:1px solid var(--line); border-radius:10px;
+  padding:10px 15px; z-index:10; box-shadow:0 8px 35px #0008 }
+footer { text-align:center; color:#626d82; font-size:12px; padding:22px }
+@keyframes rise { from { opacity:0; transform:translateY(9px) } to { opacity:1; transform:translateY(0) } }
+.animate { animation:rise .3s ease both }
+@media(max-width:800px) {
+  .case-grid { grid-template-columns:1fr 1fr }
+  .game-layout { grid-template-columns:1fr }
+  .hero { min-height:280px }
+}
+@media(max-width:540px) {
+  main { width:92%; padding-top:22px }
+  .case-grid { grid-template-columns:1fr }
+  .cover { height:145px }
+  .card-body p { min-height:0 }
+  .topbar { padding:12px 4%; align-items:flex-start }
+  .brand { padding-top:6px }
+  .small-btn { padding:7px 9px; font-size:12px }
+  .stats { gap:7px }
+  .stat { padding:11px }
+  .stat strong { font-size:21px }
+  .story-text { font-size:15px }
+}
+@media(prefers-reduced-motion:reduce) {
+  *,*::before,*::after { animation:none!important; transition:none!important; scroll-behavior:auto!important }
+}
+
+
+.clue.pickable {
+  display: block;
+  text-align: left;
+  width: 100%;
+}
+.clue.pickable.selected {
+  border-color: var(--gold);
+  background: #302819;
+  box-shadow: 0 0 0 1px #f0c67433;
+}
+.deduction-good {
+  border-left: 3px solid var(--cyan);
+}
+.deduction-bad {
+  border-left: 3px solid var(--red);
+}
+.deduction-neutral {
+  border-left: 3px solid var(--gold);
+}
+
+/* MIND LAB — визуальная доска расследования */
+
+.investigation-board {
+  margin-top: 22px;
+  overflow: hidden;
+  background:
+    radial-gradient(ellipse at 50% 0%, #24313b 0%, transparent 65%),
+    var(--panel);
+}
+
+.board-heading {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 16px;
+  flex-wrap: wrap;
+}
+
+.board-heading h2 {
+  margin: 7px 0;
+  font-size: clamp(22px, 3vw, 30px);
+  letter-spacing: -0.7px;
+}
+
+.board-heading p {
+  max-width: 560px;
+  line-height: 1.6;
+  margin-bottom: 0;
+}
+
+.board-counter {
+  color: var(--cyan);
+  border: 1px solid #71dce333;
+  background: #71dce30a;
+  border-radius: 7px;
+  padding: 10px 12px;
+  font: 11px monospace;
+  letter-spacing: 1px;
+  white-space: nowrap;
+}
+
+.board-legend {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px 20px;
+  margin: 22px 0 14px;
+  color: var(--muted);
+  font-size: 11px;
+}
+
+.board-legend span {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+}
+
+.legend-dot {
+  display: inline-block;
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+}
+
+.found-dot { background: var(--cyan); }
+.linked-dot { background: var(--gold); }
+.locked-dot { background: #64717c; }
+
+.visual-board {
+  position: relative;
+  min-height: 260px;
+  padding: 20px;
+  overflow: hidden;
+  border: 1px solid #9eb0bc20;
+  border-radius: 12px;
+  background-color: #10161b;
+  background-image:
+    linear-gradient(#a8c1d00b 1px, transparent 1px),
+    linear-gradient(90deg, #a8c1d00b 1px, transparent 1px);
+  background-size: 24px 24px;
+}
+
+.board-nodes {
+  position: relative;
+  z-index: 2;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(170px, 1fr));
+  gap: 16px;
+}
+
+.board-connections {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 1;
+  pointer-events: none;
+  overflow: visible;
+}
+
+.board-line {
+  fill: none;
+  stroke: var(--gold);
+  stroke-width: 2;
+  stroke-dasharray: 5 5;
+  opacity: 0.85;
+  filter: drop-shadow(0 0 4px #f0c67455);
+}
+
+.board-node {
+  position: relative;
+  min-width: 0;
+  min-height: 108px;
+  padding: 14px;
+  text-align: left;
+  color: var(--text);
+  background: linear-gradient(145deg, #202a32, #171e24);
+  border: 1px solid #8ca0ad35;
+  border-radius: 9px;
+  cursor: pointer;
+  transition: border-color .2s, transform .2s, background .2s;
+}
+
+.board-node:hover {
+  border-color: var(--cyan);
+  transform: translateY(-2px);
+}
+
+.board-node.is-selected {
+  border-color: var(--gold);
+  background: #302819;
+  box-shadow: 0 0 0 1px #f0c67422;
+}
+
+.board-node.is-linked {
+  border-color: #71dce366;
+}
+
+.board-node-number {
+  display: block;
+  color: var(--muted);
+  font: 10px monospace;
+  letter-spacing: 1px;
+  margin-bottom: 12px;
+}
+
+.board-node-title {
+  display: block;
+  font-size: 13px;
+  line-height: 1.45;
+  font-weight: 650;
+  overflow-wrap: anywhere;
+}
+
+.board-node-status {
+  display: block;
+  margin-top: 10px;
+  color: var(--cyan);
+  font: 10px monospace;
+  letter-spacing: .5px;
+}
+
+.board-node.is-selected .board-node-status {
+  color: var(--gold);
+}
+
+.board-empty {
+  position: relative;
+  z-index: 2;
+  min-height: 220px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  gap: 8px;
+  color: var(--muted);
+}
+
+.board-empty strong {
+  color: var(--text);
+  font-size: 14px;
+}
+
+.board-empty p {
+  max-width: 300px;
+  margin: 0;
+  font-size: 12px;
+  line-height: 1.6;
+}
+
+.board-empty-icon {
+  font-size: 34px;
+  color: var(--cyan);
+  opacity: .75;
+}
+
+.board-footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 18px;
+  flex-wrap: wrap;
+  padding-top: 20px;
+}
+
+.board-footer #boardInsight {
+  margin-top: 8px;
+  font-size: 13px;
+  line-height: 1.65;
+  max-width: 650px;
+}
+
+.board-progress {
+  color: var(--gold);
+  font: 11px monospace;
+  white-space: nowrap;
+  padding-top: 4px;
+}
+
+@media (max-width: 600px) {
+  .visual-board {
+    padding: 12px;
+  }
+
+  .board-nodes {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 10px;
+  }
+
+  .board-node {
+    padding: 11px;
+    min-height: 110px;
+  }
+
+  .board-node-title {
+    font-size: 12px;
+  }
+
+  .board-legend {
+    gap: 10px;
+  }
+}
+
+@media (max-width: 360px) {
+  .board-nodes {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* MIND LAB — система гипотез */
+
+.hypothesis-panel {
+  margin-top: 24px;
+  padding-top: 24px;
+  border-top: 1px solid var(--line);
+}
+
+.hypothesis-panel h3 {
+  margin: 8px 0;
+  font-size: 21px;
+}
+
+.hypothesis-panel > p {
+  max-width: 650px;
+  font-size: 13px;
+  line-height: 1.65;
+}
+
+.hypothesis-list {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 12px;
+  margin-top: 20px;
+}
+
+.hypothesis-card {
+  position: relative;
+  padding: 16px;
+  text-align: left;
+  color: var(--text);
+  background: #151d23;
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  cursor: pointer;
+  transition: .2s ease;
+}
+
+.hypothesis-card:hover {
+  border-color: var(--cyan);
+  transform: translateY(-2px);
+}
+
+.hypothesis-card.selected {
+  border-color: var(--gold);
+  background: #2b251b;
+}
+
+.hypothesis-card.locked {
+  opacity: .55;
+  cursor: not-allowed;
+}
+
+.hypothesis-card strong {
+  display: block;
+  margin-bottom: 8px;
+  font-size: 14px;
+  line-height: 1.5;
+}
+
+.hypothesis-card span {
+  display: block;
+  color: var(--muted);
+  font-size: 12px;
+  line-height: 1.6;
+}
+
+.hypothesis-feedback {
+  margin-top: 14px;
+  padding: 14px 16px;
+  border-left: 3px solid var(--gold);
+  background: #ffffff05;
+  color: var(--text);
+  font-size: 13px;
+  line-height: 1.7;
+  white-space: pre-line;
+}
+
+.hypothesis-feedback:empty {
+  display: none;
+}
+
+.hypothesis-feedback.feedback-good {
+  border-color: var(--cyan);
+}
+
+.hypothesis-feedback.feedback-bad {
+  border-color: var(--red);
+}
+
+.twist-scene {
+  margin-top: 20px;
+  padding: 20px;
+  border: 1px solid #e6b65c66;
+  border-radius: 10px;
+  background:
+    radial-gradient(ellipse at top right, #8d5a2022, transparent 65%),
+    #171a1d;
+  animation: twistReveal .45s ease-out;
+}
+
+.twist-scene h3 {
+  margin: 10px 0;
+  font-size: 20px;
+}
+
+.twist-scene p {
+  font-size: 13px;
+  line-height: 1.8;
+}
+
+.twist-choices {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(190px, 1fr));
+  gap: 10px;
+  margin-top: 18px;
+}
+
+.twist-choices button {
+  padding: 13px;
+  border-radius: 8px;
+  border: 1px solid var(--line);
+  color: var(--text);
+  background: #ffffff08;
+  cursor: pointer;
+  text-align: left;
+  line-height: 1.5;
+}
+
+.twist-choices button:hover {
+  border-color: var(--gold);
+  background: #f0c67412;
+}
+
+.twist-outcome {
+  margin-top: 16px;
+  padding: 14px;
+  border-left: 3px solid var(--gold);
+  background: #ffffff06;
+  font-size: 13px;
+  line-height: 1.8;
+  white-space: pre-line;
+}
+
+@keyframes twistReveal {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+
+/* MIND LAB — новая широкая компоновка */
+.game-layout.investigation-layout {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 320px;
+  align-items: stretch;
+  gap: 20px;
+  width: 100%;
+}
+
+.investigation-main {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  min-width: 0;
+  min-height: 100%;
+}
+
+.investigation-main > .story-panel {
+  flex: 0 0 auto;
+  width: 100%;
+  margin: 0;
+}
+
+.investigation-main > .investigation-board {
+  flex: 1 1 auto;
+  width: 100%;
+  min-width: 0;
+  min-height: 600px;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+}
+
+.investigation-sidebar {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  min-width: 0;
+  width: 100%;
+}
+
+.investigation-sidebar > .sidebar-section {
+  width: 100%;
+  margin: 0;
+}
+
+.investigation-board .visual-board {
+  flex: 1 1 auto;
+  min-height: 440px;
+  width: 100%;
+  position: relative;
+}
+
+.investigation-board .board-nodes {
+  width: 100%;
+  min-height: 440px;
+}
+
+.investigation-board .board-heading {
+  width: 100%;
+}
+
+.investigation-board .board-insight,
+.investigation-board .board-progress {
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.investigation-sidebar .clue-list,
+.investigation-sidebar .suspect-list {
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.investigation-sidebar .clue,
+.investigation-sidebar .suspect {
+  width: 100%;
+  box-sizing: border-box;
+  overflow-wrap: anywhere;
+}
+
+@media (max-width: 900px) {
+  .game-layout.investigation-layout {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .investigation-main > .investigation-board {
+    min-height: 480px;
+  }
+
+  .investigation-board .visual-board,
+  .investigation-board .board-nodes {
+    min-height: 360px;
+  }
+
+  .investigation-sidebar {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    align-items: start;
+  }
+}
+
+@media (max-width: 560px) {
+  .investigation-sidebar {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
+
+
+/* Фотокарточки улик на доске */
+#visualBoard {
+  position: relative;
+  overflow: hidden;
+}
+
+#boardConnections {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  z-index: 1;
+  overflow: visible;
+}
+
+#boardNodes {
+  position: relative;
+  z-index: 2;
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  align-content: start;
+  align-items: start;
+  gap: 16px;
+  padding: 16px;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.board-node {
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  gap: 8px;
+  width: 100%;
+  min-width: 0;
+  padding: 10px;
+  text-align: left;
+  color: var(--text);
+  background: var(--panel2);
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  cursor: pointer;
+  transition: border-color .2s, transform .2s, box-shadow .2s;
+  overflow: hidden;
+}
+
+.board-node:hover {
+  transform: translateY(-3px);
+  border-color: var(--cyan);
+}
+
+.board-node.is-selected {
+  border: 2px solid var(--cyan);
+  box-shadow: 0 0 18px rgba(80, 210, 235, .18);
+}
+
+.board-node.is-linked {
+  border-color: var(--red);
+}
+
+.board-node-number {
+  font-size: 10px;
+  letter-spacing: 1.4px;
+  color: var(--muted);
+}
+
+.board-node-image {
+  display: block;
+  width: 100%;
+  height: 145px;
+  object-fit: cover;
+  border-radius: 7px;
+  background: var(--bg);
+}
+
+.board-node-title {
+  font-size: 14px;
+  font-weight: 700;
+  line-height: 1.4;
+}
+
+.board-node-description {
+  font-size: 12px;
+  line-height: 1.5;
+  color: var(--muted);
+}
+
+.board-node-status {
+  padding-top: 6px;
+  border-top: 1px solid var(--line);
+  font-size: 10px;
+  letter-spacing: .6px;
+  color: var(--cyan);
+}
+
+.board-line {
+  fill: none;
+  stroke: var(--red);
+  stroke-width: 2.5;
+  stroke-linecap: round;
+  opacity: .9;
+  filter: drop-shadow(0 0 4px rgba(255, 70, 90, .25));
+}
+
+.board-node-placeholder {
+  display: grid;
+  place-items: center;
+  height: 100px;
+  color: var(--gold);
+  font-size: 32px;
+  background: var(--bg);
+  border-radius: 7px;
+}
+
+@media (max-width: 560px) {
+  #boardNodes {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .board-node-image {
+    height: 180px;
+  }
+}
+
+
+/* MIND LAB — просмотр улики */
+
+.evidence-viewer {
+  position: fixed;
+  inset: 0;
+  z-index: 9999;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 24px;
+  box-sizing: border-box;
+}
+
+.evidence-viewer.hidden {
+  display: none;
+}
+
+.evidence-viewer-backdrop {
+  position: absolute;
+  inset: 0;
+  background: rgba(3, 7, 14, 0.88);
+  backdrop-filter: blur(10px);
+  animation: viewerFadeIn 0.2s ease;
+}
+
+.evidence-viewer-card {
+  position: relative;
+  z-index: 1;
+  width: min(760px, 100%);
+  max-height: 90vh;
+  overflow-y: auto;
+  padding: 24px;
+  color: var(--text);
+  background: var(--panel2);
+  border: 1px solid var(--line);
+  border-radius: 18px;
+  box-shadow: 0 0 60px rgba(0, 0, 0, 0.55);
+  animation: viewerAppear 0.25s ease;
+}
+
+.evidence-viewer-close {
+  position: absolute;
+  top: 12px;
+  right: 14px;
+  z-index: 2;
+  width: 38px;
+  height: 38px;
+  border: 1px solid var(--line);
+  border-radius: 50%;
+  background: var(--bg);
+  color: var(--text);
+  font-size: 26px;
+  cursor: pointer;
+}
+
+.evidence-viewer-image {
+  display: block;
+  width: 100%;
+  max-height: 55vh;
+  margin-top: 18px;
+  object-fit: contain;
+  border-radius: 10px;
+  background: var(--bg);
+}
+
+.evidence-viewer-card h2 {
+  margin: 18px 0 8px;
+}
+
+.evidence-viewer-card p {
+  color: var(--muted);
+  line-height: 1.7;
+  white-space: pre-line;
+}
+
+.evidence-viewer-hint {
+  margin-top: 20px;
+  color: var(--muted);
+  font-size: 11px;
+  letter-spacing: 1px;
+}
+
+@keyframes viewerFadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes viewerAppear {
+  from {
+    opacity: 0;
+    transform: translateY(12px) scale(0.98);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+@media (max-width: 560px) {
+  .evidence-viewer {
+    padding: 10px;
+  }
+
+  .evidence-viewer-card {
+    padding: 18px;
+    max-height: 94vh;
+  }
+
+  .evidence-viewer-image {
+    max-height: 45vh;
+  }
+}
+/* MIND LAB — модальное окно допроса */
+
+.suspect-viewer {
+  position: fixed;
+  inset: 0;
+  z-index: 10000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+  box-sizing: border-box;
+}
+
+.suspect-viewer.hidden {
+  display: none;
+}
+
+.suspect-viewer-backdrop {
+  position: absolute;
+  inset: 0;
+  background: rgba(3, 6, 13, 0.88);
+  backdrop-filter: blur(9px);
+  animation: viewerFadeIn 0.2s ease;
+}
+
+.suspect-viewer-card {
+  position: relative;
+  z-index: 1;
+  width: min(680px, 100%);
+  max-height: 90vh;
+  overflow-y: auto;
+  padding: 28px;
+  box-sizing: border-box;
+  color: var(--text);
+  background: var(--panel2);
+  border: 1px solid var(--line);
+  border-radius: 18px;
+  box-shadow: 0 20px 80px rgba(0, 0, 0, 0.55);
+  animation: viewerAppear 0.25s ease;
+}
+
+.suspect-viewer-close {
+  position: absolute;
+  top: 12px;
+  right: 14px;
+  z-index: 2;
+  width: 38px;
+  height: 38px;
+  border: 1px solid var(--line);
+  border-radius: 50%;
+  background: var(--bg);
+  color: var(--text);
+  font-size: 26px;
+  cursor: pointer;
+}
+
+.suspect-viewer-card h3 {
+  padding-right: 38px;
+  margin-top: 12px;
+}
+
+.suspect-viewer-card .interrogation-questions {
+  display: grid;
+  gap: 10px;
+  margin-top: 20px;
+}
+
+.suspect-viewer-card .interrogation-question {
+  width: 100%;
+  text-align: left;
+  white-space: normal;
+}
+
+.suspect-viewer-card .interrogation-question:disabled {
+  opacity: 0.45;
+  cursor: not-allowed;
+}
+
+.suspect-viewer-card #interrogationAnswer {
+  margin-top: 18px;
+  padding: 16px;
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  line-height: 1.7;
+  white-space: pre-line;
+}
+
+@media (max-width: 560px) {
+  .suspect-viewer {
+    padding: 10px;
+  }
+
+  .suspect-viewer-card {
+    max-height: 94vh;
+    padding: 20px;
+  }
+}
+
+
+.suspect-viewer-card .interrogation-question.question-asked {
+  opacity: 0.45;
+  border-color: var(--line);
+  cursor: default;
+}
+
+</style>
+</head>
+<body>
+<header class="topbar">
+  <div class="brand">MIND <span>LAB</span></div>
+  <div class="top-actions">
+    <button class="small-btn" id="soundBtn" type="button">♫ Звук: выкл.</button>
+    <button class="small-btn" id="resetBtn" type="button">Сбросить прогресс</button>
+  </div>
+</header>
+
+<main>
+  <section id="catalog">
+    <div class="hero">
+      <div class="hero-copy">
+        <div class="eyebrow">Архив закрытых дел / 001—003</div>
+        <h1>Правда редко<br>лежит на поверхности.</h1>
+        <p class="muted">Три расследования. Десятки деталей. Люди, которые лгут — иногда даже сами себе. Собирай улики, проверяй версии и решай, кому верить.</p>
+        <button class="btn btn-primary" id="startBtn" type="button">Открыть архив →</button>
+      </div>
+    </div>
+
+    <div class="section-head">
+      <div><div class="eyebrow">Выбери расследование</div><h2>Архив дел</h2></div>
+      <span class="muted" id="archiveCount">0 / 3 завершено</span>
+    </div>
+    <div class="case-grid" id="caseGrid"></div>
+    <div class="stats">
+      <div class="stat"><strong id="statSolved">0</strong><span>Дел завершено</span></div>
+      <div class="stat"><strong id="statClues">0</strong><span>Улик найдено</span></div>
+      <div class="stat"><strong id="statScore">0</strong><span>Очки расследователя</span></div>
+    </div>
+  </section>
+
+  <section id="game" class="hidden">
+    <div class="story-top">
+      <button class="small-btn" id="backBtn" type="button">← К архиву</button>
+      <span class="chapter-label" id="caseNumber">ДЕЛО 001</span>
+    </div>
+
+<div class="game-layout investigation-layout">
+
+  <main class="investigation-main">
+
+    <article class="panel story-panel animate" id="storyPanel">
+      <div class="eyebrow" id="storyEyebrow">Досье</div>
+      <h2 id="storyTitle"></h2>
+      <div class="story-text" id="storyText"></div>
+      <div id="noticeArea"></div>
+      <div class="divider"></div>
+      <div id="storyContent"></div>
+    </article>
+
+    <section class="panel investigation-board" id="visualBoardPanel">
+      <div class="board-heading">
+        <div>
+          <div class="eyebrow">MIND LAB / ANALYSIS</div>
+          <h3>Доска расследования</h3>
+          <p class="muted">Соединяй факты. Ищи то, что не сходится.</p>
+        </div>
+        <div class="board-counter" id="boardCounter">0 улик</div>
+      </div>
+
+      <div class="visual-board" id="visualBoard">
+        <svg class="board-connections" id="boardConnections"></svg>
+        <div class="board-empty" id="boardEmpty">
+          <div class="board-empty-icon">⌕</div>
+          <h3>Расследование начинается</h3>
+          <p>Изучай материалы дела — найденные улики появятся здесь.</p>
+        </div>
+        <div class="board-nodes" id="boardNodes"></div>
+      </div>
+
+      <div class="board-insight" id="boardInsight">
+        <span class="insight-icon">◆</span>
+        <span>Каждая деталь может изменить ход расследования.</span>
+      </div>
+
+      <div class="board-progress">
+        <span class="muted">Собранные улики</span>
+        <strong id="boardProgress">0%</strong>
+      </div>
+    </section>
+
+  </main>
+
+  <aside class="investigation-sidebar">
+
+    <section class="panel sidebar-section">
+      <div class="eyebrow">CASE FILE / 01</div>
+      <h3>Материалы дела</h3>
+      <p class="muted">Изучи каждую деталь. Важное может скрываться на виду.</p>
+      <div class="clue-list" id="clueList"></div>
+    </section>
+
+    <section class="panel sidebar-section">
+      <div class="eyebrow">DEDUCTION</div>
+      <h3>Проверка связей</h3>
+      <p class="muted">Выбери две найденные улики и проверь свою версию.</p>
+      <div class="clue-list" id="deductionList"></div>
+      <div id="deductionResult" class="notice hidden" aria-live="polite"></div>
+    </section>
+
+    <section class="panel sidebar-section">
+      <div class="eyebrow">PERSONS OF INTEREST</div>
+      <h3>Подозреваемые</h3>
+      <div class="suspect-list" id="suspectList"></div>
+    </section>
+
+    <section class="panel sidebar-section">
+      <div class="eyebrow">CASE STATUS</div>
+      <div class="progress-heading">
+        <span class="muted">Прогресс дела</span>
+        <strong id="progressText">0%</strong>
+      </div>
+      <div class="progress">
+        <div id="progressBar" style="width:0%"></div>
+      </div>
+      <p class="muted progress-note">Прогресс сохраняется в этом браузере.</p>
+    </section>
+
+  </aside>
+</div>
+<section class="panel hypothesis-panel"> <div class="eyebrow">CASE THEORY / 01</div> <h3>Во что ты веришь?</h3> <p class="muted"> Выбери версию событий. По мере появления доказательств ты сможешь подтвердить её или полностью пересмотреть дело. </p> <div class="hypothesis-list" id="hypothesisList"></div> <div id="hypothesisFeedback" class="hypothesis-feedback" aria-live="polite"> Пока нет выбранной версии. </div> </section>
+
+  <div id="toast" class="toast hidden" role="status"></div>
+
+<div id="evidenceViewer" class="evidence-viewer hidden" role="dialog" aria-modal="true" aria-labelledby="viewerTitle">
+  <div class="evidence-viewer-backdrop" data-close-viewer></div>
+
+  <div class="evidence-viewer-card">
+    <button type="button" class="evidence-viewer-close" data-close-viewer aria-label="Закрыть">×</button>
+    <div class="eyebrow">MIND LAB / EVIDENCE ARCHIVE</div>
+    <img id="viewerImage" class="evidence-viewer-image" src="" alt="">
+    <h2 id="viewerTitle"></h2>
+    <p id="viewerDescription"></p>
+    <div class="evidence-viewer-hint">ESC — закрыть досье</div>
+  </div>
+</div>
+<div id="suspectViewer" 
+class="suspect-viewer hidden"
+     role="dialog" aria-modal="true" aria-label="Допрос подозреваемого">
+
+  <div class="suspect-viewer-backdrop" data-close-suspect></div>
+
+  <div class="suspect-viewer-card">
+    <button type="button"
+        class="suspect-viewer-close"
+        data-close-suspect
+        aria-label="Закрыть"
+        >×</button>
+
+    <div id="suspectViewerContent"></div>
+  </div>
+</div>
+
+</div>
+</main>
+<footer>MIND LAB · Архив психологических расследований</footer>
+
+<script>
+"use strict";
+
+const CASES = [
+{
+ id:"session", number:"001", title:"Последний сеанс", genre:"ПСИХОЛОГИЧЕСКИЙ ТРИЛЛЕР",
+ difficulty:"Сложность: высокая", time:"15–20 мин",
+ short:"Пациент исчез из закрытой клиники. Последняя запись его психотерапевта обрывается на одной фразе.",
+ cover:"cover-one",
+ intro:"22:14. Частная клиника «Белый шум». Пациент Марк Ветров исчез из запертой комнаты для сеансов. Окно закрыто изнутри, коридор снимала камера, а дверь открывали только ключом врача. На столе остались диктофон и чашка с ещё тёплым чаем.\n\nТебя пригласили как независимого консультанта. До утра клиника собирается объявить, что пациент сбежал. Но кто-то удалил последние одиннадцать минут записи.",
+ chapters:[
+  {title:"Комната без выхода",text:"В кабинете тихо гудит вентиляция. На стене — часы, остановившиеся на 21:40. Доктор Левин утверждает, что закончил сеанс в девять вечера и после этого Марка не видел.\n\nМедсестра Нина говорит, что слышала спор уже после десяти. Дежурный техник настаивает: система видеонаблюдения не прерывалась ни на секунду.",clues:["clock","cup","log"],next:"Кто-то хочет, чтобы ты поверил в идеальную комнату. Но идеальных комнат не бывает."},
+  {title:"Голос на плёнке",text:"На диктофоне обнаружилась резервная дорожка. Она начинается с шороха, затем слышен голос Марка: «Вы обещали, что больше не будете использовать моё настоящее имя».\n\nДоктор Левин говорит, что это вырвано из контекста. Нина бледнеет, когда слышит запись. Техник утверждает, что файл мог быть подменён.",clues:["tape","keycard","note"],next:"Запись — не просто доказательство. Это предупреждение, адресованное конкретному человеку."},
+  {title:"Имя в журнале",text:"Журнал доступа противоречит словам доктора: его карта открывала кабинет в 21:52. При этом он утверждает, что уже был дома.\n\nВ медицинской карте Марка есть другое имя — Алексей Орлов. Пять лет назад в клинике произошёл инцидент, который официально назвали несчастным случаем. В архиве по нему нет ни одного документа.",clues:["archive","message"],next:"У тебя достаточно деталей, чтобы выбрать версию. Но улик достаточно не для любой версии."}
+ ],
+ suspects:[
+  {id:"levin",name:"Доктор Левин",role:"Лечащий врач",desc:"Уверен, что пациент сбежал. Отрицает поздний визит.",tell:"Он скрыл посещение кабинета. Это подтверждено журналом доступа, но само по себе ещё не доказывает, что он причинил Марку вред."},
+  {id:"nina",name:"Нина Соколова",role:"Дежурная медсестра",desc:"Слышала спор после десяти вечера.",tell:"Она знала о конфликте и умолчала о времени разговора. Но её слова согласуются с записью."},
+  {id:"tech",name:"Илья Громов",role:"Техник клиники",desc:"Обслуживает камеры и систему доступа.",tell:"У него был технический доступ к архиву. Однако журнал резервного копирования показывает, что запись исчезла ещё до его ночной смены."}
+ ],
+ evidence: [
+  ["clock", "Остановившиеся часы", "Часы остановились на 21:40, но секундная стрелка застряла между делениями. Похоже, механизм повредили намеренно."],
+  ["cup", "Чашка чая", "Чай ещё тёплый, хотя доктор говорит, что кабинет пустует с девяти. На ободке нет отпечатков, зато чашку вымыли не до конца."],
+  ["log", "Журнал доступа", "Карта доктора открыла кабинет в 21:52. В официальном отчёте этого события нет."],
+  ["tape", "Резервная запись", "Голос Марка произносит: «Вы обещали не использовать моё настоящее имя». Файл обрывается после трёх коротких ударов."],
+  ["keycard", "Карта посетителя", "В 22:03 дверь открывали аварийным ключом. Доступ зарегистрирован как техническое обслуживание."],
+  ["note", "Записка в обложке", "На листке написано: «Не тот, кто запер дверь. Тот, кто решил, что выхода нет»."],
+  ["archive", "Пустая папка архива", "Дело пятилетней давности удалено из общего каталога, но его номер сохранился в журнале резервного копирования."],
+  ["message", "Удалённое сообщение", "Черновик сообщения Марка: «Если он снова назовёт меня прежним именем, я расскажу, что произошло тогда»."],
+  ["protocol", "Исправленный протокол", "В копии протокола указано время встречи, которое не совпадает с официальным отчётом."],
+  ["metadata", "Метаданные записи", "Время изменения файла отличается от времени, указанного в официальном журнале."]
+],
+ finalQuestion:"Кто несёт главную ответственность за исчезновение Марка?",
+ choices:[
+  {id:"levin",label:"Обвинить доктора Левина",desc:"Поздний визит, ложь о времени и удалённые документы указывают на него.",score:100,ending:"truth",result:"Верная версия — но не вся правда."},
+  {id:"nina",label:"Обвинить Нину Соколову",desc:"Она слышала спор и скрыла часть событий.",score:20,ending:"partial",result:"Ты нашёл свидетеля, но перепутал молчание с причиной."},
+  {id:"tech",label:"Обвинить техника",desc:"У него был доступ к камерам и архивам.",score:10,ending:"wrong",result:"Технический доступ оказался удобной приманкой."}
+ ],
+ endings:{
+  truth:{title:"Дело раскрыто: чужое имя",text:"Левин не просто нарушил протокол. Пять лет назад он изменил документы после инцидента с пациентом Алексеем Орловым. Марк вернулся под новым именем, чтобы получить признание. В тот вечер он сам покинул клинику через служебный проход, открытый аварийным ключом. Левин солгал, потому что хотел скрыть их последнюю встречу и уничтожить следы старого дела.\n\nТы установил, кто лгал и почему исчезновение было инсценировано. Но Марка пока не нашли. Последнее сообщение указывает на вокзал в соседнем городе.",rank:"АНАЛИТИК I КЛАССА"},
+  partial:{title:"Неверный вывод",text:"Нина действительно скрыла часть вечера, но не организовывала исчезновение. Она боялась потерять работу и поэтому не сообщила о споре. Настоящий мотив остался в старом архиве. Дело закрыли с неверным обвинением.",rank:"ПРЕЖДЕВРЕМЕННЫЙ ВЫВОД"},
+  wrong:{title:"Ложный след",text:"У техника был доступ к системе, но журнал резервных копий не подтверждает его участие. Ты выбрал самый заметный след и пропустил мотив. В отчёте остаётся слишком много противоречий.",rank:"ДЕЛО НЕ РАСКРЫТО"}
+ }
+},
+{
+ id:"room",number:"002",title:"Запертая комната",genre:"КЛАССИЧЕСКИЙ ДЕТЕКТИВ",
+difficulty:"Сложность: средняя",time:"10–15 мин",short:"Коллекционер найден мёртвым в кабинете, запертом изнутри. Все трое гостей утверждают, что не входили туда после ужина.",cover:"cover-two",
+intro:"Поместье «Северный мыс». Во время бури коллекционер Павел Арден найден в своём кабинете. Дверь заперта изнутри, окна заколочены на зиму. На ковре — разбитый бокал, на камине — нетронутая пыль.\n\nВ доме три человека: наследница, секретарь и садовник. Каждый слышал удар часов в десять. Но часы остановились на девять семнадцать.",
+chapters:[
+{title:"Кабинет",text:"Осмотр комнаты показывает, что ничего не похищено. Дорогие часы лежат на месте, а сейф закрыт. Врач предполагает, что смерть наступила около десяти, но точного времени пока нет.\n\nНаследница утверждает, что весь вечер играла на пианино. Секретарь говорит, что разбирал письма. Садовник был в оранжерее.",clues:["glass","clock","window"],next:"Комната кажется запертой. Возможно, неверно само представление о времени преступления."},
+{title:"Три показания",text:"Секретарь помнит звук падающего бокала в 21:17. Наследница говорит, что в это время играла сонату, которую слышали все в доме. Садовник утверждает, что видел свет в кабинете уже после десяти.\n\nНо в нотах наследницы есть пропуск ровно на четыре минуты.",clues:["letters","music","mud"],next:"У каждого есть алиби. И каждое алиби построено на том, что другие считают доказательством."},
+{title:"Последняя деталь",text:"Пыль на камине нарушена только у одной кирпичной панели. За ней — старый узкий канал для подачи угля, ведущий в служебный коридор. Он слишком мал для взрослого человека, но через него можно провести тонкий шнур.\n\nВрач пересматривает время смерти: Павел умер значительно раньше, чем считали гости.",clues:["panel","will"],next:"Пора решить, кто воспользовался ложным временем и почему."}
+],
+suspects:[
+{id:"heir",name:"Элеонора Арден",role:"Наследница",desc:"Получает поместье и коллекцию.",tell:"Она действительно пропустила четыре минуты в музыке. Но это было до смерти Павла, а не доказательство убийства."},
+{id:"secretary",name:"Михаил Воронцов",role:"Секретарь",desc:"Знал распорядок и содержание писем.",tell:"Он подменил время в документах. Завещание показывало, что Павел собирался уволить его и передать коллекцию музею."},
+{id:"gardener",name:"Степан Рудин",role:"Садовник",desc:"Знал старые служебные проходы.",tell:"Он видел свет позже десяти, потому что лампу оставили включённой. Его слова верны, но вывод из них неверен."}
+],
+evidence:[
+["glass","Разбитый бокал","Осколки лежат поверх засохшей капли. Бокал разбился раньше, чем гости услышали удар часов."],
+["clock","Часы на камине","Механизм остановлен вручную. Время 21:17 не совпадает с реальным временем смерти."],
+["window","Заколоченное окно","Пыль на подоконнике цела. Никто не выходил через окно."],
+["letters","Письма секретаря","Последнее письмо сообщает, что Павел собирался уволить секретаря утром."],
+["music","Ноты сонаты","Четыре минуты музыки отсутствуют. Наследница могла уходить из гостиной, но в это время Павел был ещё жив."],
+["mud","Следы в оранжерее","Следы садовника идут только от оранжереи к кухне. К кабинету они не ведут."],
+["panel","Кирпичная панель","За камином скрывается канал и тонкий шнур. Им можно было остановить часы из соседнего служебного прохода."],
+["will","Новое завещание","Павел лишал секретаря доступа к коллекции и планировал передать её музею."]
+],
+finalQuestion:"Кто организовал обман с запертой комнатой?",
+choices:[
+{id:"secretary",label:"Михаил Воронцов, секретарь",desc:"Он знал распорядок, подменил время и имел мотив.",score:100,ending:"truth",result:"Ты восстановил механизм обмана."},
+{id:"heir",label:"Элеонора Арден",desc:"У неё есть наследство и пропуск в алиби.",score:20,ending:"partial",result:"Ты заметил несостыковку, но не связал её с главным мотивом."},
+{id:"gardener",label:"Степан Рудин, садовник",desc:"Он знал служебные проходы и видел свет.",score:10,ending:"wrong",result:"Ты поверил наблюдению, не проверив время."}
+],
+endings:{
+truth:{title:"Дело раскрыто: неправильное время",text:"Секретарь отравил Павла раньше десяти, затем разбил бокал и остановил часы в 21:17. Позже он воспользовался тонким шнуром через старый канал, чтобы создать впечатление, будто часы остановились в момент смерти. Дверь оставалась запертой, потому что убийца покинул кабинет до того, как запер её сам хозяин.\n\nРешающей уликой стали не следы в комнате, а завещание: у секретаря был мотив, знание распорядка и возможность подделать временную линию.",rank:"МАСТЕР ДЕДУКЦИИ"},
+partial:{title:"Часть правды",text:"Элеонора скрыла свой уход из гостиной, но это не делает её организатором преступления. Она искала письмо, которое могло изменить завещание. Настоящий мотив был у человека, который составлял документы.",rank:"НЕПОЛНОЕ РАССЛЕДОВАНИЕ"},
+wrong:{title:"Алиби оказалось ловушкой",text:"Садовник знал поместье, но его следы не ведут к кабинету. Он стал удобным подозреваемым, потому что мог объяснить служебные проходы. Ты не учёл фальшивое время на часах.",rank:"ДЕЛО НЕ РАСКРЫТО"}
+}
+},
+{
+id:"zero",number:"003",title:"Нулевой пациент",genre:"ТЕХНОТРИЛЛЕР",
+difficulty:"Сложность: высокая",time:"15–20 мин",short:"В исследовательской компании исчез серверный журнал. Через час неизвестный прислал сообщение: «Первый пациент никогда не существовал».",cover:"cover-three",
+intro:"03:06. Исследовательская компания «Helix North». Из закрытого сегмента сети исчезли данные испытаний проекта ZERO. Руководство утверждает, что это обычная ошибка синхронизации.\n\nНо ночью сотрудница безопасности получила письмо с единственной строкой: «Нулевой пациент никогда не существовал». Через час отправитель пропал из корпоративной системы.",
+chapters:[
+{title:"Цифровой след",text:"На сервере сохранились три события: вход администратора в 02:11, экспорт архива в 02:14 и удаление журнала в 02:19. В официальном отчёте написано, что сервер был отключён с полуночи.\n\nРуководитель проекта называет это тестовой средой. Инженер безопасности говорит, что тестовой среды у них никогда не было.",clues:["server","badge","mail"],next:"Данные не исчезают без следа. Но иногда оставленный след создан специально."},
+{title:"Несуществующий сотрудник",text:"Аккаунт, с которого отправили письмо, принадлежит человеку по имени Н. Вейл. В кадровой системе такой сотрудник не числится, однако ему назначен постоянный пропуск и служебный ноутбук.\n\nРуководитель утверждает, что это имя старого подрядчика. Инженер вспоминает, что видел его в отчёте об инциденте два года назад.",clues:["account","backup","invoice"],next:"Личность может быть подделана. История платежей — гораздо более упрямое свидетельство."},
+{title:"Проект ZERO",text:"В резервной копии обнаружен файл с протоколом испытаний. В нём нет имени пациента — только последовательность идентификаторов. Последний идентификатор повторяется в документах о выплатах внешнему подрядчику.\n\nРуководитель просит прекратить расследование: по его словам, файл содержит коммерческую тайну. Но кто-то уже удалил единственную копию журнала доступа.",clues:["protocol","payment"],next:"Ты собрал достаточно следов. Осталось решить, что именно было скрыто."}
+],
+suspects:[
+{id:"director",name:"Доктор Крамер",role:"Руководитель проекта",desc:"Отрицает существование испытаний.",tell:"Он скрывал незаконное исследование, но не удалял журнал лично. Его подпись стоит на протоколе."},
+{id:"engineer",name:"Ирина Волкова",role:"Инженер безопасности",desc:"Нашла письмо и первой сообщила об инциденте.",tell:"Она сохранила копию письма, чтобы передать её аудиторам. Её действия выглядели подозрительно, но помогли восстановить цепочку."},
+{id:"vendor",name:"Н. Вейл",role:"Внешний подрядчик",desc:"Не числится в штате, но имеет постоянный доступ.",tell:"Это не настоящий сотрудник, а служебная личность, созданная для выплат и доступа к закрытым данным."}
+],
+evidence:[
+["server","Журнал сервера","Экспорт архива был выполнен за пять минут до удаления журнала. Сервер не был отключён."],
+["badge","Пропуск администратора","Физический пропуск использовали в здании, когда его владелец официально находился в другом городе."],
+["mail","Анонимное письмо","Фраза «Нулевой пациент никогда не существовал» совпадает с заметкой в протоколе аудита."],
+["account","Аккаунт Н. Вейла","Аккаунт создан без кадрового номера, но с максимальными правами доступа."],
+["backup","Резервная копия","В архиве осталась часть удалённого журнала. Она показывает, что данные экспортировали на внешний узел."],
+["invoice","Счёт подрядчика","Компания получила платежи за работу сотрудника, которого нет в кадровой системе."],
+["protocol","Протокол ZERO","В документе нет настоящего имени пациента. Идентификатор повторяется в нескольких версиях отчёта."],
+["payment","Платёжная ведомость","Платёж за испытания подписан руководителем проекта и отправлен на счёт подставного подрядчика."]
+],
+finalQuestion:"Как лучше всего объяснить исчезновение данных и личность Н. Вейла?",
+choices:[
+{id:"director",label:"Крамер создал фиктивную личность для сокрытия испытаний",desc:"Протокол, подпись и выплаты связывают его с проектом.",score:100,ending:"truth",result:"Ты проследил схему от данных до мотива."},
+{id:"engineer",label:"Ирина удалила данные, чтобы скрыть собственную ошибку",desc:"Она первой обнаружила письмо и имела доступ к журналу.",score:20,ending:"partial",result:"Доступ — не доказательство вины. Ты пропустил финансовый след."},
+{id:"vendor",label:"Внешний подрядчик похитил результаты",desc:"У него был аккаунт и техническая возможность.",score:10,ending:"wrong",result:"Ты нашёл фиктивный аккаунт, но не того, кто его создал."}
+],
+endings:{
+truth:{title:"Дело раскрыто: пациент-призрак",text:"Н. Вейл — служебная личность, созданная руководством для маскировки доступа и выплат. Проект ZERO проводил испытания, которые компания официально отрицала. Крамер подписывал протоколы и платёжные ведомости, а затем распорядился удалить журналы. Инженер Волкова сохранила письмо и часть резервной копии, благодаря чему схема восстановлена.\n\nСамого «нулевого пациента» в документах действительно нет: идентификаторы подменяли настоящее имя. Но отсутствие имени не означает отсутствия человека.",rank:"ЦИФРОВОЙ КРИМИНАЛИСТ"},
+partial:{title:"Слишком простое объяснение",text:"Ирина имела доступ, но её копия письма стала единственным способом восстановить удалённую цепочку. Ты принял близость к доказательствам за вину и пропустил связь между фиктивным аккаунтом и платежами.",rank:"ПРОВЕРЬ ФИНАНСОВЫЙ СЛЕД"},
+wrong:{title:"Подставная личность",text:"Аккаунт Н. Вейла действительно использовался для доступа к архиву. Но он был создан внутри компании и получал финансирование через её подрядчика. Ты нашёл инструмент сокрытия, а не организатора.",rank:"ДЕЛО НЕ РАСКРЫТО"}
+}
+}
+];
+
+const STORE_KEY="mindlab_archive_v1";
+let state=loadState();
+let activeId=null, chapterIndex=0, soundOn=false, audioContext=null;
+
+let selectedEvidence = [];
+let deductionMessage = "";
+
+const HYPOTHESES = {
+  session: [
+    {
+      id: "doctor",
+      title: "Доктор скрывает время встречи",
+      description: "Он изменил временную линию, чтобы скрыть свой визит.",
+      requires: ["clock", "log"],
+      result: "good",
+      feedback:
+        "ВЕРСИЯ ПОДТВЕРЖДАЕТСЯ.\n\nОстановившиеся часы и журнал посещений противоречат словам доктора. Но пока неизвестно, что именно он пытался скрыть."
+    },
+    {
+      id: "mark",
+      title: "Марк инсценировал собственное исчезновение",
+      description: "Исчезновение было частью заранее подготовленного плана.",
+      requires: ["archive", "tape"],
+      result: "twist",
+      feedback:
+        "НОВАЯ ЗАЦЕПКА.\n\nАрхив и запись связывают Марка с прошлым инцидентом. Возможно, исчезновение связано не с сегодняшним конфликтом, а с тем, что произошло раньше."
+    },
+    {
+      id: "accident",
+      title: "Всё произошло случайно",
+      description: "Противоречия вызваны паникой и ошибками персонала.",
+      requires: ["cup", "clock"],
+      result: "bad",
+      feedback:
+        "ВЕРСИЯ НЕ УБЕДИТЕЛЬНА.\n\nОтдельные несостыковки можно объяснить случайностью. Но это не объясняет, почему данные о времени противоречат друг другу."
+    }
+  ],
+  room: [
+    {
+      id: "staged",
+      title: "Время смерти подделали",
+      description: "Сцену подготовили так, чтобы запутать следствие.",
+      requires: ["clock", "glass"],
+      result: "good",
+      feedback: "ВЕРСИЯ ПОДТВЕРЖДАЕТСЯ.\n\nЧасы и следы на осколках указывают на подготовленную сцену."
+    },
+    {
+      id: "inheritance",
+      title: "Мотив связан с завещанием",
+      description: "Кто-то рисковал потерять деньги или положение.",
+      requires: ["letters", "will"],
+      result: "twist",
+      feedback: "НОВАЯ ЗАЦЕПКА.\n\nПереписка и завещание показывают, что конфликт мог начаться задолго до преступления."
+    }
+  ],
+  zero: [
+    {
+      id: "identity",
+      title: "Кто-то создал фиктивную личность",
+      description: "Цифровой след использовали для сокрытия финансовых операций.",
+      requires: ["account", "invoice"],
+      result: "good",
+      feedback: "ВЕРСИЯ ПОДТВЕРЖДАЕТСЯ.\n\nАккаунт и платёжные данные связывают неизвестного пользователя с финансовой схемой."
+    },
+    {
+      id: "erasure",
+      title: "Данные удалили намеренно",
+      description: "Отключение сервера могло быть прикрытием.",
+      requires: ["backup", "server"],
+      result: "twist",
+      feedback: "НОВАЯ ЗАЦЕПКА.\n\nРезервная копия противоречит официальной версии. Следы проекта могли сохраниться вопреки плану тех, кто хотел их уничтожить."
+    }
+  ]
+};
+
+function renderTwistScene() {
+  const scene = document.getElementById("twistScene");
+  const story = document.getElementById("twistStory");
+  const choices = document.getElementById("twistChoices");
+  const outcome = document.getElementById("twistOutcome");
+
+  if (!scene || !story || !choices || !outcome) return;
+  if (activeId !== "session") {
+    scene.hidden = true;
+    return;
+  }
+
+  const s = caseState(activeId);
+
+  const requiredHypotheses = ["doctor", "mark"];
+  const requiredLinks = ["clock|log", "archive|tape"];
+
+  const hypothesesReady = requiredHypotheses.every(
+    id => (s.hypotheses || []).includes(id)
+  );
+
+  const linksReady = requiredLinks.every(
+    key => (s.links || []).includes(key)
+  );
+
+  scene.hidden = !(hypothesesReady && linksReady);
+
+  if (scene.hidden) return;
+
+  story.textContent =
+    "Ты сопоставляешь запись с журналом посещений. В конце файла слышен короткий разговор, которого нет в официальной расшифровке. Затем становится ясно: доктор действительно скрыл встречу, но это ещё не доказывает, что именно он организовал исчезновение Марка.";
+
+  const result = s.twistChoice;
+
+  if (!result) {
+    choices.hidden = false;
+    outcome.hidden = true;
+    return;
+  }
+
+  choices.hidden = true;
+  outcome.hidden = false;
+
+  if (result === "doctor") {
+    outcome.textContent =
+      "ТЫ ДЕЛАЕШЬ ПЕРВЫЙ ХОД\n\n" +
+      "Доктор узнаёт запись и внезапно перестаёт отрицать встречу. " +
+      "Но он утверждает, что пришёл уже после исчезновения Марка. " +
+      "Теперь нужно выяснить, кто может подтвердить его слова.";
+  } else {
+    outcome.textContent =
+      "ТЫ ИЩЕШЬ ПЕРВОИСТОЧНИК\n\n" +
+      "В архиве находится копия того же файла с другим временем создания. " +
+      "Значит, кто-то изменил материалы дела уже после исчезновения Марка. " +
+      "Доктор мог лгать — но, возможно, не он управлял всей историей.";
+  }
+}
+
+function chooseTwistChoice(choice) {
+  if (activeId !== "session") return;
+  if (!["doctor", "archive"].includes(choice)) return;
+
+  const s = caseState(activeId);
+
+  // Не позволяем повторно менять уже сделанный выбор.
+  if (s.twistChoice) {
+    toast("Ты уже выбрал направление расследования.");
+    return;
+  }
+
+  s.twistChoice = choice;
+
+  // Каждая ветка открывает собственную улику.
+  const newClue = choice === "doctor"
+    ? "protocol"
+    : "metadata";
+
+  if (!s.found.includes(newClue)) {
+    s.found.push(newClue);
+  }
+
+  if (!Array.isArray(s.branchClues)) {
+    s.branchClues = [];
+  }
+
+  if (!s.branchClues.includes(newClue)) {
+    s.branchClues.push(newClue);
+  }
+
+  saveState();
+
+  renderTwistScene();
+  renderSidebar();
+
+  ping(choice === "doctor" ? 700 : 900, .12);
+
+  toast(
+    choice === "doctor"
+      ? "Новая улика: исправленный протокол"
+      : "Новая улика: метаданные записи"
+  );
+}
+
+document.querySelectorAll("[data-twist-choice]").forEach(button => {
+  button.addEventListener("click", () => {
+    chooseTwistChoice(button.dataset.twistChoice);
+  });
+});
+
+function renderHypotheses() {
+  const list = document.getElementById("hypothesisList");
+  const feedback = document.getElementById("hypothesisFeedback");
+
+  if (!list || !feedback || !activeId) return;
+
+  const s = caseState(activeId);
+  const hypotheses = HYPOTHESES[activeId] || [];
+
+  if (!Array.isArray(s.hypotheses)) s.hypotheses = [];
+
+  list.innerHTML = hypotheses.map(h => {
+    const available = h.requires.every(id => s.found.includes(id));
+    const chosen = s.hypotheses.includes(h.id);
+
+    return `
+      <button
+        type="button"
+        class="hypothesis-card ${chosen ? "selected" : ""} ${!available ? "locked" : ""}"
+        data-hypothesis="${esc(h.id)}"
+        ${available ? "" : "disabled"}
+      >
+        <strong>${available ? "◈" : "🔒"} ${esc(h.title)}</strong>
+        <span>${esc(
+          available
+            ? h.description
+            : "Найди необходимые улики, чтобы проверить эту версию."
+        )}</span>
+      </button>
+    `;
+  }).join("");
+
+  list.querySelectorAll("[data-hypothesis]").forEach(button => {
+    button.addEventListener("click", () => {
+      chooseHypothesis(button.dataset.hypothesis);
+    });
+  });
+
+  const last = s.lastHypothesisFeedback || "";
+
+  feedback.textContent = last || "Выбери доступную версию событий.";
+  feedback.className = "hypothesis-feedback";
+
+  if (last.startsWith("ВЕРСИЯ ПОДТВЕРЖДАЕТСЯ")) {
+    feedback.classList.add("feedback-good");
+  } else if (last.startsWith("ВЕРСИЯ НЕ УБЕДИТЕЛЬНА")) {
+    feedback.classList.add("feedback-bad");
+  }
+  renderTwistScene();
+}
+
+function chooseHypothesis(id) {
+  const s = caseState(activeId);
+  const hypothesis = (HYPOTHESES[activeId] || [])
+    .find(h => h.id === id);
+
+  if (!hypothesis) return;
+
+  if (!hypothesis.requires.every(clue => s.found.includes(clue))) {
+    toast("Сначала найди необходимые улики.");
+    return;
+  }
+
+  if (!Array.isArray(s.hypotheses)) s.hypotheses = [];
+
+  if (!s.hypotheses.includes(id)) {
+    s.hypotheses.push(id);
+  }
+
+  s.lastHypothesisFeedback = hypothesis.feedback;
+
+  // Скрытые выводы дают дополнительные очки только при первом открытии.
+  if (
+    hypothesis.result === "twist" &&
+    !Array.isArray(s.unlockedTwists)
+  ) {
+    s.unlockedTwists = [];
+  }
+
+  if (
+    hypothesis.result === "twist" &&
+    !s.unlockedTwists.includes(id)
+  ) {
+    s.unlockedTwists.push(id);
+    state.score = (state.score || 0) + 30;
+    s.lastHypothesisFeedback += "\n\n+30 очков: открыта новая зацепка.";
+    ping(950, .18);
+  } else if (hypothesis.result === "good") {
+    ping(750, .12);
+  } else {
+    ping(300, .12);
+  }
+
+  saveState();
+  renderHypotheses();
+}
+const DEDUCTIONS = {
+  session: {
+    "clock|log": {
+      title: "Подтверждено: ложное алиби",
+      text: "Часы остановлены, а журнал фиксирует поздний вход доктора. Его версия о времени не сходится с цифровыми данными.",
+      good: true
+    },
+    "archive|tape": {
+      title: "Подтверждено: старое дело связано с исчезновением",
+      text: "Запись упоминает настоящее имя, а архив содержит следы прошлого инцидента. Это связывает конфликт Марка с историей клиники.",
+      good: true
+    },
+    "keycard|message": {
+      title: "Важная версия: встреча была скрыта",
+      text: "Аварийный доступ и удалённое сообщение указывают на события, которые кто-то не хотел фиксировать официально.",
+      good: true
+    },
+    "cup|clock": {
+      title: "Проверка времени",
+      text: "Чашка и часы ставят под сомнение временную линию, но сами по себе не указывают, кто именно солгал.",
+      good: false
+    }
+  },
+  room: {
+    "clock|glass": {
+      title: "Подтверждено: время преступления подделано",
+      text: "Остановившиеся часы и следы на осколках показывают, что сцену подготовили заранее.",
+      good: true
+    },
+    "letters|will": {
+      title: "Подтверждено: мотив секретаря",
+      text: "Письма и новое завещание показывают, кто рисковал потерять положение и доступ к коллекции.",
+      good: true
+    },
+    "clock|panel": {
+      title: "Подтверждено: механизм обмана",
+      text: "Скрытый канал и остановленные часы позволяют объяснить, как создали ложную временную линию.",
+      good: true
+    }
+  },
+  zero: {
+    "account|invoice": {
+      title: "Подтверждено: фиктивная личность",
+      text: "Аккаунт без кадрового номера и платёж подрядчику связывают цифровую личность с финансовой схемой.",
+      good: true
+    },
+    "backup|server": {
+      title: "Подтверждено: данные удаляли намеренно",
+      text: "Резервная копия сохраняет следы экспорта, которые противоречат официальной версии об отключённом сервере.",
+      good: true
+    },
+    "payment|protocol": {
+      title: "Подтверждено: следы проекта ZERO",
+      text: "Протокол испытаний и платёжная ведомость связывают исследование с людьми, утверждавшими, что проекта не существовало.",
+      good: true
+    }
+  }
+};
+
+function deductionPairKey(a, b) {
+  return [a, b].sort().join("|");
+}
+
+function pickDeductionEvidence(id) {
+  const s = caseState(activeId);
+
+  if (!s.found.includes(id)) {
+    toast("Сначала изучи эту улику.");
+    return;
+  }
+
+  if (selectedEvidence.includes(id)) {
+    selectedEvidence = selectedEvidence.filter(x => x !== id);
+  } else {
+    selectedEvidence.push(id);
+  }
+
+  deductionMessage = "";
+
+  if (selectedEvidence.length === 2) {
+    analyzeDeduction(selectedEvidence[0], selectedEvidence[1]);
+    selectedEvidence = [];
+  }
+
+  renderSidebar();
+}
+
+function analyzeDeduction(a, b) {
+  const s = caseState(activeId);
+  const key = deductionPairKey(a, b);
+  const known = DEDUCTIONS[activeId]?.[key];
+
+  if (!known) {
+    deductionMessage =
+      "Эта связь пока не подтверждается. Попробуй другую пару улик и подумай, что именно они доказывают.";
+    ping(250, .12);
+    return;
+  }
+
+  if (!Array.isArray(s.links)) s.links = [];
+
+  if (s.links.includes(key)) {
+    deductionMessage = known.title + "\nТы уже устанавливал эту связь.";
+    ping(450, .08);
+    return;
+  }
+
+  s.links.push(key);
+
+  if (known.good) {
+    state.score = (state.score || 0) + 20;
+    deductionMessage = known.title + "\n" + known.text + "\n\n+20 очков за дедукцию.";
+    ping(850, .16);
+  } else {
+    deductionMessage = known.title + "\n" + known.text;
+    ping(350, .12);
+  }
+
+  saveState();
+}
+
+function loadState(){
+ try{return JSON.parse(localStorage.getItem(STORE_KEY))||{cases:{},score:0};}
+ catch(e){return {cases:{},score:0};}
+}
+function saveState(){
+ try{localStorage.setItem(STORE_KEY,JSON.stringify(state));}
+ catch(e){toast("Браузер не разрешил сохранить прогресс.");}
+}
+
+function caseState(id) {
+  if (!state.cases[id]) {
+    state.cases[id] = {
+      chapter: 0,
+      found: [],
+      seen: [],
+      links: [],
+      finished: false,
+      ending: null,
+      score: 0,
+      interrogations: {}
+    };
+  }
+
+  // Совместимость с прогрессом, сохранённым в предыдущей версии
+  if (!Array.isArray(state.cases[id].links)) {
+    state.cases[id].links = [];
+  }
+
+    // Совместимость со старыми сохранениями
+  if (
+    !state.cases[id].interrogations ||
+    typeof state.cases[id].interrogations !== "object" ||
+    Array.isArray(state.cases[id].interrogations)
+  ) {
+    state.cases[id].interrogations = {};
+  }
+
+  return state.cases[id];
+}
+function esc(s){
+ return String(s).replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+}
+function toast(message){
+ const el=document.getElementById("toast");
+ el.textContent=message;el.classList.remove("hidden");
+ clearTimeout(toast.timer);toast.timer=setTimeout(()=>el.classList.add("hidden"),2300);
+}
+function ping(freq=520,duration=.09){
+ if(!soundOn)return;
+ try{
+  audioContext=audioContext||new(window.AudioContext||window.webkitAudioContext)();
+  const osc=audioContext.createOscillator(),gain=audioContext.createGain();
+  osc.type="sine";osc.frequency.value=freq;gain.gain.value=.045;
+  osc.connect(gain);gain.connect(audioContext.destination);
+  osc.start();gain.gain.exponentialRampToValueAtTime(.001,audioContext.currentTime+duration);
+  osc.stop(audioContext.currentTime+duration);
+ }catch(e){}
+}
+function renderCatalog(){
+ document.getElementById("catalog").classList.remove("hidden");
+ document.getElementById("game").classList.add("hidden");
+ const grid=document.getElementById("caseGrid");
+ grid.innerHTML=CASES.map(c=>{
+  const s=caseState(c.id), total=c.evidence.length;
+  const pct=s.finished?100:Math.round((s.found.length/total)*100);
+  const status=s.finished?"Завершено":s.found.length?"В процессе":"Не начато";
+  return `<article class="case-card">
+    <div class="cover ${c.cover}"><span class="cover-label">MIND LAB / CASE ${c.number}</span></div>
+    <div class="card-body">
+      <div class="eyebrow">${esc(c.genre)}</div><h3 style="margin-top:7px">${esc(c.title)}</h3>
+      <p>${esc(c.short)}</p>
+      <div class="meta"><span class="tag">${esc(c.difficulty)}</span><span class="tag">${esc(c.time)}</span></div>
+      <div class="card-foot"><span class="muted" style="font-size:12px">${status}</span>
+      <button class="btn ${s.found.length||s.finished?"btn-cyan":"btn-primary"}" data-open="${c.id}">${s.finished?"Пересмотреть":s.found.length?"Продолжить":"Начать"} →</button></div>
+      <div class="progress"><div style="width:${pct}%"></div></div>
+    </div></article>`;
+ }).join("");
+ grid.querySelectorAll("[data-open]").forEach(b=>b.addEventListener("click",()=>openCase(b.dataset.open)));
+ const solved=CASES.filter(c=>caseState(c.id).finished).length;
+ const clues=CASES.reduce((n,c)=>n+caseState(c.id).found.length,0);
+ document.getElementById("archiveCount").textContent=`${solved} / ${CASES.length} завершено`;
+ document.getElementById("statSolved").textContent=solved;
+ document.getElementById("statClues").textContent=clues;
+ document.getElementById("statScore").textContent=state.score||0;
+}
+function openCase(id){
+selectedEvidence = [];
+deductionMessage = "";
+ activeId=id;const c=CASES.find(x=>x.id===id),s=caseState(id);
+ chapterIndex=Math.min(s.chapter,c.chapters.length-1);
+ document.getElementById("catalog").classList.add("hidden");
+ document.getElementById("game").classList.remove("hidden");
+ if(s.finished&&s.ending){renderEnding();return;}
+ renderChapter();ping(620,.12);window.scrollTo({top:0,behavior:"smooth"});
+}
+function renderChapter(){
+ const c=CASES.find(x=>x.id===activeId),s=caseState(activeId);
+ const ch=c.chapters[chapterIndex];
+ document.getElementById("caseNumber").textContent=`ДЕЛО ${c.number} / ${chapterIndex+1} ИЗ ${c.chapters.length}`;
+ document.getElementById("storyEyebrow").textContent=c.genre;
+ document.getElementById("storyTitle").textContent=ch.title;
+ document.getElementById("storyText").textContent=ch.text;
+ document.getElementById("noticeArea").innerHTML=`<div class="notice">${esc(ch.next)}</div>`;
+ const storyContent=document.getElementById("storyContent");
+ storyContent.innerHTML=`<div class="badge">ОБНАРУЖЕННЫЕ СВЕДЕНИЯ</div>
+ <p class="muted">Открой улики справа. Затем переходи дальше, когда будешь готов.</p>
+ <div class="footer-actions">
+ <button class="btn btn-primary" id="continueBtn">${chapterIndex<c.chapters.length-1?"Продолжить расследование →":"Перейти к выводу →"}</button>
+ <button class="btn" id="hintBtn">Подсказка</button>
+ </div>`;
+ document.getElementById("continueBtn").onclick=()=>{
+  if(chapterIndex<c.chapters.length-1){
+   chapterIndex++;s.chapter=chapterIndex;saveState();renderChapter();ping(690,.1);
+  }else{renderVerdict();}
+ };
+ document.getElementById("hintBtn").onclick=()=>{
+  const missing=ch.clues.filter(id=>!s.found.includes(id));
+  toast(missing.length?`В этой главе ещё есть улики: ${missing.length}.`:"Ты изучил все улики этой главы.");
+  ping(400,.1);
+ };
+ renderSidebar();
+}
+function renderSidebar(){
+ const c = CASES.find(x => x.id === activeId);
+ const s = caseState(activeId);
+
+ const visibleEvidence = c.evidence.filter(e =>
+   Array.isArray(e) &&
+   e.length >= 3 &&
+   (!["protocol", "metadata"].includes(e[0]) ||
+     (Array.isArray(s.branchClues) && s.branchClues.includes(e[0])))
+ );
+ document.getElementById("clueList").innerHTML = visibleEvidence.map(e => {
+  const found=s.found.includes(e[0]);
+  return `<button class="clue ${found?"found":""}" data-clue="${e[0]}">
+  <span>${found?"◉":"◌"} ${esc(e[1])}</span>
+  <small>${found?esc(e[2]):"Нажми, чтобы изучить улику"}</small></button>`;
+ }).join("");
+ document.querySelectorAll("[data-clue]").forEach(b=>b.addEventListener("click",()=>inspectClue(b.dataset.clue)));
+ 
+  // Доска дедукции: показываем только уже изученные улики
+  const deductionList = document.getElementById("deductionList");
+  // В доске дедукции тоже показываем только доступные улики.
+  const deductionResult = document.getElementById("deductionResult");
+
+  if (deductionList) {
+    deductionList.innerHTML = visibleEvidence
+      .filter(e => s.found.includes(e[0]))
+      .map(e => {
+        const selected = selectedEvidence.includes(e[0]);
+
+        return `
+          <button
+            class="clue pickable ${selected ? "selected" : ""}"
+            data-pick="${e[0]}"
+            type="button"
+          >
+            ${selected ? "◆" : "◇"} ${esc(e[1])}
+          </button>
+        `;
+      }).join("");
+
+    deductionList.querySelectorAll("[data-pick]").forEach(button => {
+      button.addEventListener("click", () => {
+        pickDeductionEvidence(button.dataset.pick);
+      });
+    });
+  }
+
+  if (deductionResult) {
+    deductionResult.classList.toggle("hidden", !deductionMessage);
+    deductionResult.className = "notice " +
+      (deductionMessage.includes("+20 очков")
+        ? "deduction-good"
+        : deductionMessage.includes("не подтверждается")
+          ? "deduction-bad"
+          : "deduction-neutral") +
+      (deductionMessage ? "" : " hidden");
+
+    deductionResult.textContent = deductionMessage;
+  }
+ document.getElementById("suspectList").innerHTML=c.suspects.map(p=>
+ `<button class="suspect" data-suspect="${p.id}"><strong>${esc(p.name)}</strong><small>${esc(p.role)} · нажми для досье</small></button>`
+ ).join("");
+ document.querySelectorAll("[data-suspect]").forEach(b=>b.addEventListener("click",()=>inspectSuspect(b.dataset.suspect)));
+ const pct=Math.round(s.found.length/c.evidence.length*100);
+ document.getElementById("progressText").textContent=pct+"%";
+ document.getElementById("progressBar").style.width=pct+"%";
+   renderVisualBoard();
+   renderHypotheses();
+}
+function inspectClue(id){
+ const c=CASES.find(x=>x.id===activeId),s=caseState(activeId),e=c.evidence.find(x=>x[0]===id);
+ if(!e)return;
+ if(!s.found.includes(id)){
+  s.found.push(id);state.score=(state.score||0)+10;saveState();ping(760,.13);
+  toast("Новая улика: +10 очков");
+ }else ping(430,.07);
+ renderSidebar();
+ const box=document.getElementById("noticeArea");
+ box.innerHTML=`<div class="notice"><strong>${esc(e[1])}</strong><br>${esc(e[2])}</div>`;
+}
+
+
+
+function inspectSuspect(id) {
+  const c = CASES.find(x => x.id === activeId);
+  const p = c?.suspects.find(x => x.id === id);
+
+  if (!p) return;
+
+  const s = caseState(activeId);
+  const viewer = document.getElementById("suspectViewer");
+  const content = document.getElementById("suspectViewerContent");
+
+  if (!viewer || !content) return;
+
+  // Подготовка истории допроса с поддержкой старых сохранений
+  const interrogationHistory = s.interrogations[id] || {
+    asked: [],
+    answers: {}
+  };
+
+  if (!Array.isArray(interrogationHistory.asked)) {
+    interrogationHistory.asked = [];
+  }
+
+  if (
+    !interrogationHistory.answers ||
+    typeof interrogationHistory.answers !== "object"
+  ) {
+    interrogationHistory.answers = {};
+  }
+
+  s.interrogations[id] = interrogationHistory;
+
+  const has = clueId => s.found.includes(clueId);
+  const hasAny = ids => ids.some(has);
+  const hasAll = ids => ids.every(has);
+
+  const evidenceList = (c.evidence || []).map(e => {
+    if (Array.isArray(e)) {
+      return { id: e[0], title: e[1], description: e[2] };
+    }
+    return {
+      id: e.id,
+      title: e.title || e.name || e.id,
+      description: e.description || e.text || ""
+    };
+  });
+
+  const foundEvidence = evidenceList.filter(e => has(e.id));
+
+  const evidenceNames = foundEvidence
+    .map(e => e.title)
+    .join(", ");
+
+  const questions = [];
+
+  // =====================================================
+  // ДЕЛО 1. ПОСЛЕДНИЙ СЕАНС
+  // =====================================================
+
+  if (activeId === "session" && id === "levin") {
+    questions.push(
+      {
+        id: "alibi",
+        title: "Почему вы отрицали поздний визит?",
+        requires: [],
+        answer:
+          "Левин поправляет манжету и не сразу поднимает глаза.\n\n" +
+          "«Я был в клинике по рабочим вопросам. Но присутствие в здании не делает меня виновным в исчезновении Марка».\n\n" +
+          "Ты замечаешь, что он ответил на вопрос о вине, хотя его спрашивали о визите."
+      },
+      {
+        id: "evidence",
+        title: "Что показывает журнал доступа?",
+        requires: ["log"],
+        answer: has("clock")
+          ? "Ты кладёшь рядом журнал доступа и сведения об остановившихся часах.\n\n" +
+            "Левин изучает обе записи.\n\n" +
+            "«Хорошо. Я действительно входил в кабинет. Но ваши отметки показывают время доступа, а не то, что я там делал».\n\n" +
+            "Он признал посещение, но по-прежнему скрывает его цель."
+          : "Левин читает журнал и сжимает губы.\n\n" +
+            "«Запись подтверждает только вход. Вы не можете заключить из неё, что произошло внутри кабинета».\n\n" +
+            "Он больше не отрицает само посещение."
+      },
+      {
+        id: "timeline",
+        title: "Почему время событий не совпадает?",
+        requires: ["clock", "log"],
+        answer:
+          "Левин снова смотрит на отметки времени.\n\n" +
+          "«Часы могли остановиться раньше. Вы строите последовательность событий на предположении».\n\n" +
+          "Он впервые предлагает конкретное альтернативное объяснение, но не подкрепляет его доказательствами.\n\n" +
+          "Теперь нужно проверить, согласуется ли его версия с остальными уликами."
+      }
+    );
+  } else if (activeId === "session" && id === "nina") {
+    questions.push(
+      {
+        id: "alibi",
+        title: "Что вы слышали той ночью?",
+        requires: [],
+        answer:
+          "Нина складывает руки на коленях.\n\n" +
+          "«Я слышала спор после десяти. Два голоса. Один был спокойнее, другой почти срывался. Я решила, что они разберутся сами».\n\n" +
+          "Она не может уверенно назвать тему разговора."
+      },
+      {
+        id: "evidence",
+        title: "Почему вы не записали спор в журнале смены?",
+        requires: ["log"],
+        answer:
+          "«Я боялась, что меня спросят, почему я не вмешалась», — признаётся Нина.\n\n" +
+          "Она признаёт, что не сообщила важную деталь вовремя.\n\n" +
+          "Но умолчание о разговоре ещё не доказывает, что она участвовала в исчезновении Марка."
+      },
+      {
+        id: "timeline",
+        title: "Вы уверены во времени разговора?",
+        requires: ["clock", "log"],
+        answer:
+          "Ты показываешь Нине отметки времени.\n\n" +
+          "Она долго изучает их.\n\n" +
+          "«Я помню, что было поздно. Но не поручусь за точную минуту. Возможно, я связала спор с другим событием той ночи».\n\n" +
+          "Её показания становятся менее точными, но не обязательно ложными."
+      }
+    );
+  } else if (activeId === "session" && id === "tech") {
+    questions.push(
+      {
+        id: "alibi",
+        title: "Кто мог получить доступ к архиву камер?",
+        requires: [],
+        answer:
+          "Илья отвечает почти сразу.\n\n" +
+          "«Технический доступ был у меня. Но это не значит, что только я мог работать с архивом. Административные права и физический доступ — разные вещи».\n\n" +
+          "Он предлагает проверить журнал действий, а не полагаться на список сотрудников."
+      },
+      {
+        id: "evidence",
+        title: "Когда исчезла запись с камер?",
+        requires: ["log"],
+        answer: has("clock")
+          ? "Ты показываешь Илье журнал и временную отметку остановившихся часов.\n\n" +
+            "«Если резервная копия уже не содержала запись к началу моей смены, значит, она исчезла раньше. Но нужно проверить саму копию».\n\n" +
+            "Он обращает внимание на источник данных, а не только на время."
+          : "«Пока неизвестно, когда запись исчезла. Если не проверить резервную копию, можно обвинить не того человека».\n\n" +
+            "Илья настаивает на проверке временных отметок."
+      },
+      {
+        id: "timeline",
+        title: "Откуда вы знаете, что запись исчезла раньше смены?",
+        requires: ["clock", "log"],
+        answer:
+          "«Я проверял состояние архива», — отвечает Илья.\n\n" +
+          "Ты уточняешь, когда именно он это делал. Илья на мгновение замолкает.\n\n" +
+          "Он объясняет, что видел пустой архив, но пока не может доказать, кто и когда удалил запись.\n\n" +
+          "Его осведомлённость подозрительна, однако сама по себе не доказывает вину."
+      }
+    );
+
+  // =====================================================
+  // ДЕЛО 2. НУЛЕВОЙ ПАЦИЕНТ
+  // =====================================================
+
+  } else if (activeId === "zero" && id === "director") {
+    questions.push(
+      {
+        id: "alibi",
+        title: "Что представлял собой проект ZERO?",
+        requires: [],
+        answer:
+          "Крамер откидывается на спинку кресла.\n\n" +
+          "«Внутреннее исследование. Ничего необычного. В крупных проектах всегда существуют тестовые документы и технические аккаунты».\n\n" +
+          "Он говорит уверенно, но не объясняет, почему официальный отчёт отрицает существование испытаний."
+      },
+      {
+        id: "evidence",
+        title: "Почему сервер работал, когда его считали отключённым?",
+        requires: ["server"],
+        answer:
+          "Крамер изучает журнал сервера.\n\n" +
+          "«Возможно, это был отдельный узел. Я не отвечаю за каждую техническую запись».\n\n" +
+          "Но журнал показывает экспорт архива в 02:14 и удаление журнала в 02:19.\n\n" +
+          "Версия об отключённом сервере теперь требует объяснения."
+      },
+      {
+        id: "timeline",
+        title: "Почему выплаты связаны с протоколом испытаний?",
+        requires: ["protocol", "payment"],
+        answer:
+          "Ты показываешь Крамеру протокол ZERO и платёжную ведомость.\n\n" +
+          "Он долго не отвечает.\n\n" +
+          "«Я подписывал финансовые документы. Это не означает, что я знал о каждом действии подрядчика».\n\n" +
+          "Его подпись связывает его с финансированием проекта. Чтобы установить роль Крамера в сокрытии данных, нужно сопоставить платежи с фиктивным аккаунтом."
+      },
+      {
+        id: "identity",
+        title: "Кто такой Н. Вейл?",
+        requires: ["account", "invoice"],
+        answer:
+          "Крамер сначала называет Вейла старым подрядчиком, но не может указать его кадровый номер.\n\n" +
+          "Аккаунт имел высокие права доступа, а счета выставлялись за работу человека, которого нет в кадровой системе.\n\n" +
+          "«Такие вопросы должны решать кадровая служба и бухгалтерия», — говорит он.\n\n" +
+          "Он пытается переложить ответственность на другие подразделения."
+      }
+    );
+
+  } else if (activeId === "zero" && id === "engineer") {
+    questions.push(
+      {
+        id: "alibi",
+        title: "Почему вы первой сообщили об инциденте?",
+        requires: [],
+        answer:
+          "Ирина отвечает спокойно.\n\n" +
+          "«Я увидела письмо и поняла, что журнал событий не соответствует официальному отчёту. Я сообщила об этом, потому что запись могла исчезнуть».\n\n" +
+          "Она не отрицает, что имела технический доступ."
+      },
+      {
+        id: "evidence",
+        title: "Вы могли удалить журнал сами?",
+        requires: ["server"],
+        answer:
+          "«Технически доступ у меня был. Но возможность выполнить действие не доказывает, что я его выполнила».\n\n" +
+          "Ирина просит проверить последовательность событий: экспорт архива предшествовал удалению журнала.\n\n" +
+          "Это указывает на подготовленное действие, но пока не устанавливает исполнителя."
+      },
+      {
+        id: "timeline",
+        title: "Почему вы сохранили копию письма?",
+        requires: ["mail", "backup"],
+        answer:
+          "Ирина достаёт заметки.\n\n" +
+          "«Я боялась, что оригинал исчезнет. Поэтому сохранила копию и часть резервных данных».\n\n" +
+          "Её действия могли выглядеть как несанкционированное копирование, но именно эти материалы помогают восстановить хронологию."
+      }
+    );
+
+  } else if (activeId === "zero" && id === "vendor") {
+    questions.push(
+      {
+        id: "alibi",
+        title: "Почему вас нет в кадровой системе?",
+        requires: [],
+        answer:
+          "Вейл улыбается, но не выглядит удивлённым.\n\n" +
+          "«Я внешний подрядчик. Не все подрядчики числятся сотрудниками».\n\n" +
+          "Формально это возможно, но постоянный пропуск и максимальные права доступа требуют отдельного объяснения."
+      },
+      {
+        id: "evidence",
+        title: "Кто создал ваш аккаунт?",
+        requires: ["account"],
+        answer:
+          "«Мне предоставили доступ, когда заключили договор», — отвечает Вейл.\n\n" +
+          "Но у аккаунта нет кадрового номера, а уровень прав выше обычного доступа подрядчика.\n\n" +
+          "Он говорит, что получил готовую учётную запись, и не называет человека, который её создал."
+      },
+      {
+        id: "timeline",
+        title: "Почему платежи связаны с испытаниями?",
+        requires: ["invoice", "payment"],
+        answer:
+          "Вейл внимательно изучает ведомость.\n\n" +
+          "«Я получал оплату за услуги. Что компания записывала в назначении платежа, я не решал».\n\n" +
+          "Документы связывают подрядчика с деньгами, но подпись Крамера указывает на возможную роль руководства в организации схемы."
+      },
+      {
+        id: "protocol",
+        title: "Что означает повторяющийся идентификатор?",
+        requires: ["protocol", "backup"],
+        answer:
+          "Вейл перестаёт улыбаться.\n\n" +
+          "«Я работал с файлами, которые мне передавали. Идентификаторы уже были в документах».\n\n" +
+          "Это объяснение не устанавливает, кто подменил настоящее имя пациента, но подтверждает, что Вейл имел дело с материалами проекта."
+      }
+    );
+
+  // =====================================================
+  // УНИВЕРСАЛЬНЫЙ СЦЕНАРИЙ ДЛЯ ОСТАЛЬНЫХ ПОДОЗРЕВАЕМЫХ
+  // =====================================================
+
+  } else {
+    const firstClue = evidenceList[0]?.id;
+    const secondClue = evidenceList[1]?.id;
+    const thirdClue = evidenceList[2]?.id;
+
+    questions.push(
+      {
+        id: "alibi",
+        title: "Расскажите, что вы делали в тот вечер",
+        requires: [],
+        answer:
+          `${p.name} отвечает не сразу.\n\n` +
+          `«Я уже объяснил свою роль: ${p.desc}»\n\n` +
+          "Ответ звучит подготовленным. Пока ты не предъявил конкретных материалов, обвинять собеседника рано."
+      },
+      {
+        id: "evidence",
+        title: "Что вы можете объяснить по найденным уликам?",
+        requires: firstClue ? [firstClue] : [],
+        answer:
+          foundEvidence.length
+            ? `${p.name} изучает материалы: ${evidenceNames}.\n\n` +
+              `${p.tell}\n\n` +
+              "Подозреваемый объясняет свою версию, но каждое утверждение ещё нужно сопоставить с доказательствами."
+            : `${p.name} пожимает плечами.\n\n` +
+              "«Вы пока не показали мне ничего конкретного».\n\n" +
+              "Сначала найди хотя бы одну улику."
+      },
+      {
+        id: "timeline",
+        title: "Почему ваши слова расходятся с уликами?",
+        requires: secondClue ? [secondClue] : firstClue ? [firstClue] : [],
+        answer:
+          foundEvidence.length >= 2
+            ? `${p.name} вновь перечитывает материалы.\n\n` +
+              `«Вы связываете ${evidenceNames}, но это ещё не вся картина».\n\n` +
+              `${p.tell}\n\n` +
+              "В его версии остаётся пробел. Возможно, ты ещё не нашёл улику, которая соединит события."
+            : "Подозреваемый просит вернуться к разговору после изучения дополнительных материалов."
+      },
+      {
+        id: "confrontation",
+        title: "Предъявить все собранные доказательства",
+        requires: thirdClue ? [thirdClue] : secondClue ? [secondClue] : firstClue ? [firstClue] : [],
+        answer:
+          foundEvidence.length >= 3
+            ? `Ты раскладываешь перед ${p.name} собранные материалы: ${evidenceNames}.\n\n` +
+              `${p.tell}\n\n` +
+              "На этот раз ответ звучит иначе: отдельные факты начинают складываться в последовательность. Однако окончательный вывод должен опираться на совокупность улик, а не только на слова подозреваемого."
+            : "Для полноценного предъявления собери ещё доказательства."
+      }
+    );
+  }
+
+  // =====================================================
+  // СОЗДАНИЕ ДОСЬЕ И КНОПОК
+  // =====================================================
+
+  content.innerHTML = `
+    <div class="eyebrow">MIND LAB / INTERROGATION</div>
+    <h3>${esc(p.name)}</h3>
+    <p class="muted">${esc(p.role)}</p>
+    <div class="divider"></div>
+    <p>${esc(p.desc)}</p>
+
+    <div class="interrogation-status">
+      <span class="insight-icon">◆</span>
+      <span>Каждый ответ может изменить ход расследования.</span>
+    </div>
+
+    <div class="interrogation-questions">
+      ${questions.map(q => {
+        const unlocked = hasAll(q.requires);
+        const asked = interrogationHistory.asked.includes(q.id);
+
+        return `
+          <button type="button"
+            class="clue interrogation-question ${asked ? "question-asked" : ""}"
+            data-question="${esc(q.id)}"
+            ${unlocked ? "" : "disabled"}>
+            <strong>${esc(q.title)}</strong>
+            <small>${
+              !unlocked
+                ? "Нужны новые улики"
+                : asked
+                  ? "Перечитать ответ"
+                  : "Задать вопрос"
+            }</small>
+          </button>`;
+      }).join("")}
+    </div>
+
+    <div id="interrogationAnswer"
+      class="hypothesis-feedback" aria-live="polite">
+      Выбери вопрос, чтобы начать допрос.
+    </div>
+  `;
+
+  content.querySelectorAll("[data-question]").forEach(button => {
+    button.addEventListener("click", () => {
+      if (button.disabled) return;
+
+      const question = questions.find(
+        q => q.id === button.dataset.question
+      );
+
+      if (!question) return;
+
+      const answerBox = content.querySelector("#interrogationAnswer");
+      const questionId = question.id;
+      const alreadyAsked = interrogationHistory.asked.includes(questionId);
+
+      // Повторный вопрос показывает сохранённый ответ
+      if (alreadyAsked) {
+        answerBox.textContent =
+          interrogationHistory.answers[questionId] || question.answer;
+        return;
+      }
+
+      // Первый ответ сохраняется в истории
+      answerBox.textContent = question.answer;
+
+      interrogationHistory.asked.push(questionId);
+      interrogationHistory.answers[questionId] = question.answer;
+
+      button.classList.add("question-asked");
+
+      const label = button.querySelector("small");
+      if (label) label.textContent = "Перечитать ответ";
+
+      saveState();
+      ping(360, 0.1);
+    });
+  });
+
+  viewer.classList.remove("hidden");
+  document.body.style.overflow = "hidden";
+  ping(360, 0.1);
+}
+
+function renderVerdict(){
+    selectedEvidence = [];
+ const c=CASES.find(x=>x.id===activeId),s=caseState(activeId);
+ document.getElementById("storyEyebrow").textContent="ФИНАЛЬНЫЙ ВЫВОД";
+ document.getElementById("storyTitle").textContent="Собери версию событий";
+ document.getElementById("storyText").textContent=c.finalQuestion;
+ document.getElementById("noticeArea").innerHTML=`<div class="notice">Перед выбором проверь улики. После решения ты увидишь разбор событий и результат расследования.</div>`;
+ document.getElementById("storyContent").innerHTML=`<div class="choice-list">${c.choices.map(ch=>
+ `<button class="choice" data-choice="${ch.id}"><strong>${esc(ch.label)}</strong><span>${esc(ch.desc)}</span></button>`
+ ).join("")}</div><div class="footer-actions"><button class="btn" id="backChapter">← Вернуться к материалам</button></div>`;
+ document.querySelectorAll("[data-choice]").forEach(b=>b.addEventListener("click",()=>chooseVerdict(b.dataset.choice)));
+ document.getElementById("backChapter").onclick=()=>{chapterIndex=c.chapters.length-1;renderChapter();};
+ renderSidebar();window.scrollTo({top:0,behavior:"smooth"});
+}
+function chooseVerdict(id){
+ const c=CASES.find(x=>x.id===activeId),s=caseState(activeId);
+ const choice=c.choices.find(x=>x.id===id);
+ if(!choice)return;
+ const ending=c.endings[choice.ending];
+ const completeness=s.found.length/c.evidence.length;
+ s.finished=true;s.ending=choice.ending;
+ const bonus=choice.score+(completeness>=.75?30:completeness>=.5?15:0);
+ if(!s.score){s.score=bonus;state.score=(state.score||0)+bonus;}
+ saveState();renderEnding();ping(choice.ending==="truth"?880:280,.22);
+}
+function renderEnding(){
+ const c=CASES.find(x=>x.id===activeId),s=caseState(activeId);
+ const ending=c.endings[s.ending]||c.endings.wrong;
+ document.getElementById("caseNumber").textContent=`ДЕЛО ${c.number} / ИТОГ`;
+ document.getElementById("storyEyebrow").textContent=ending.rank;
+ document.getElementById("storyTitle").textContent="";
+ document.getElementById("storyText").textContent="";
+ document.getElementById("noticeArea").innerHTML="";
+ document.getElementById("storyContent").innerHTML=`
+ <div class="ending animate">
+ <div class="ending-mark">${s.ending==="truth"?"✦":"◈"}</div>
+ <div class="eyebrow">РАССЛЕДОВАНИЕ ЗАВЕРШЕНО</div>
+ <h2>${esc(ending.title)}</h2>
+ <p>${esc(ending.text)}</p>
+ <div class="stats">
+ <div class="stat"><strong>${s.found.length}/${c.evidence.length}</strong><span>Улик изучено</span></div>
+ <div class="stat"><strong>+${s.score}</strong><span>Очки за дело</span></div>
+ <div class="stat"><strong>${s.ending==="truth"?"100%":"—"}</strong><span>Верная версия</span></div>
+ </div>
+ <div class="footer-actions" style="justify-content:center">
+ <button class="btn btn-primary" id="archiveBtn">Вернуться в архив →</button>
+ <button class="btn" id="replayBtn">Переиграть дело</button>
+ </div></div>`;
+ document.getElementById("archiveBtn").onclick=()=>{renderCatalog();window.scrollTo({top:0,behavior:"smooth"});};
+ document.getElementById("replayBtn").onclick=()=>{
+  const old=caseState(activeId);
+  if(old.score)state.score=Math.max(0,(state.score||0)-old.score);
+  state.cases[activeId]={chapter:0,found:[],seen:[],finished:false,ending:null,score:0};
+  saveState();openCase(activeId);
+ };
+ renderSidebar();window.scrollTo({top:0,behavior:"smooth"});
+}
+document.getElementById("backBtn").onclick=()=>{renderCatalog();window.scrollTo({top:0,behavior:"smooth"});};
+document.getElementById("startBtn").onclick=()=>document.getElementById("caseGrid").scrollIntoView({behavior:"smooth",block:"start"});
+document.getElementById("soundBtn").onclick=()=>{
+ soundOn=!soundOn;
+ document.getElementById("soundBtn").textContent=`♫ Звук: ${soundOn?"вкл.":"выкл."}`;
+ if(soundOn)ping(600,.12);
+};
+document.getElementById("resetBtn").onclick=()=>{
+ if(confirm("Сбросить весь прогресс, найденные улики и очки на этом устройстве?")){
+  state={cases:{},score:0};saveState();renderCatalog();toast("Прогресс сброшен.");
+ }
+};
+renderCatalog();
+
+// MIND LAB — визуальная доска улик
+
+
+function renderVisualBoard() {
+  const board = document.getElementById("visualBoard");
+  const nodes = document.getElementById("boardNodes");
+  const svg = document.getElementById("boardConnections");
+  const empty = document.getElementById("boardEmpty");
+  const counter = document.getElementById("boardCounter");
+  const insight = document.getElementById("boardInsight");
+  const progress = document.getElementById("boardProgress");
+
+  if (!board || !nodes || !svg) return;
+  if (!activeId) return;
+
+  const c = CASES.find(item => item.id === activeId);
+  if (!c) return;
+
+  const s = caseState(activeId);
+
+  const discovered = c.evidence.filter(
+    e => Array.isArray(e) &&
+      e.length >= 3 &&
+      s.found.includes(e[0]) &&
+      (!["protocol", "metadata"].includes(e[0]) ||
+        (Array.isArray(s.branchClues) && s.branchClues.includes(e[0])))
+  );
+
+  const knownLinks = (Array.isArray(s.links) ? s.links : []).filter(key => {
+    return DEDUCTIONS[activeId]?.[key]?.good === true;
+  });
+
+  // Изображения для улик. Неизвестные улики получают нейтральную обложку.
+  const imageById = {
+    clock: "https://images.unsplash.com/photo-1523275335684-37898b6baf30?auto=format&fit=crop&w=640&q=80",
+    cup: "https://images.unsplash.com/photo-1514228742587-6b1558fcca3d?auto=format&fit=crop&w=640&q=80",
+    log: "https://images.unsplash.com/photo-1455390582262-044cdead277a?auto=format&fit=crop&w=640&q=80",
+    tape: "https://images.unsplash.com/photo-1511379938547-c1f69419868d?auto=format&fit=crop&w=640&q=80",
+    keycard: "https://images.unsplash.com/photo-1500530855697-b586d89ba3ee?auto=format&fit=crop&w=640&q=80",
+    note: "https://images.unsplash.com/photo-1455390582262-044cdead277a?auto=format&fit=crop&w=640&q=80",
+    archive: "https://images.unsplash.com/photo-1455390582262-044cdead277a?auto=format&fit=crop&w=640&q=80",
+    message: "https://images.unsplash.com/photo-1516321318423-f06f85e504b3?auto=format&fit=crop&w=640&q=80",
+    protocol: "https://images.unsplash.com/photo-1517842645767-c639042777db?auto=format&fit=crop&w=640&q=80",
+    metadata: "https://images.unsplash.com/photo-1516321318423-f06f85e504b3?auto=format&fit=crop&w=640&q=80",
+    glass: "https://images.unsplash.com/photo-1514228742587-6b1558fcca3d?auto=format&fit=crop&w=640&q=80",
+    letters: "https://images.unsplash.com/photo-1455390582262-044cdead277a?auto=format&fit=crop&w=640&q=80",
+    will: "https://images.unsplash.com/photo-1517842645767-c639042777db?auto=format&fit=crop&w=640&q=80",
+    account: "https://images.unsplash.com/photo-1516321318423-f06f85e504b3?auto=format&fit=crop&w=640&q=80",
+    invoice: "https://images.unsplash.com/photo-1455390582262-044cdead277a?auto=format&fit=crop&w=640&q=80",
+    backup: "https://images.unsplash.com/photo-1558494949-ef010cbdcc31?auto=format&fit=crop&w=640&q=80",
+    server: "https://images.unsplash.com/photo-1558494949-ef010cbdcc31?auto=format&fit=crop&w=640&q=80"
+  };
+
+  counter.textContent = `УЛИКИ: ${discovered.length}`;
+  progress.textContent = `${knownLinks.length} ${
+    knownLinks.length === 1 ? "связь установлена" : "связей установлено"
+  }`;
+
+  if (empty) empty.style.display = discovered.length ? "none" : "flex";
+
+  nodes.innerHTML = discovered.map((e, i) => {
+    const id = e[0];
+    const title = e[1];
+    const description = e[2] || "Материал расследования";
+    const selected = selectedEvidence.includes(id);
+    const linked = knownLinks.some(key => key.split("|").includes(id));
+    const imageUrl = imageById[id];
+
+    return `
+      <button
+        type="button"
+        class="board-node ${selected ? "is-selected" : ""} ${linked ? "is-linked" : ""}"
+        data-board-evidence="${esc(id)}"
+        aria-pressed="${selected}"
+        title="${esc(description)}"
+      >
+        <span class="board-node-number">EVIDENCE / ${String(i + 1).padStart(2, "0")}</span>
+       ${
+  imageUrl
+    ? `<img class="board-node-image" src="${esc(imageUrl)}" alt="${esc(title)}" loading="lazy">`
+    : `<span class="board-node-placeholder">◆</span>`
+}
+        <span class="board-node-title">${esc(title)}</span>
+        <span class="board-node-description">${esc(description)}</span>
+        <span class="board-node-status">
+          ${selected ? "◆ ВЫБРАНО" : linked ? "● ЕСТЬ СВЯЗЬ" : "◇ ВЫБРАТЬ УЛИКУ"}
+        </span>
+      </button>
+    `;
+  }).join("");
+
+
+nodes.querySelectorAll("[data-board-evidence]").forEach(button => {
+  button.addEventListener("click", event => {
+    const image = event.target.closest(".board-node-image");
+
+    if (image) {
+      event.stopPropagation();
+
+      const id = button.dataset.boardEvidence;
+      const c = CASES.find(item => item.id === activeId);
+      const evidence = c?.evidence.find(item => item[0] === id);
+
+      if (!evidence) return;
+
+      const viewer = document.getElementById("evidenceViewer");
+      const viewerImage = document.getElementById("viewerImage");
+      const viewerTitle = document.getElementById("viewerTitle");
+      const viewerDescription = document.getElementById("viewerDescription");
+
+      if (!viewer || !viewerImage || !viewerTitle || !viewerDescription) return;
+
+      viewerImage.src = image.src;
+      viewerImage.alt = evidence[1];
+      viewerTitle.textContent = evidence[1];
+      viewerDescription.textContent = evidence[2] || "Материал расследования";
+
+      viewer.classList.remove("hidden");
+      
+      document.body.style.overflow = "hidden";
+      return;
+    }
+
+    pickDeductionEvidence(button.dataset.boardEvidence);
+  });
+});
+
+  if (insight) {
+    if (!discovered.length) {
+      insight.textContent = "Изучи первую улику, чтобы начать расследование.";
+    } else if (selectedEvidence.length === 1) {
+      insight.textContent = "Теперь выбери вторую улику, чтобы проверить связь.";
+    } else if (!knownLinks.length) {
+      insight.textContent = "Выбери две карточки на доске и проверь свою версию.";
+    } else {
+      insight.textContent = "Сопоставь подтверждённые связи с показаниями подозреваемых.";
+    }
+  }
+
+  requestAnimationFrame(() => {
+    if (!board.isConnected || !svg.isConnected) return;
+
+    const boardRect = board.getBoundingClientRect();
+    svg.setAttribute(
+      "viewBox",
+      `0 0 ${board.clientWidth} ${board.clientHeight}`
+    );
+    svg.innerHTML = "";
+
+    knownLinks.forEach(key => {
+      const [a, b] = key.split("|");
+
+      const first = nodes.querySelector(
+        `[data-board-evidence="${a}"]`
+      );
+      const second = nodes.querySelector(
+        `[data-board-evidence="${b}"]`
+      );
+
+      if (!first || !second) return;
+
+      const r1 = first.getBoundingClientRect();
+      const r2 = second.getBoundingClientRect();
+
+      const x1 = r1.left + r1.width / 2 - boardRect.left;
+      const y1 = r1.top + r1.height / 2 - boardRect.top;
+      const x2 = r2.left + r2.width / 2 - boardRect.left;
+      const y2 = r2.top + r2.height / 2 - boardRect.top;
+
+      const curve = Math.max(24, Math.abs(x2 - x1) * 0.12);
+      const path = document.createElementNS(
+        "http://www.w3.org/2000/svg",
+        "path"
+      );
+
+      path.setAttribute(
+        "d",
+        `M ${x1} ${y1} C ${x1 + curve} ${y1}, ${x2 - curve} ${y2}, ${x2} ${y2}`
+      );
+      path.setAttribute("class", "board-line");
+      svg.appendChild(path);
+    });
+  });
+}
+
+// Перерисовываем линии при изменении размеров окна.
+window.addEventListener("resize", () => {
+  renderVisualBoard();
+});
+
+
+function closeEvidenceViewer() {
+  const viewer = document.getElementById("evidenceViewer");
+  if (!viewer) return;
+
+  viewer.classList.add("hidden");
+  document.body.style.overflow = "";
+}
+
+
+function closeSuspectViewer() {
+  const viewer = document.getElementById("suspectViewer");
+  if (!viewer) return;
+
+  viewer.classList.add("hidden");
+  viewer.style.cssText = "";
+  document.body.style.overflow = "";
+}
+
+document.addEventListener("click", function (event) {
+  const closeButton = event.target.closest("[data-close-suspect]");
+  if (closeButton) {
+    closeSuspectViewer();
+  }
+});
+
+document.addEventListener("keydown", event => {
+  if (event.key === "Escape") {
+    closeSuspectViewer();
+  }
+});
+
+document.querySelectorAll("[data-close-viewer]").forEach(element => {
+  element.addEventListener("click", closeEvidenceViewer);
+});
+
+document.addEventListener("keydown", event => {
+  if (event.key === "Escape") {
+    closeEvidenceViewer();
+  }
+});
+
+</script>
+</body>
+</html>
