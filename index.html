@@ -11,7 +11,6 @@
   --line:#293143; --text:#edf0f7; --muted:#8c97ad;
   --red:#ff4d67; --cyan:#69e0dc; --gold:#f0c674;
 }
-  
 * { box-sizing:border-box }
 body {
   margin:0; min-height:100vh; background:
@@ -1513,6 +1512,14 @@ footer { text-align:center; color:#626d82; font-size:12px; padding:22px }
       <div class="clue-list" id="clueList"></div>
     </section>
 
+    <section class="panel sidebar-section investigation-route">
+      <div class="eyebrow">INVESTIGATION ROUTE</div>
+      <h3>Путь расследования</h3>
+      <p class="muted">Двигайся от изучения фактов к обоснованному выводу.</p>
+      <div id="investigationRoute" class="route-steps"></div>
+      <p id="routeNextStep" class="route-next-step" aria-live="polite"></p>
+    </section>
+
     <section class="panel sidebar-section">
       <div class="eyebrow">DEDUCTION</div>
       <h3>Проверка связей</h3>
@@ -1533,14 +1540,6 @@ footer { text-align:center; color:#626d82; font-size:12px; padding:22px }
       <div class="eyebrow">PERSONS OF INTEREST</div>
       <h3>Подозреваемые</h3>
       <div class="suspect-list" id="suspectList"></div>
-    </section>
-
-    <section class="panel sidebar-section investigation-route">
-      <div class="eyebrow">INVESTIGATION ROUTE</div>
-      <h3>Путь расследования</h3>
-      <p class="muted">Двигайся от изучения фактов к обоснованному выводу.</p>
-      <div id="investigationRoute" class="route-steps"></div>
-      <p id="routeNextStep" class="route-next-step" aria-live="polite"></p>
     </section>
 
     <section class="panel sidebar-section">
@@ -2048,7 +2047,8 @@ const missingFindings = findings.filter(item => {
     feedback.classList.add("feedback-bad");
   }
 
-  renderTwistScene();
+    renderTwistScene();
+  renderInvestigationRoute();
 }
 
 function chooseHypothesis(id) {
@@ -2605,6 +2605,113 @@ function renderChapter(){
  };
  renderSidebar();
 }
+
+
+function renderInvestigationRoute() {
+  const container = document.getElementById("investigationRoute");
+  const nextStep = document.getElementById("routeNextStep");
+
+  if (!container || !nextStep || !activeId) return;
+
+  const c = CASES.find(item => item.id === activeId);
+  const s = caseState(activeId);
+
+  if (!c || !s) return;
+
+  const evidence = c.evidence.filter(e =>
+    Array.isArray(e) &&
+    e.length >= 3 &&
+    (
+      activeId !== "session" ||
+      !["protocol", "metadata"].includes(e[0]) ||
+      (Array.isArray(s.branchClues) &&
+        s.branchClues.includes(e[0]))
+    )
+  );
+
+  const foundAllEvidence =
+    evidence.length > 0 &&
+    evidence.every(e => (s.found || []).includes(e[0]));
+
+  const hasLinks =
+    (Array.isArray(s.links) && s.links.length > 0) ||
+    (Array.isArray(s.suspectLinks) && s.suspectLinks.length > 0);
+
+  const interrogations = Object.values(s.interrogations || {});
+
+  const hasInterrogation = interrogations.some(history =>
+    (Array.isArray(history.asked) && history.asked.length > 0) ||
+    Object.keys(history.findings || {}).length > 0 ||
+    Object.keys(history.presented || {}).length > 0
+  );
+
+  const hypothesisResults = Object.values(s.hypothesisResults || {});
+
+  const hasCheckedHypothesis = hypothesisResults.some(result =>
+    ["supported", "twist"].includes(result?.status)
+  );
+
+  const steps = [
+    {
+      title: "Изучить материалы дела",
+      description: "Открой доступные улики и внимательно прочитай детали.",
+      done: foundAllEvidence
+    },
+    {
+      title: "Сопоставить улики",
+      description: "Проверь, что подтверждают найденные связи.",
+      done: hasLinks
+    },
+    {
+      title: "Проверить подозреваемых",
+      description: "Изучи показания и проверь противоречия.",
+      done: hasInterrogation
+    },
+    {
+      title: "Проверить гипотезу",
+      description: "Сопоставь факты и проверь версию событий.",
+      done: hasCheckedHypothesis
+    },
+    {
+      title: "Вынести вердикт",
+      description: "Когда будешь готов, перейди к итоговому решению.",
+      done: Boolean(s.finished && s.ending)
+    }
+  ];
+
+  const activeStep = steps.findIndex(step => !step.done);
+
+  container.innerHTML = steps.map((step, index) => {
+    const status = step.done
+      ? "completed"
+      : index === activeStep
+        ? "active"
+        : "";
+
+    const marker = step.done ? "✓" : String(index + 1);
+
+    return `
+      <div class="route-step ${status}">
+        <span class="route-step-marker">${marker}</span>
+        <div>
+          <span class="route-step-title">${esc(step.title)}</span>
+          <span class="route-step-description">
+            ${esc(step.description)}
+          </span>
+        </div>
+      </div>
+    `;
+  }).join("");
+
+  if (activeStep === -1) {
+    nextStep.textContent = "Расследование завершено. Все этапы пройдены.";
+  } else {
+    nextStep.textContent =
+      "Следующий шаг: " + steps[activeStep].title + ". " +
+      steps[activeStep].description;
+  }
+}
+
 function renderSidebar(){
  const c = CASES.find(x => x.id === activeId);
  const s = caseState(activeId);
@@ -2761,8 +2868,9 @@ document.querySelectorAll("[data-suspect]").forEach(button => {
  const pct=Math.round(s.found.length/c.evidence.length*100);
  document.getElementById("progressText").textContent=pct+"%";
  document.getElementById("progressBar").style.width=pct+"%";
-   renderVisualBoard();
+      renderVisualBoard();
    renderHypotheses();
+   renderInvestigationRoute();
 }
 function inspectClue(id){
  const c=CASES.find(x=>x.id===activeId),s=caseState(activeId),e=c.evidence.find(x=>x[0]===id);
