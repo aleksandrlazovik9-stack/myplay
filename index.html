@@ -1299,6 +1299,112 @@ footer { text-align:center; color:#626d82; font-size:12px; padding:22px }
   }
 }
 
+
+/* MIND LAB — маршрут расследования */
+.investigation-route {
+  position: relative;
+  overflow: hidden;
+}
+
+.route-steps {
+  display: grid;
+  gap: 0;
+  margin-top: 18px;
+}
+
+.route-step {
+  position: relative;
+  display: grid;
+  grid-template-columns: 30px minmax(0, 1fr);
+  gap: 10px;
+  padding: 0 0 18px;
+}
+
+.route-step:last-child {
+  padding-bottom: 0;
+}
+
+.route-step:not(:last-child)::after {
+  content: "";
+  position: absolute;
+  left: 14px;
+  top: 30px;
+  bottom: 0;
+  width: 1px;
+  background: var(--line);
+}
+
+.route-step.completed:not(:last-child)::after {
+  background: #397b7a;
+}
+
+.route-step-marker {
+  position: relative;
+  z-index: 1;
+  display: grid;
+  place-items: center;
+  width: 29px;
+  height: 29px;
+  border: 1px solid var(--line);
+  border-radius: 50%;
+  background: var(--panel2);
+  color: var(--muted);
+  font-size: 12px;
+  font-weight: 800;
+}
+
+.route-step.active .route-step-marker {
+  color: var(--gold);
+  border-color: var(--gold);
+  background: #302819;
+  box-shadow: 0 0 0 3px #f0c67412;
+}
+
+.route-step.completed .route-step-marker {
+  color: var(--cyan);
+  border-color: #397b7a;
+  background: #142526;
+}
+
+.route-step-title {
+  display: block;
+  padding-top: 3px;
+  font-size: 13px;
+  line-height: 1.45;
+  font-weight: 750;
+}
+
+.route-step-description {
+  display: block;
+  margin-top: 4px;
+  color: var(--muted);
+  font-size: 12px;
+  line-height: 1.6;
+}
+
+.route-step.active .route-step-title {
+  color: var(--gold);
+}
+
+.route-step.completed .route-step-title {
+  color: var(--cyan);
+}
+
+.route-next-step {
+  margin: 18px 0 0;
+  padding: 12px;
+  border-left: 2px solid var(--gold);
+  border-radius: 0 7px 7px 0;
+  background: #f0c6740a;
+  color: var(--text);
+  font-size: 12px;
+  line-height: 1.7;
+}
+
+.route-next-step:empty {
+  display: none;
+}
+
 </style>
 </head>
 <body>
@@ -1421,10 +1527,19 @@ footer { text-align:center; color:#626d82; font-size:12px; padding:22px }
 
     </section>
 
+    
     <section class="panel sidebar-section">
       <div class="eyebrow">PERSONS OF INTEREST</div>
       <h3>Подозреваемые</h3>
       <div class="suspect-list" id="suspectList"></div>
+    </section>
+
+    <section class="panel sidebar-section investigation-route">
+      <div class="eyebrow">INVESTIGATION ROUTE</div>
+      <h3>Путь расследования</h3>
+      <p class="muted">Двигайся от изучения фактов к обоснованному выводу.</p>
+      <div id="investigationRoute" class="route-steps"></div>
+      <p id="routeNextStep" class="route-next-step" aria-live="polite"></p>
     </section>
 
     <section class="panel sidebar-section">
