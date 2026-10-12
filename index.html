@@ -471,6 +471,24 @@ footer { text-align:center; color:#626d82; font-size:12px; padding:22px }
   line-height: 1.6;
 }
 
+
+.hypothesis-progress {
+  display: block;
+  margin-top: 10px;
+  font-size: 11px;
+  line-height: 1.5;
+  opacity: 0.8;
+  color: var(--muted, #a5a5b5);
+}
+
+.hypothesis-card.locked .hypothesis-progress {
+  color: #e5b76a;
+}
+
+.hypothesis-card:not(.locked) .hypothesis-progress {
+  color: #83d6a5;
+}
+
 .hypothesis-feedback {
   margin-top: 14px;
   padding: 14px 16px;
@@ -1012,6 +1030,275 @@ footer { text-align:center; color:#626d82; font-size:12px; padding:22px }
   cursor: default;
 }
 
+
+/* MIND LAB — кабинет допроса: психологический триллер */
+
+.suspect-viewer {
+  padding: 3vh 2vw;
+}
+
+.suspect-viewer-backdrop {
+  background: rgba(2, 4, 10, 0.94);
+  backdrop-filter: blur(14px);
+}
+
+.suspect-viewer-card {
+  width: min(1180px, 100%);
+  max-height: 94vh;
+  padding: clamp(20px, 3vw, 38px);
+  background:
+    radial-gradient(
+      ellipse at top left,
+      rgba(81, 111, 157, 0.12),
+      transparent 48%
+    ),
+    var(--panel2);
+  border: 1px solid rgba(130, 158, 194, 0.28);
+  border-radius: 16px;
+  box-shadow:
+    0 30px 100px rgba(0, 0, 0, 0.7),
+    inset 0 1px rgba(255, 255, 255, 0.025);
+}
+
+.suspect-viewer-card h3 {
+  font-size: clamp(25px, 3vw, 36px);
+  letter-spacing: 0.02em;
+}
+
+.interrogation-header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 20px;
+  margin: 12px 0 24px;
+  padding-right: 42px;
+}
+
+.interrogation-header-main {
+  min-width: 0;
+}
+
+.interrogation-kicker {
+  color: #8faed9;
+  font-size: 11px;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+}
+
+.interrogation-meta {
+  margin-top: 8px;
+  color: var(--muted);
+  font-size: 13px;
+  line-height: 1.6;
+}
+
+.interrogation-counter {
+  flex-shrink: 0;
+  padding: 10px 13px;
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  color: #b9c9e1;
+  background: rgba(5, 9, 17, 0.45);
+  font-size: 12px;
+  text-align: center;
+}
+
+.interrogation-tabs {
+  display: flex;
+  gap: 8px;
+  margin: 24px 0 20px;
+  padding-bottom: 10px;
+  border-bottom: 1px solid var(--line);
+}
+
+.interrogation-tab {
+  flex: 1;
+  min-width: 0;
+  padding: 13px 10px;
+  border: 1px solid transparent;
+  border-radius: 9px;
+  background: transparent;
+  color: var(--muted);
+  cursor: pointer;
+  font: inherit;
+  transition:
+    background 0.2s ease,
+    border-color 0.2s ease,
+    color 0.2s ease;
+}
+
+.interrogation-tab:hover {
+  background: rgba(130, 158, 194, 0.07);
+  color: var(--text);
+}
+
+.interrogation-tab.active {
+  color: #dce8fb;
+  background: rgba(87, 119, 165, 0.16);
+  border-color: rgba(130, 158, 194, 0.35);
+  box-shadow: inset 0 -2px #8faed9;
+}
+
+.interrogation-panel[hidden] {
+  display: none !important;
+}
+
+.interrogation-section-title {
+  margin: 0 0 12px;
+  color: var(--text);
+  font-size: 16px;
+  font-weight: 650;
+}
+
+.interrogation-dossier,
+.interrogation-result-card {
+  margin-bottom: 12px;
+  padding: 17px;
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  background: rgba(5, 9, 17, 0.27);
+}
+
+.interrogation-dossier-label {
+  margin-bottom: 8px;
+  color: #8faed9;
+  font-size: 11px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+
+.interrogation-dossier p,
+.interrogation-result-card p {
+  margin: 0;
+  line-height: 1.7;
+  overflow-wrap: anywhere;
+}
+
+.interrogation-questions {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 12px;
+}
+
+.suspect-viewer-card .interrogation-question {
+  min-height: 82px;
+  padding: 16px;
+  border-radius: 11px;
+  transition:
+    border-color 0.2s ease,
+    background 0.2s ease,
+    transform 0.2s ease;
+}
+
+.suspect-viewer-card .interrogation-question:not(:disabled):hover {
+  transform: translateY(-1px);
+  border-color: rgba(143, 174, 217, 0.55);
+  background: rgba(87, 119, 165, 0.12);
+}
+
+.interrogation-question strong {
+  display: block;
+  line-height: 1.5;
+}
+
+.interrogation-question small {
+  display: block;
+  margin-top: 8px;
+  color: var(--muted);
+  line-height: 1.4;
+}
+
+.suspect-viewer-card #interrogationAnswer {
+  min-height: 90px;
+  margin-top: 16px;
+  background: rgba(4, 7, 13, 0.35);
+  border-color: rgba(130, 158, 194, 0.22);
+}
+
+.interrogation-empty {
+  padding: 24px 18px;
+  border: 1px dashed var(--line);
+  border-radius: 12px;
+  color: var(--muted);
+  line-height: 1.7;
+  text-align: center;
+}
+
+.interrogation-result-title {
+  margin-bottom: 8px !important;
+  color: #b8cdee;
+  font-weight: 650;
+}
+
+.interrogation-result-meta {
+  margin-bottom: 8px !important;
+  color: var(--muted);
+  font-size: 12px;
+}
+
+@media (max-width: 650px) {
+  .suspect-viewer {
+    padding: 8px;
+  }
+
+  .suspect-viewer-card {
+    max-height: 96vh;
+    padding: 18px 14px;
+    border-radius: 13px;
+  }
+
+  .interrogation-header {
+    flex-direction: column;
+    gap: 12px;
+  }
+
+  .interrogation-counter {
+    align-self: flex-start;
+  }
+
+  .interrogation-tabs {
+    gap: 4px;
+  }
+
+  .interrogation-tab {
+    padding: 12px 5px;
+    font-size: 12px;
+  }
+
+  .interrogation-questions {
+    grid-template-columns: 1fr;
+  }
+
+  .suspect-viewer-card .interrogation-question {
+    min-height: 70px;
+  }
+}
+
+
+/* Предъявление улик в кабинете допроса */
+
+.interrogation-evidence {
+  margin-top: 26px;
+  padding-top: 20px;
+  border-top: 1px solid var(--line);
+}
+
+.interrogation-presented-list {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 10px;
+  margin-top: 14px;
+}
+
+.interrogation-presented-list .interrogation-question {
+  min-width: 0;
+}
+
+@media (max-width: 650px) {
+  .interrogation-presented-list {
+    grid-template-columns: 1fr;
+  }
+}
+
 </style>
 </head>
 <body>
@@ -1090,11 +1377,23 @@ footer { text-align:center; color:#626d82; font-size:12px; padding:22px }
         <span>Каждая деталь может изменить ход расследования.</span>
       </div>
 
-      <div class="board-progress">
-        <span class="muted">Собранные улики</span>
-        <strong id="boardProgress">0%</strong>
-      </div>
-    </section>
+      
+<div class="board-progress">
+  <span class="muted">Собранные улики</span>
+  <strong id="boardProgress">0%</strong>
+</div>
+
+<section class="deduction-history">
+  <div class="eyebrow">INVESTIGATION LOG</div>
+  <h3>История выводов</h3>
+  <p class="muted">
+    Все проверенные связи и результаты дедукции по текущему делу.
+  </p>
+  <div id="deductionHistory">
+    <p class="muted">Пока нет проверенных связей.</p>
+  </div>
+</section>
+</section>
 
   </main>
 
@@ -1110,9 +1409,16 @@ footer { text-align:center; color:#626d82; font-size:12px; padding:22px }
     <section class="panel sidebar-section">
       <div class="eyebrow">DEDUCTION</div>
       <h3>Проверка связей</h3>
-      <p class="muted">Выбери две найденные улики и проверь свою версию.</p>
-      <div class="clue-list" id="deductionList"></div>
-      <div id="deductionResult" class="notice hidden" aria-live="polite"></div>
+      
+<p class="muted">
+  Выбери две улики, чтобы найти связь между ними.
+  Или выбери одну улику, а затем подозреваемого, чтобы проверить его причастность.
+</p>
+<div class="clue-list" id="deductionList"></div>
+<div id="deductionHint" class="notice hidden" aria-live="polite"></div>
+<div id="deductionResult" class="notice hidden" aria-live="polite"></div>
+
+
     </section>
 
     <section class="panel sidebar-section">
@@ -1295,7 +1601,9 @@ let state=loadState();
 let activeId=null, chapterIndex=0, soundOn=false, audioContext=null;
 
 let selectedEvidence = [];
+let selectedSuspect = null;
 let deductionMessage = "";
+
 
 const HYPOTHESES = {
   session: [
@@ -1327,6 +1635,7 @@ const HYPOTHESES = {
         "ВЕРСИЯ НЕ УБЕДИТЕЛЬНА.\n\nОтдельные несостыковки можно объяснить случайностью. Но это не объясняет, почему данные о времени противоречат друг другу."
     }
   ],
+
   room: [
     {
       id: "staged",
@@ -1334,7 +1643,8 @@ const HYPOTHESES = {
       description: "Сцену подготовили так, чтобы запутать следствие.",
       requires: ["clock", "glass"],
       result: "good",
-      feedback: "ВЕРСИЯ ПОДТВЕРЖДАЕТСЯ.\n\nЧасы и следы на осколках указывают на подготовленную сцену."
+      feedback:
+        "ВЕРСИЯ ПОДТВЕРЖДАЕТСЯ.\n\nЧасы и следы на осколках указывают на подготовленную сцену."
     },
     {
       id: "inheritance",
@@ -1342,25 +1652,55 @@ const HYPOTHESES = {
       description: "Кто-то рисковал потерять деньги или положение.",
       requires: ["letters", "will"],
       result: "twist",
-      feedback: "НОВАЯ ЗАЦЕПКА.\n\nПереписка и завещание показывают, что конфликт мог начаться задолго до преступления."
+      feedback:
+        "НОВАЯ ЗАЦЕПКА.\n\nПереписка и завещание показывают, что конфликт мог начаться задолго до преступления."
     }
   ],
+
   zero: [
     {
       id: "identity",
       title: "Кто-то создал фиктивную личность",
-      description: "Цифровой след использовали для сокрытия финансовых операций.",
+      description:
+        "Цифровой след использовали для сокрытия финансовых операций. Версию нужно подтвердить показаниями о происхождении аккаунта и выплатах.",
       requires: ["account", "invoice"],
+      requiresFindings: [
+        {
+          suspect: "vendor",
+          id: "contradiction_account"
+        }
+      ],
+      requiresQuestions: [
+        {
+          suspect: "director",
+          id: "cross_vendor_account"
+        }
+      ],
       result: "good",
-      feedback: "ВЕРСИЯ ПОДТВЕРЖДАЕТСЯ.\n\nАккаунт и платёжные данные связывают неизвестного пользователя с финансовой схемой."
+      feedback:
+        "ВЕРСИЯ ПОДТВЕРЖДАЕТСЯ.\n\nАккаунт и платёжные данные связывают неизвестного пользователя с финансовой схемой. Вейл не объяснил происхождение доступа, а Крамер не назвал конкретного ответственного за его выдачу.\n\nЭто подтверждает существование подозрительной схемы доступа, но ещё не доказывает, кто организовал её и кто приказал удалить журнал."
     },
     {
       id: "erasure",
       title: "Данные удалили намеренно",
-      description: "Отключение сервера могло быть прикрытием.",
+      description:
+        "Отключение сервера могло быть прикрытием. Сопоставь технические данные с объяснениями руководства.",
       requires: ["backup", "server"],
+      requiresFindings: [
+        {
+          suspect: "director",
+          id: "contradiction_server"
+        }
+      ],
+      requiresQuestions: [
+        {
+          suspect: "engineer",
+          id: "cross_engineer_report"
+        }
+      ],
       result: "twist",
-      feedback: "НОВАЯ ЗАЦЕПКА.\n\nРезервная копия противоречит официальной версии. Следы проекта могли сохраниться вопреки плану тех, кто хотел их уничтожить."
+      feedback:
+        "НОВАЯ ЗАЦЕПКА.\n\nРезервная копия противоречит официальной версии. Крамер уточнил, что речь шла об исследовательском сегменте, а инженер отделила технические данные от формулировок отчёта.\n\nТеперь есть основания расследовать возможное намеренное удаление данных. Но для установления конкретного исполнителя необходимы дополнительные доказательства."
     }
   ]
 };
@@ -1474,6 +1814,8 @@ document.querySelectorAll("[data-twist-choice]").forEach(button => {
   });
 });
 
+
+
 function renderHypotheses() {
   const list = document.getElementById("hypothesisList");
   const feedback = document.getElementById("hypothesisFeedback");
@@ -1485,23 +1827,90 @@ function renderHypotheses() {
 
   if (!Array.isArray(s.hypotheses)) s.hypotheses = [];
 
+  function checkRequirements(h) {
+    const clues = h.requires || [];
+    const findings = h.requiresFindings || [];
+    const questions = h.requiresQuestions || [];
+
+    const missingClues = clues.filter(
+      id => !(s.found || []).includes(id)
+    );
+
+    
+const missingFindings = findings.filter(item => {
+  const history = s.interrogations?.[item.suspect];
+
+  const evidenceId = item.id.startsWith("contradiction_")
+    ? item.id.slice("contradiction_".length)
+    : null;
+
+  const presentedContradiction =
+    evidenceId && history?.presented?.[evidenceId]?.contradiction;
+
+  return !history?.findings?.[item.id] &&
+    !presentedContradiction;
+});
+
+    const missingQuestions = questions.filter(item =>
+      !(s.interrogations?.[item.suspect]?.asked || []).includes(item.id)
+    );
+
+    return {
+      missingClues,
+      missingFindings,
+      missingQuestions,
+      available:
+        missingClues.length === 0 &&
+        missingFindings.length === 0 &&
+        missingQuestions.length === 0,
+      total: clues.length + findings.length + questions.length,
+      completed:
+        clues.length + findings.length + questions.length -
+        missingClues.length -
+        missingFindings.length -
+        missingQuestions.length
+    };
+  }
+
   list.innerHTML = hypotheses.map(h => {
-    const available = h.requires.every(id => s.found.includes(id));
+    const check = checkRequirements(h);
     const chosen = s.hypotheses.includes(h.id);
+    const result = s.hypothesisResults?.[h.id];
+
+    let status = `Условия: ${check.completed}/${check.total}`;
+
+    if (result?.status === "twist") {
+      status = "✦ Новая зацепка открыта";
+    } else if (result?.status === "supported") {
+      status = "✓ Версия проверена";
+    } else if (check.available) {
+      status = "✓ Можно проверить версию";
+    }
+
+    const missing = [];
+
+    if (check.missingClues.length) {
+      missing.push("Улики: " + check.missingClues.length);
+    }
+    if (check.missingFindings.length) {
+      missing.push("Результаты допросов: " + check.missingFindings.length);
+    }
+    if (check.missingQuestions.length) {
+      missing.push("Перекрёстные вопросы: " + check.missingQuestions.length);
+    }
+
+    if (missing.length) status += " · Не хватает: " + missing.join(", ");
 
     return `
       <button
         type="button"
-        class="hypothesis-card ${chosen ? "selected" : ""} ${!available ? "locked" : ""}"
+        class="hypothesis-card ${chosen ? "selected" : ""} ${!check.available ? "locked" : ""}"
         data-hypothesis="${esc(h.id)}"
-        ${available ? "" : "disabled"}
+        ${check.available ? "" : "disabled"}
       >
-        <strong>${available ? "◈" : "🔒"} ${esc(h.title)}</strong>
-        <span>${esc(
-          available
-            ? h.description
-            : "Найди необходимые улики, чтобы проверить эту версию."
-        )}</span>
+        <strong>${check.available ? "◈" : "🔒"} ${esc(h.title)}</strong>
+        <span>${esc(h.description)}</span>
+        <small class="hypothesis-progress">${esc(status)}</small>
       </button>
     `;
   }).join("");
@@ -1522,6 +1931,7 @@ function renderHypotheses() {
   } else if (last.startsWith("ВЕРСИЯ НЕ УБЕДИТЕЛЬНА")) {
     feedback.classList.add("feedback-bad");
   }
+
   renderTwistScene();
 }
 
@@ -1532,24 +1942,80 @@ function chooseHypothesis(id) {
 
   if (!hypothesis) return;
 
-  if (!hypothesis.requires.every(clue => s.found.includes(clue))) {
-    toast("Сначала найди необходимые улики.");
+  const missingClues = (hypothesis.requires || [])
+    .filter(clueId => !(s.found || []).includes(clueId));
+
+  
+const missingFindings = (hypothesis.requiresFindings || [])
+  .filter(item => {
+    const history = s.interrogations?.[item.suspect];
+
+    const evidenceId = item.id.startsWith("contradiction_")
+      ? item.id.slice("contradiction_".length)
+      : null;
+
+    const presentedContradiction =
+      evidenceId && history?.presented?.[evidenceId]?.contradiction;
+
+    return !history?.findings?.[item.id] &&
+      !presentedContradiction;
+  });
+
+  const missingQuestions = (hypothesis.requiresQuestions || [])
+    .filter(item =>
+      !(s.interrogations?.[item.suspect]?.asked || []).includes(item.id)
+    );
+
+  if (
+    missingClues.length ||
+    missingFindings.length ||
+    missingQuestions.length
+  ) {
+    const messages = [];
+
+    if (missingClues.length) {
+      messages.push("не хватает улик: " + missingClues.length);
+    }
+    if (missingFindings.length) {
+      messages.push("не хватает результатов допросов: " + missingFindings.length);
+    }
+    if (missingQuestions.length) {
+      messages.push("не заданы перекрёстные вопросы: " + missingQuestions.length);
+    }
+
+    toast("Версия пока недоступна — " + messages.join("; ") + ".");
+    renderHypotheses();
     return;
   }
 
-  if (!Array.isArray(s.hypotheses)) s.hypotheses = [];
+  if (!Array.isArray(s.hypotheses)) {
+    s.hypotheses = [];
+  }
 
   if (!s.hypotheses.includes(id)) {
     s.hypotheses.push(id);
   }
 
-  s.lastHypothesisFeedback = hypothesis.feedback;
-
-  // Скрытые выводы дают дополнительные очки только при первом открытии.
   if (
-    hypothesis.result === "twist" &&
-    !Array.isArray(s.unlockedTwists)
+    !s.hypothesisResults ||
+    typeof s.hypothesisResults !== "object" ||
+    Array.isArray(s.hypothesisResults)
   ) {
+    s.hypothesisResults = {};
+  }
+
+  s.hypothesisResults[id] = {
+    status: hypothesis.result === "twist"
+      ? "twist"
+      : hypothesis.result === "good"
+        ? "supported"
+        : "reviewed",
+    checkedAt: Date.now()
+  };
+
+  s.lastHypothesisFeedback = hypothesis.feedback || "";
+
+  if (!Array.isArray(s.unlockedTwists)) {
     s.unlockedTwists = [];
   }
 
@@ -1558,13 +2024,14 @@ function chooseHypothesis(id) {
     !s.unlockedTwists.includes(id)
   ) {
     s.unlockedTwists.push(id);
-    state.score = (state.score || 0) + 30;
-    s.lastHypothesisFeedback += "\n\n+30 очков: открыта новая зацепка.";
-    ping(950, .18);
+    state.score = (Number(state.score) || 0) + 30;
+    s.lastHypothesisFeedback +=
+      "\n\n+30 очков: открыта новая зацепка.";
+    ping(950, 0.18);
   } else if (hypothesis.result === "good") {
-    ping(750, .12);
+    ping(750, 0.12);
   } else {
-    ping(300, .12);
+    ping(300, 0.12);
   }
 
   saveState();
@@ -1629,6 +2096,73 @@ const DEDUCTIONS = {
   }
 };
 
+
+const SUSPECT_DEDUCTIONS = {
+  session: {
+    "log|levin": {
+      title: "Поздний визит доктора подтверждён",
+      text: "Журнал доступа опровергает слова Левина о времени ухода. Это доказывает ложь, но ещё не доказывает его ответственность за исчезновение.",
+      good: true
+    },
+    "archive|levin": {
+      title: "Доктор связан со старым делом",
+      text: "Архив и показания указывают на связь Левина с прошлым инцидентом. Нужно установить, как эта история связана с исчезновением Марка.",
+      good: true
+    },
+    "keycard|tech": {
+      title: "Технический доступ обнаружен",
+      text: "У техника был доступ к системе, но один лишь доступ не доказывает, что он удалил запись.",
+      good: false
+    }
+  },
+
+  room: {
+    "letters|secretary": {
+      title: "Мотив секретаря подтверждён",
+      text: "Письмо показывает, что Павел собирался уволить секретаря. Это даёт возможный мотив, но само по себе не доказывает убийство.",
+      good: true
+    },
+    "will|secretary": {
+      title: "Завещание связывает секретаря с мотивом",
+      text: "Новое завещание угрожало положению секретаря и его доступу к коллекции.",
+      good: true
+    },
+    "mud|gardener": {
+      title: "Следы садовника проверены",
+      text: "Следы помогают проверить его маршрут, но не ведут непосредственно к кабинету.",
+      good: false
+    }
+  },
+
+  zero: {
+    "account|vendor": {
+      title: "Вейл пользовался фиктивной личностью",
+      text: "Аккаунт без кадрового номера связан с подрядчиком. Это подтверждает использование фиктивной учётной записи, но не доказывает, кто её создал.",
+      good: true
+    },
+    "invoice|vendor": {
+      title: "Подрядчик связан с выплатами",
+      text: "Счёт подтверждает финансовую связь с подрядчиком. Необходимо установить, кто согласовал платежи и за какие действия.",
+      good: true
+    },
+    "payment|director": {
+      title: "Подпись руководителя на платеже",
+      text: "Платёжная ведомость связывает Крамера с финансированием проекта ZERO. Это важный след, но не прямое доказательство удаления журнала.",
+      good: true
+    },
+    "protocol|director": {
+      title: "Крамер связан с протоколом ZERO",
+      text: "Протокол испытаний противоречит заявлениям руководителя об отсутствии проекта.",
+      good: true
+    },
+    "server|engineer": {
+      title: "Инженер обнаружила техническое противоречие",
+      text: "Журнал показывает события, несовместимые с официальным отчётом. Но наличие доступа или знание о событиях не доказывает вину инженера.",
+      good: false
+    }
+  }
+};
+
 function deductionPairKey(a, b) {
   return [a, b].sort().join("|");
 }
@@ -1657,35 +2191,170 @@ function pickDeductionEvidence(id) {
   renderSidebar();
 }
 
-function analyzeDeduction(a, b) {
+
+function analyzeSuspectDeduction(evidenceId, suspectId) {
   const s = caseState(activeId);
-  const key = deductionPairKey(a, b);
-  const known = DEDUCTIONS[activeId]?.[key];
+
+  if (!s) {
+    deductionMessage = "Не удалось загрузить состояние дела.";
+    return;
+  }
+
+  const c = CASES.find(item => item.id === activeId);
+  const evidence = c?.evidence?.find(item => item[0] === evidenceId);
+  const suspect = c?.suspects?.find(item => item.id === suspectId);
+
+  if (!evidence || !suspect) {
+    deductionMessage = "Не удалось определить улику или подозреваемого.";
+    return;
+  }
+
+  const found = Array.isArray(s.found)
+    ? s.found
+    : [];
+
+  if (!found.includes(evidenceId)) {
+    deductionMessage = "Сначала изучи эту улику.";
+    return;
+  }
+
+  const key = [evidenceId, suspectId].sort().join("|");
+  const known = SUSPECT_DEDUCTIONS[activeId]?.[key];
+
+  if (!Array.isArray(s.suspectLinks)) {
+    s.suspectLinks = [];
+  }
+
+  if (s.suspectLinks.includes(key)) {
+    deductionMessage =
+      suspect.name + " — " + evidence[1] + "\n\n" +
+      "Ты уже проверял эту связь. Повторно очки не начисляются.";
+    ping(450, 0.08);
+    renderSidebar();
+    return;
+  }
 
   if (!known) {
     deductionMessage =
-      "Эта связь пока не подтверждается. Попробуй другую пару улик и подумай, что именно они доказывают.";
-    ping(250, .12);
+      evidence[1] + " — " + suspect.name + "\n\n" +
+      "Эта комбинация пока не подтверждается. " +
+      "Само по себе совпадение улики и подозреваемого не доказывает причастность.";
+    ping(300, 0.10);
+    renderSidebar();
     return;
   }
 
-  if (!Array.isArray(s.links)) s.links = [];
+  s.suspectLinks.push(key);
 
+  if (known.good) {
+    const points = 15;
+
+    s.score = (Number(s.score) || 0) + points;
+    state.score = (Number(state.score) || 0) + points;
+
+    deductionMessage =
+      known.title + "\n\n" +
+      known.text +
+      "\n\n+15 очков за дедукцию.";
+
+    ping(800, 0.14);
+  } else {
+    deductionMessage =
+      known.title + "\n\n" +
+      known.text +
+      "\n\nСвязь записана, но очки не начислены.";
+
+    ping(350, 0.10);
+  }
+
+  saveState();
+  renderSidebar();
+}
+
+function analyzeDeduction(a, b) {
+  const s = caseState(activeId);
+
+  if (!s) {
+    deductionMessage = "Не удалось загрузить состояние дела.";
+    ping(250, 0.12);
+    return;
+  }
+
+  if (!a || !b || a === b) {
+    deductionMessage =
+      "Для дедукции выбери две разные улики.";
+    ping(250, 0.12);
+    return;
+  }
+
+  const key = deductionPairKey(a, b);
+  const known = DEDUCTIONS[activeId]?.[key];
+
+  // Проверяем, найдены ли обе улики.
+  const hasEvidence = id => {
+    if (Array.isArray(s.found)) {
+      return s.found.includes(id);
+    }
+
+    if (s.found && typeof s.found === "object") {
+      return Boolean(s.found[id]);
+    }
+
+    return false;
+  };
+
+  if (!hasEvidence(a) || !hasEvidence(b)) {
+    deductionMessage =
+      "Для этой дедукции сначала необходимо найти обе улики.";
+    ping(250, 0.12);
+    return;
+  }
+
+  if (!known) {
+    deductionMessage =
+      "Эта связь пока не подтверждается.\n\n" +
+      "Сравни детали улик: совпадают ли время, участники " +
+      "или обстоятельства события?";
+    ping(250, 0.12);
+    return;
+  }
+
+  // Совместимость со старыми сохранениями.
+  if (!Array.isArray(s.links)) {
+    s.links = [];
+  }
+
+  // Повторная связь не приносит очков.
   if (s.links.includes(key)) {
-    deductionMessage = known.title + "\nТы уже устанавливал эту связь.";
-    ping(450, .08);
+    deductionMessage =
+      known.title + "\n\n" +
+      "Эта связь уже установлена. Повторно очки не начисляются.";
+    ping(450, 0.08);
     return;
   }
 
+  // Сохраняем связь один раз.
   s.links.push(key);
 
   if (known.good) {
-    state.score = (state.score || 0) + 20;
-    deductionMessage = known.title + "\n" + known.text + "\n\n+20 очков за дедукцию.";
-    ping(850, .16);
+    const points = 20;
+
+    s.score = (Number(s.score) || 0) + points;
+    state.score = (Number(state.score) || 0) + points;
+
+    deductionMessage =
+      known.title + "\n\n" +
+      known.text +
+      "\n\n+20 очков за дедукцию.";
+    
+    ping(850, 0.16);
   } else {
-    deductionMessage = known.title + "\n" + known.text;
-    ping(350, .12);
+    deductionMessage =
+      known.title + "\n\n" +
+      known.text +
+      "\n\nСвязь записана, но очки за неё не начислены.";
+
+    ping(350, 0.12);
   }
 
   saveState();
@@ -1707,6 +2376,7 @@ function caseState(id) {
       found: [],
       seen: [],
       links: [],
+      suspectLinks: [],
       finished: false,
       ending: null,
       score: 0,
@@ -1717,6 +2387,12 @@ function caseState(id) {
   // Совместимость с прогрессом, сохранённым в предыдущей версии
   if (!Array.isArray(state.cases[id].links)) {
     state.cases[id].links = [];
+  }
+
+  
+  // Связи улик с подозреваемыми — для старых сохранений.
+  if (!Array.isArray(state.cases[id].suspectLinks)) {
+    state.cases[id].suspectLinks = [];
   }
 
     // Совместимость со старыми сохранениями
@@ -1818,11 +2494,13 @@ function renderSidebar(){
  const s = caseState(activeId);
 
  const visibleEvidence = c.evidence.filter(e =>
-   Array.isArray(e) &&
-   e.length >= 3 &&
-   (!["protocol", "metadata"].includes(e[0]) ||
-     (Array.isArray(s.branchClues) && s.branchClues.includes(e[0])))
- );
+  Array.isArray(e) &&
+  e.length >= 3 &&
+  (
+    activeId !== "session" ||
+    !["protocol", "metadata"].includes(e[0]) ||
+    (Array.isArray(s.branchClues) && s.branchClues.includes(e[0]))
+  ));
  document.getElementById("clueList").innerHTML = visibleEvidence.map(e => {
   const found=s.found.includes(e[0]);
   return `<button class="clue ${found?"found":""}" data-clue="${e[0]}">
@@ -1858,6 +2536,23 @@ function renderSidebar(){
         pickDeductionEvidence(button.dataset.pick);
       });
     });
+    
+const deductionHint = document.getElementById("deductionHint");
+
+if (deductionHint) {
+  if (selectedEvidence.length === 1) {
+    deductionHint.textContent =
+      "Выбрана одна улика. Выбери вторую улику для сравнения или нажми на подозреваемого ниже.";
+    deductionHint.classList.remove("hidden");
+  } else if (selectedEvidence.length === 2) {
+    deductionHint.textContent =
+      "Сравни две выбранные улики.";
+    deductionHint.classList.remove("hidden");
+  } else {
+    deductionHint.textContent = "";
+    deductionHint.classList.add("hidden");
+  }
+}
   }
 
   if (deductionResult) {
@@ -1872,10 +2567,81 @@ function renderSidebar(){
 
     deductionResult.textContent = deductionMessage;
   }
+  
+  // История проверенных связей
+  const deductionHistory = document.getElementById("deductionHistory");
+
+  if (deductionHistory) {
+    const s = caseState(activeId);
+    const c = CASES.find(item => item.id === activeId);
+
+    const evidenceLinks = (Array.isArray(s.links) ? s.links : [])
+      .map(key => {
+        const known = DEDUCTIONS[activeId]?.[key];
+        if (!known) return null;
+
+        return {
+          key,
+          title: known.title,
+          text: known.text,
+          good: known.good,
+          type: "Улика ↔ улика"
+        };
+      });
+
+    const suspectLinks = (Array.isArray(s.suspectLinks) ? s.suspectLinks : [])
+      .map(key => {
+        const known = SUSPECT_DEDUCTIONS[activeId]?.[key];
+        if (!known) return null;
+
+        return {
+          key,
+          title: known.title,
+          text: known.text,
+          good: known.good,
+          type: "Улика ↔ подозреваемый"
+        };
+      });
+
+    const history = [...evidenceLinks, ...suspectLinks].filter(Boolean);
+
+    if (history.length === 0) {
+      deductionHistory.innerHTML =
+        '<p class="muted">Пока нет проверенных связей. Изучи улики и начни сопоставление.</p>';
+    } else {
+      deductionHistory.innerHTML = history.map(item => `
+        <article class="deduction-history-item">
+          <span class="deduction-history-type">${esc(item.type)}</span>
+          <strong>${esc(item.title)}</strong>
+          <p>${esc(item.text)}</p>
+          <span class="deduction-history-status">
+            ${item.good ? "Вывод подтверждён" : "Связь проверена"}
+          </span>
+        </article>
+      `).join("");
+    }
+  }
  document.getElementById("suspectList").innerHTML=c.suspects.map(p=>
  `<button class="suspect" data-suspect="${p.id}"><strong>${esc(p.name)}</strong><small>${esc(p.role)} · нажми для досье</small></button>`
  ).join("");
- document.querySelectorAll("[data-suspect]").forEach(b=>b.addEventListener("click",()=>inspectSuspect(b.dataset.suspect)));
+ 
+document.querySelectorAll("[data-suspect]").forEach(button => {
+  button.addEventListener("click", () => {
+    const suspectId = button.dataset.suspect;
+
+    // Если на доске уже выбрана улика — проверяем их связь.
+    if (selectedEvidence.length === 1) {
+      analyzeSuspectDeduction(selectedEvidence[0], suspectId);
+      selectedEvidence = [];
+      selectedSuspect = null;
+      renderSidebar();
+      return;
+    }
+
+    // Иначе оставляем обычное открытие досье.
+    inspectSuspect(suspectId);
+  });
+});
  const pct=Math.round(s.found.length/c.evidence.length*100);
  document.getElementById("progressText").textContent=pct+"%";
  document.getElementById("progressBar").style.width=pct+"%";
@@ -1894,7 +2660,550 @@ function inspectClue(id){
  box.innerHTML=`<div class="notice"><strong>${esc(e[1])}</strong><br>${esc(e[2])}</div>`;
 }
 
+const EVIDENCE_CHAINS = {
+zero: [
+{
+id: "data_export",
+title: "Цепочка восстановленного журнала",
+evidence: ["server", "backup"],
+suspect: "director",
+result:
+"Серверные события и резервная копия подтверждают экспорт данных перед удалением журнала."
+},
+{
+id: "ghost_identity",
+title: "Цепочка фиктивной личности",
+evidence: ["account", "invoice"],
+suspect: "vendor",
+result:
+"Аккаунт без кадрового номера связан с реальными выплатами подрядчику."
+},
+{
+id: "project_funding",
+title: "Цепочка финансирования ZERO",
+evidence: ["protocol", "payment"],
+suspect: "director",
+result:
+"Протокол испытаний и подписанная платёжная ведомость связывают проект с руководством."
+}
+]
+};
 
+const CHAIN_CONFESSIONS = {
+zero: {
+data_export: {
+suspect: "director",
+title: "Крамер меняет показания",
+text:
+"Крамер несколько секунд изучает распечатку.\n\n" +
+"«Сервер действительно работал. В отчёте описали состояние исследовательского сегмента, а не всей системы. Я согласовал эту формулировку».\n\n" +
+"Он признаёт, что знал о работе системы, но продолжает отрицать личное участие в удалении журнала.\n\n" +
+"НОВАЯ ДЕТАЛЬ: официальная версия была согласована руководством проекта."
+},
+ghost_identity: {
+suspect: "vendor",
+title: "Вейл раскрывает происхождение доступа",
+text:
+"Вейл отводит взгляд от счёта подрядчика.\n\n" +
+"«Я получил готовую учётную запись. Документы на доступ оформляли не через кадровую службу. Мне сказали, что это отдельный контракт».\n\n" +
+"Он не называет человека, который организовал схему, но подтверждает, что фиктивная личность существовала не случайно.\n\n" +
+"НОВАЯ ДЕТАЛЬ: доступ Вейла оформлялся в обход обычного кадрового процесса."
+},
+project_funding: {
+suspect: "director",
+title: "Крамер подтверждает финансирование",
+text:
+"Крамер долго смотрит на платёжную ведомость.\n\n" +
+"«Я подписывал финансирование проекта. Но подпись под платежом не означает, что я лично управлял каждой операцией с данными».\n\n" +
+"Впервые он прямо подтверждает связь с финансированием испытаний, однако отрицает, что лично удалил серверный журнал.\n\n" +
+"НОВАЯ ДЕТАЛЬ: Крамер подтверждает финансирование проекта ZERO."
+}
+}
+};
+
+
+const CONFESSION_QUESTIONS = {
+  zero: {
+    director: [
+      {
+        id: "after_funding",
+        title: "Кто распорядился удалить журнал?",
+        text:
+          "«Я согласовал финансирование, но не отдавал приказа об удалении журнала. Доступ к серверу был у нескольких сотрудников. Проверьте время экспорта и права доступа»."
+      },
+      {
+        id: "after_export",
+        title: "Почему официальный отчёт не совпадает с журналом?",
+        text:
+          "«Отчёт готовили после инцидента. Я отвечал за проект, но технические детали собирал отдел безопасности. Возможно, формулировка об отключении сегмента была слишком общей»."
+      },
+      {
+        id: "after_protocol",
+        title: "Кто разрешил испытания без идентификатора пациента?",
+        text:
+          "«Протокол проходил несколько этапов согласования. Я утверждал финансирование, но не могу подтвердить, кто именно разрешил конкретную процедуру»."
+      },
+      {
+        id: "after_backup",
+        title: "Почему резервная копия сохранилась после удаления журнала?",
+        text:
+          "«Резервное копирование выполнялось автоматически. Я не управлял расписанием сервера. Нужно установить, кто знал о существовании этой копии»."
+      }
+    ],
+
+    vendor: [
+      {
+        id: "after_identity",
+        title: "Кто оформил вашу учётную запись?",
+        text:
+          "«Документы передали через координатора проекта. Я не видел кадрового приказа и не знаю, кто внёс запись в систему. Имя человека, который передал доступ, должно быть в переписке о контракте»."
+      },
+      {
+        id: "after_invoice",
+        title: "За какую услугу вам перечислили деньги?",
+        text:
+          "«Оплата прошла по договору с подрядчиком. Я выполнял поручения, которые получал, но не участвовал в согласовании исследовательской программы»."
+      }
+    ],
+
+    engineer: [
+      {
+        id: "after_server",
+        title: "Кто имел доступ к серверу в момент экспорта?",
+        text:
+          "«Одного журнала недостаточно, чтобы установить человека за клавиатурой. Нужны права доступа, время операции и данные резервного копирования»."
+      },
+      {
+        id: "after_protocol",
+        title: "Почему последовательность испытаний не отражена в отчёте?",
+        text:
+          "«Технические записи и итоговый отчёт создавались в разное время. Если сведения расходятся, нужно установить, кто изменял документ и на каком этапе»."
+      }
+    ]
+  }
+};
+
+
+const EVIDENCE_CONTRADICTIONS = {
+zero: {
+director: {
+server: {
+title: "Противоречие: сервер не был отключён",
+text:
+"Крамер замолкает, увидев время событий.\n\n" +
+"«Я говорил об отключении исследовательского сегмента, а не всего сервера», — наконец отвечает он.\n\n" +
+"Но в официальном отчёте не было такого уточнения. Его объяснение не согласуется с первоначальной версией."
+},
+backup: {
+title: "Противоречие: данные покинули внутреннюю сеть",
+text:
+"Крамер внимательно читает восстановленный фрагмент.\n\n" +
+"«Экспорт мог быть частью штатной процедуры», — говорит он.\n\n" +
+"Однако он не объясняет, почему в отчёте утверждалось, что сервер был отключён. Версия об обычной ошибке синхронизации становится менее убедительной."
+},
+payment: {
+title: "Противоречие: подпись руководителя",
+text:
+"Крамер задерживает взгляд на платёжной ведомости.\n\n" +
+"«Подписание платежа не означает, что я знал обо всех действиях подрядчика».\n\n" +
+"Но его подпись связывает руководство с финансированием проекта. Теперь необходимо сопоставить платёж с протоколом ZERO."
+}
+},
+engineer: {
+backup: {
+title: "Показания подтверждены: копия сохранила след",
+text:
+"Ирина изучает восстановленный фрагмент.\n\n" +
+"«Это та часть журнала, которую удалось сохранить. Здесь видно, что архив отправили на внешний узел».\n\n" +
+"Её объяснение согласуется с техническими данными. Само по себе это не доказывает её невиновность, но подтверждает ценность сохранённой копии."
+}
+},
+vendor: {
+account: {
+title: "Противоречие: происхождение доступа не объяснено",
+text:
+"Вейл внимательно рассматривает сведения об аккаунте.\n\n" +
+"«Я пользовался предоставленными мне учётными данными. Кто создал аккаунт — не моя зона ответственности».\n\n" +
+"Он не объясняет, кто предоставил ему максимальные права. Происхождение фиктивной личности остаётся ключевым вопросом."
+},
+invoice: {
+title: "Противоречие: подрядчик получил реальные выплаты",
+text:
+"Вейл перестаёт листать документы.\n\n" +
+"«Договор был оформлен через компанию. Я не занимался кадровыми записями».\n\n" +
+"Счёт подтверждает финансовую связь, но пока не устанавливает, кто организовал схему. Нужно проверить, кто подписывал выплаты."
+}
+}
+}
+};
+
+
+const EVIDENCE_REACTIONS = {
+  zero: {
+    director: {
+      server: {
+        title: "Крамер оспаривает трактовку журнала",
+        text:
+          "Крамер отодвигает документ.\n\n" +
+          "«Журнал подтверждает работу сервера, но не доказывает, кто отдавал команды. За технические операции отвечает соответствующий отдел».\n\n" +
+          "Он не объясняет, почему официальный отчёт утверждал, что сервер был отключён."
+      },
+      
+      protocol: {
+        title: "Крамер узнаёт детали протокола",
+        text:
+          "Крамер задерживает взгляд на идентификаторах.\n\n" +
+          "«Этот документ относится к исследовательской программе. Но отсутствие имени пациента не доказывает, что испытания проводились без разрешения».\n\n" +
+          "Он впервые не отрицает связь документа с проектом ZERO."
+      },
+
+      payment: {
+        title: "Подпись Крамера на платёжной ведомости",
+        text:
+          "Крамер изучает собственную подпись.\n\n" +
+          "«Я утверждал бюджет проекта. Платежи обрабатывала бухгалтерия».\n\n" +
+          "Он подтверждает финансирование, но пытается отделить его от операций с сервером."
+      },
+
+      backup: {
+        title: "Резервная копия противоречит официальному отчёту",
+        text:
+          "Крамер читает восстановленные записи молча.\n\n" +
+          "«Я не видел именно эту копию до сегодняшнего дня».\n\n" +
+          "Он не объясняет, почему отчёт об отключении сервера расходится с восстановленными данными."
+      }
+    },
+
+    engineer: {
+      server: {
+        title: "Ирина требует восстановить последовательность событий",
+        text:
+          "Ирина внимательно изучает отметки времени.\n\n" +
+          "«Сначала экспорт архива, затем удаление журнала. Нужно установить, кто имел доступ в этот промежуток».\n\n" +
+          "Она признаёт значение журнала, но не пытается выдавать его за доказательство личности исполнителя."
+      },
+      backup: {
+        title: "Ирина сопоставляет резервную копию",
+        text:
+          "Ирина открывает восстановленные записи рядом с журналом событий.\n\n" +
+          "«Если копия подлинная, она позволяет восстановить последовательность действий. Но нужно проверить время создания и источник файла».\n\n" +
+          "Она настаивает на проверке происхождения данных, а не только их содержания."
+      }
+    },
+
+    vendor: {
+      mail: {
+        title: "Вейл дистанцируется от содержания письма",
+        text:
+          "Вейл перечитывает письмо и становится заметно серьёзнее.\n\n" +
+          "«Я получал файлы, которые мне передавали. Это письмо само по себе не доказывает, что я его написал или отправил».\n\n" +
+          "Нужно проверить происхождение письма и сопоставить его с журналом доступа."
+      },
+
+      account: {
+        title: "Вейл не называет создателя аккаунта",
+        text:
+          "«Учётную запись мне предоставили. Я не занимался её созданием», — отвечает Вейл.\n\n" +
+          "Он снова не называет человека, который выдал ему доступ. Происхождение аккаунта остаётся открытым вопросом."
+      },
+      invoice: {
+        title: "Вейл объясняет происхождение счёта",
+        text:
+          "Вейл долго изучает реквизиты документа.\n\n" +
+          "«Я получил оплату за услуги. Но этот счёт не объясняет, кто оформил мою учётную запись и почему в системе нет кадрового номера».\n\n" +
+          "Он признаёт связь с платежом, но не раскрывает, кто организовал доступ."
+      }
+    }
+  }
+};
+
+const INTERROGATION_FINDINGS = {
+  session: {
+    levin: {
+      evidence: {
+        title: "Посещение клиники подтверждено",
+        text: "Левин признал визит. Его цель и действия внутри кабинета остаются предметом расследования."
+      },
+      timeline: {
+        title: "Временная линия оспорена",
+        text: "Левин предложил альтернативное объяснение времени, но пока не подкрепил его доказательствами."
+      }
+    },
+    nina: {
+      timeline: {
+        title: "Точность показаний поставлена под сомнение",
+        text: "Нина не уверена в точном времени спора. Её слова требуют проверки по независимым уликам."
+      }
+    },
+    tech: {
+      timeline: {
+        title: "Осведомлённость техника требует проверки",
+        text: "Илья знал о состоянии архива, но его ответ не устанавливает, кто удалил запись."
+      }
+    }
+  },
+
+  zero: {
+    director: {
+      evidence: {
+        title: "Официальная версия оспорена",
+        text: "Журнал показывает экспорт архива перед удалением записи. Версия об отключённом сервере требует объяснения."
+      },
+      cross_vendor_account: {
+        title: "Перекрёстный допрос: происхождение аккаунта",
+        text:
+          "Показания Вейла заставили Крамера объяснять порядок выдачи доступа. Руководитель не назвал конкретного ответственного. Необходимо проверить журналы создания учётной записи и согласования прав."
+      },
+      timeline: {
+        title: "Связь руководства с финансированием",
+        text: "Подпись Крамера связывает его с финансовыми документами проекта, но сама по себе не доказывает приказ об удалении данных."
+      },
+      identity: {
+        title: "Обнаружена проблема с личностью подрядчика",
+        text: "Аккаунт без кадрового номера и повышенные права доступа требуют установить, кто создал учётную запись."
+      },
+      contradiction_server: {
+        title: "Уточнение Крамера зафиксировано",
+        text: "Крамер отделяет отключение исследовательского сегмента от отключения всего сервера. Это уточнение не объясняет, почему официальный отчёт не отражает экспорт данных."
+      },
+      contradiction_backup: {
+        title: "Автор официальной версии не установлен",
+        text: "Крамер допускает штатный экспорт, но не называет человека, согласовавшего формулировку отчёта. Ответ требует сопоставления с протоколом и платёжными документами."
+      },
+      contradiction_payment: {
+        title: "Осведомлённость руководства требует проверки",
+        text: "Подпись Крамера подтверждает участие в финансировании, но не доказывает, что он лично распорядился удалить журнал."
+      }
+    },
+    engineer: {
+      evidence: {
+        title: "Доступ не равен доказанной вине",
+        text: "Ирина имела техническую возможность удалить журнал, но последовательность событий сама по себе не доказывает её причастность."
+      },
+      timeline: {
+        title: "Сохранённые данные помогают расследованию",
+        text: "Копия письма и резервные данные помогают восстановить события, даже если оригинальные записи исчезли."
+      }, 
+      cross_engineer_report: {
+        title: "Перекрёстный допрос: технические данные и отчёт",
+        text:
+          "Инженер отделила технические факты от формулировок официального отчёта. Последовательность событий необходимо сверить с резервной копией и исходным журналом. Само расхождение ещё не устанавливает, кто намеренно исказил информацию."
+      }
+    },
+    vendor: {
+      evidence: {
+        title: "Учётная запись требует объяснения",
+        text: "Вейл утверждает, что получил готовый аккаунт. Кто создал его и назначил права, пока не установлено."
+      },
+      timeline: {
+        title: "Платежи связаны с испытаниями",
+        text: "Финансовые документы связывают подрядчика с проектом, а подпись Крамера указывает на возможную роль руководства."
+      },
+      protocol: {
+        title: "Связь с материалами проекта подтверждена",
+        text: "Вейл работал с файлами проекта ZERO, но это ещё не устанавливает, кто подменил имя пациента."
+      },
+      contradiction_account: {
+        title: "Происхождение доступа осталось невыясненным",
+        text: "Вейл утверждает, что получил готовые учётные данные, но не называет человека, который передал аккаунт. Следующий шаг — установить, кто оформил доступ."
+      },
+      contradiction_invoice: {
+        title: "Назначение выплаты требует проверки",
+        text: "Вейл отрицает ответственность за кадровые записи, но не объясняет конкретную услугу по счёту. Финансовую цепочку необходимо сопоставить с документами проекта."
+      },
+      cross_director_payment: {
+        title: "Перекрёстный допрос: выплаты подрядчику",
+        text:
+          "Вейл подтвердил, что получал оплату за работу по договорённости, но не уточнил, кто согласовывал конкретные платежи. Финансовые документы связывают подрядчика с проектом, однако сами по себе не доказывают его причастность к удалению журнала."
+      }
+    }
+  }
+};
+
+
+function getInterrogationPressure(history) {
+  const presented = Object.values(
+    history?.presented || {}
+  );
+
+  const chains = Object.values(
+    history?.chains || {}
+  );
+
+  const findings = Object.values(
+    history?.findings || {}
+  );
+
+  const contradictions = presented.filter(
+    item => item.contradiction
+  ).length;
+
+  const confessions = chains.filter(
+    chain => Boolean(chain.confession)
+  ).length;
+
+  // Учитываем только подтверждённые результаты.
+  const points =
+    contradictions * 22 +
+    chains.length * 18 +
+    confessions * 12 +
+    findings.length * 4;
+
+  return Math.min(100, points);
+}
+
+
+function getInterrogationMood(pressure, suspectId) {
+  const profiles = {
+    director: {
+      calm: "Крамер держится как руководитель, привыкший контролировать разговор.",
+      tense: "Крамер начинает тщательно выбирать формулировки.",
+      breaking: "Крамер пытается переложить ответственность на подчинённых.",
+      broken: "Крамеру всё труднее отделять решения руководства от последствий проекта."
+    },
+    vendor: {
+      calm: "Вейл старается выглядеть человеком, который лишь выполнял поручения.",
+      tense: "Вейл всё чаще дистанцируется от документов и решений.",
+      breaking: "Вейл пытается объяснить, кто именно предоставил ему доступ.",
+      broken: "Вейл больше не может уверенно ссылаться только на чужие поручения."
+    },
+    engineer: {
+      calm: "Ирина сосредоточена на фактах и последовательности событий.",
+      tense: "Ирина всё настойчивее требует точной технической хронологии.",
+      breaking: "Ирина указывает на расхождения между записями и официальной версией.",
+      broken: "Ирина перестаёт поддерживать объяснения, которые не согласуются с журналами."
+    },
+    levin: {
+      calm: "Левин старается сохранять спокойствие.",
+      tense: "Левин осторожнее отвечает на вопросы о времени событий.",
+      breaking: "Левин начинает уклоняться от деталей, которые раньше не считал важными.",
+      broken: "Левину становится трудно согласовать свои показания с фактами."
+    },
+    nina: {
+      calm: "Нина старается придерживаться первоначальной версии.",
+      tense: "Нина становится осторожнее в объяснениях.",
+      breaking: "Нина начинает противоречить собственным прежним формулировкам.",
+      broken: "Прежняя версия Нины больше не выглядит цельной."
+    },
+    tech: {
+      calm: "Технический специалист опирается на формальные объяснения.",
+      tense: "Он всё чаще уточняет границы своей ответственности.",
+      breaking: "Ему становится трудно объяснять технические расхождения.",
+      broken: "Формальные объяснения больше не закрывают ключевые вопросы."
+    },
+    heir: {
+      calm: "Наследник держится уверенно и старается контролировать разговор.",
+      tense: "В ответах появляется больше оговорок.",
+      breaking: "Ему приходится объяснять детали, которые раньше оставались за рамками версии.",
+      broken: "Прежнее объяснение событий начинает рассыпаться."
+    },
+    secretary: {
+      calm: "Секретарь придерживается сдержанной официальной версии.",
+      tense: "Ответы становятся осторожнее и конкретнее.",
+      breaking: "Секретарю приходится объяснять несоответствия в документах.",
+      broken: "Официальная версия больше не объясняет все известные факты."
+    },
+    gardener: {
+      calm: "Садовник старается не выходить за рамки первоначальных показаний.",
+      tense: "Он начинает внимательнее относиться к вопросам о времени.",
+      breaking: "Ему приходится уточнять детали прежних объяснений.",
+      broken: "Его версия событий уже не согласуется со всеми уликами."
+    }
+  };
+
+  let level;
+
+  if (pressure >= 75) {
+    level = "broken";
+  } else if (pressure >= 50) {
+    level = "breaking";
+  } else if (pressure >= 25) {
+    level = "tense";
+  } else {
+    level = "calm";
+  }
+
+  const profile = profiles[suspectId] || profiles.tech;
+
+  const titles = {
+    calm: "ДЕРЖИТСЯ УВЕРЕННО",
+    tense: "НАЧИНАЕТ НЕРВНИЧАТЬ",
+    breaking: "ПРОТИВОРЕЧИЯ НАКАПЛИВАЮТСЯ",
+    broken: "ПОЗИЦИЯ ПОЧТИ РАЗРУШЕНА"
+  };
+
+  const colors = {
+    calm: "#8d96a8",
+    tense: "#d6bd69",
+    breaking: "#e89b58",
+    broken: "#e45d65"
+  };
+
+  return {
+    level,
+    title: titles[level],
+    description: profile[level],
+    color: colors[level]
+  };
+}
+
+function getDynamicInterrogationAnswer(
+  caseId,
+  suspectId,
+  question,
+  history
+) {
+  const baseAnswer = question.answer || question.text || "";
+  const presented = history?.presented || {};
+  const chains = history?.chains || {};
+
+  if (caseId !== "zero") {
+    return baseAnswer;
+  }
+
+  // Крамер: после раскрытия финансирования
+  if (
+    suspectId === "director" &&
+    chains.project_funding?.confession &&
+    ["funding", "project", "budget"].some(word =>
+      (question.title || "").toLowerCase().includes(word)
+    )
+  ) {
+    return (
+      baseAnswer +
+      "\n\nКрамер уже подтвердил связь руководства с финансированием. " +
+      "Теперь ему труднее отрицать, что проект находился под контролем его отдела."
+    );
+  }
+
+  // Крамер: журнал и резервная копия
+  if (
+    suspectId === "director" &&
+    presented.backup &&
+    presented.server
+  ) {
+    return (
+      baseAnswer +
+      "\n\nПосле сопоставления журнала и резервной копии Крамер " +
+      "становится осторожнее: теперь недостаточно просто ссылаться " +
+      "на отсутствие доказательств конкретного исполнителя."
+    );
+  }
+
+  // Вейл: после раскрытия фиктивной личности
+  if (
+    suspectId === "vendor" &&
+    chains.ghost_identity?.confession
+  ) {
+    return (
+      baseAnswer +
+      "\n\nВейл уже признал, что получил готовую учётную запись. " +
+      "Его прежнее объяснение о происхождении доступа больше не снимает вопросов."
+    );
+  }
+
+  return baseAnswer;
+}
 
 function inspectSuspect(id) {
   const c = CASES.find(x => x.id === activeId);
@@ -1914,6 +3223,31 @@ function inspectSuspect(id) {
     answers: {}
   };
 
+  
+  // Журнал ключевых событий допроса
+  if (!Array.isArray(interrogationHistory.timeline)) {
+    interrogationHistory.timeline = [];
+  }
+
+  const recordInterrogationEvent = (event) => {
+    if (!event || !event.id) return;
+
+    if (
+      interrogationHistory.timeline.some(
+        item => item.id === event.id
+      )
+    ) {
+      return;
+    }
+
+    interrogationHistory.timeline.push({
+      ...event,
+      timestamp: Date.now()
+    });
+
+    saveState();
+  };
+
   if (!Array.isArray(interrogationHistory.asked)) {
     interrogationHistory.asked = [];
   }
@@ -1924,7 +3258,29 @@ function inspectSuspect(id) {
   ) {
     interrogationHistory.answers = {};
   }
+if (
+  !interrogationHistory.findings ||
+  typeof interrogationHistory.findings !== "object" ||
+  Array.isArray(interrogationHistory.findings)
+) {
+  interrogationHistory.findings = {};
+}
 
+if (
+  !interrogationHistory.chains ||
+  typeof interrogationHistory.chains !== "object" ||
+  Array.isArray(interrogationHistory.chains)
+) {
+  interrogationHistory.chains = {};
+}
+  // История предъявления улик, включая старые сохранения
+  if (
+    !interrogationHistory.presented ||
+    typeof interrogationHistory.presented !== "object" ||
+    Array.isArray(interrogationHistory.presented)
+  ) {
+    interrogationHistory.presented = {};
+  }
   s.interrogations[id] = interrogationHistory;
 
   const has = clueId => s.found.includes(clueId);
@@ -2230,49 +3586,554 @@ function inspectSuspect(id) {
     );
   }
 
+
+  // =====================================================
+  // ДОПОЛНИТЕЛЬНЫЕ ВОПРОСЫ ПОСЛЕ ПРИЗНАНИЙ
+  // =====================================================
+
+  const confessionQuestions =
+    CONFESSION_QUESTIONS[activeId]?.[id] || [];
+
+  confessionQuestions.forEach(q => {
+    const chainId = {
+  after_funding: "project_funding",
+  after_export: "data_export",
+  after_identity: "ghost_identity",
+  after_protocol: "project_funding",
+  after_backup: "data_export",
+  after_invoice: "ghost_identity",
+  after_server: "data_export"
+}[q.id];
+
+    const requiredEvidence = {
+  after_protocol: ["protocol"],
+  after_backup: ["backup", "server"],
+  after_invoice: ["invoice"],
+  after_server: ["server"]
+}[q.id] || [];
+
+const evidencePresented = requiredEvidence.every(
+  evidenceId => interrogationHistory.presented?.[evidenceId]
+);
+
+if (
+  chainId &&
+  interrogationHistory.chains?.[chainId] &&
+  interrogationHistory.chains[chainId].confession &&
+  evidencePresented
+) {
+      questions.push({
+        ...q,
+        requires: [],
+        answer: q.text
+      });
+    }
+  });
+
+  
+  // =====================================================
+  // ПЕРЕКРЁСТНЫЙ ДОПРОС — ДЕЛО ZERO
+  // =====================================================
+
+  if (activeId === "zero") {
+    const otherInterrogations = s.interrogations || {};
+
+    const crossQuestions = [
+      {
+        id: "cross_vendor_account",
+        suspect: "director",
+        sourceSuspect: "vendor",
+        sourceFinding: "contradiction_account",
+        title: "Кто создал аккаунт Вейла?",
+        answer:
+          "Ты предъявляешь Крамеру показания Вейла о готовой учётной записи.\n\n" +
+          "Крамер внимательно изучает документ.\n\n" +
+          "«Создание учётной записи не входило в мои непосредственные обязанности. Нужно проверить, кто согласовал доступ и кто выдал подрядчику права».\n\n" +
+          "Он не называет конкретного человека. Теперь необходимо сопоставить его ответ с техническими журналами и показаниями инженера."
+      },
+      {
+        id: "cross_director_payment",
+        suspect: "vendor",
+        sourceSuspect: "director",
+        sourceFinding: "contradiction_payment",
+        title: "Что Крамер знал о ваших выплатах?",
+        answer:
+          "Ты рассказываешь Вейлу о подписи Крамера на финансовых документах.\n\n" +
+          "Вейл заметно напрягается.\n\n" +
+          "«Я получал деньги за работу по договорённости. Кто именно согласовывал каждый платёж, вам следует выяснить по документам».\n\n" +
+          "Ответ подтверждает связь подрядчика с проектом, но не устанавливает, кто организовал фиктивный доступ."
+      },
+      {
+        id: "cross_engineer_report",
+        suspect: "engineer",
+        sourceSuspect: "director",
+        sourceFinding: "contradiction_server",
+        title: "Почему отчёт расходится с журналом?",
+        answer:
+          "Ты показываешь Ирине объяснение Крамера об отключении исследовательского сегмента.\n\n" +
+          "«Это не одно и то же, что отключить весь сервер. По журналам можно восстановить последовательность операций, но нужно проверить, кто подготовил итоговый отчёт».\n\n" +
+          "Инженер отделяет технические факты от интерпретации руководства. Теперь показания можно сопоставить с резервной копией и исходным журналом."
+      }
+    ];
+
+    crossQuestions.forEach(q => {
+      if (q.suspect !== id) return;
+
+      const sourceHistory =
+        otherInterrogations[q.sourceSuspect];
+
+      if (!sourceHistory) return;
+
+      const sourceFinding =
+        sourceHistory.findings?.[q.sourceFinding];
+
+      const sourcePresented =
+        sourceHistory.presented || {};
+
+      // Вопрос открывается только после подтверждённого
+      // результата другого допроса.
+      const unlocked =
+        Boolean(sourceFinding) ||
+        Object.keys(sourcePresented).some(
+          evidenceId =>
+            sourcePresented[evidenceId]?.contradiction &&
+            q.sourceFinding === "contradiction_" + evidenceId
+        );
+
+      if (!unlocked) return;
+
+      if (questions.some(existing => existing.id === q.id)) return;
+
+      questions.push({
+        id: q.id,
+        title: "◆ Перекрёстный допрос: " + q.title,
+        requires: [],
+        answer: q.answer
+      });
+    });
+  }
+
   // =====================================================
   // СОЗДАНИЕ ДОСЬЕ И КНОПОК
   // =====================================================
 
+  
+  // Обновление содержимого вкладки «Результаты»
+  const renderResults = () => {
+    const resultsPanel = content.querySelector(
+      '[data-interrogation-panel="results"]'
+    );
+
+    if (!resultsPanel) return;
+
+    const askedQuestions = questions.filter(q =>
+      interrogationHistory.asked.includes(q.id)
+    );
+    
+    const presented = Object.entries(
+      interrogationHistory.presented || {}
+    );
+
+    const findings = Object.entries(
+      interrogationHistory.findings || {}
+    );
+
+    const askedHtml = askedQuestions.map(q => `
+      <article class="interrogation-result-card">
+        <p class="interrogation-result-title">
+          ${esc(q.title)}
+        </p>
+        <p class="interrogation-result-meta">
+          Показания зафиксированы
+        </p>
+        <p>${esc(
+          interrogationHistory.answers[q.id] || q.answer
+        )}</p>
+      </article>
+    `).join("");
+
+    const findingsHtml = findings.map(([questionId, finding]) => `
+      <article class="interrogation-result-card">
+        <p class="interrogation-result-title">
+          ◆ ${esc(finding.title || "Результат расследования")}
+        </p>
+        <p class="interrogation-result-meta">
+          Вопрос: ${esc(
+            questions.find(q => q.id === questionId)?.title
+              || questionId
+          )}
+        </p>
+        <p>${esc(finding.text || "")}</p>
+      </article>
+    `).join("");
+
+    const presentedHtml = presented.map(([evidenceId, item]) => `
+      <article class="interrogation-result-card">
+        <p class="interrogation-result-title">
+          ◆ Предъявлена улика: ${esc(item.title)}
+        </p>
+        <p class="interrogation-result-meta">
+          Материал: ${esc(evidenceId)}
+        </p>
+        <p>${esc(item.response)}</p>
+      </article>
+    `).join("");
+
+    
+    const timeline = interrogationHistory.timeline || [];
+
+    const timelineHtml = timeline.length
+      ? timeline
+          .slice()
+          .sort((a, b) => a.timestamp - b.timestamp)
+          .map(item => `
+            <article class="interrogation-result-card">
+              <p class="interrogation-result-title">
+                ◆ ${esc(item.title)}
+              </p>
+              <p class="interrogation-result-meta">
+                ${
+                  item.type === "confession"
+                    ? "ПЕРЕЛОМНЫЙ МОМЕНТ · ПРИЗНАНИЕ"
+                    : "ПЕРЕЛОМНЫЙ МОМЕНТ · ДОКАЗАТЕЛЬСТВА"
+                }
+              </p>
+              <p>${esc(item.text || "")}</p>
+            </article>
+          `)
+          .join("")
+      : `
+          <div class="interrogation-empty">
+            Ключевые переломные моменты появятся
+            после завершения цепочек доказательств.
+          </div>
+        `;
+
+    resultsPanel.innerHTML = `
+      <h4 class="interrogation-section-title">
+        Зафиксированные показания
+      </h4>
+
+      ${askedHtml || `
+        <div class="interrogation-empty">
+          Показаний пока нет. Перейди во вкладку «Допрос»
+          и задай первый вопрос.
+        </div>
+      `}
+
+      <h4 class="interrogation-section-title"
+          style="margin-top:24px">
+        Предъявленные улики
+      </h4>
+
+      ${presentedHtml || `
+        <div class="interrogation-empty">
+          Подозреваемому пока не предъявляли улики.
+        </div>
+      `}
+
+      <h4 class="interrogation-section-title"
+          style="margin-top:24px">
+        Результаты расследования
+      </h4>
+
+      
+<h4 class="interrogation-section-title"
+    style="margin-top:24px">
+  Хронология переломных моментов
+</h4>
+
+${timelineHtml}
+
+      ${findingsHtml || `
+        <div class="interrogation-empty">
+          Подтверждённых результатов допроса пока нет.
+          Некоторые выводы появятся после изучения улик
+          и получения определённых ответов.
+        </div>
+      `}
+    `;
+  };
+
+  const foundEvidenceHtml = foundEvidence.length
+    ? foundEvidence.map(e => `
+        <article class="interrogation-dossier">
+          <div class="interrogation-dossier-label">
+            Обнаруженная улика
+          </div>
+          <p><strong>${esc(e.title)}</strong></p>
+          <p>${esc(e.description || "Описание отсутствует.")}</p>
+        </article>
+      `).join("")
+    : `
+        <div class="interrogation-empty">
+          Улики по этому делу пока не обнаружены.
+        </div>
+      `;
+
   content.innerHTML = `
-    <div class="eyebrow">MIND LAB / INTERROGATION</div>
-    <h3>${esc(p.name)}</h3>
-    <p class="muted">${esc(p.role)}</p>
+    <div class="eyebrow">MIND LAB / CASE INTERROGATION</div>
+
+    <div class="interrogation-header">
+      <div class="interrogation-header-main">
+        <div class="interrogation-kicker">
+          Материалы следствия · ${esc(c.title || c.id)}
+        </div>
+
+        <h3>${esc(p.name)}</h3>
+        <p class="muted">${esc(p.role)}</p>
+        <p class="interrogation-meta">${esc(p.desc)}</p>
+      </div>
+
+      <div class="interrogation-counter">
+        <div>ДОПРОС</div>
+        <strong>${interrogationHistory.asked.length}
+          / ${questions.length}</strong>
+        <div>вопросов</div>
+      </div>
+    </div>
+
     <div class="divider"></div>
-    <p>${esc(p.desc)}</p>
 
-    <div class="interrogation-status">
-      <span class="insight-icon">◆</span>
-      <span>Каждый ответ может изменить ход расследования.</span>
+    <div class="interrogation-tabs" role="tablist"
+         aria-label="Разделы досье">
+      <button type="button"
+        class="interrogation-tab active"
+        data-interrogation-tab="dossier"
+        role="tab" aria-selected="true">
+        Досье
+      </button>
+
+      <button type="button"
+        class="interrogation-tab"
+        data-interrogation-tab="interview"
+        role="tab" aria-selected="false">
+        Допрос
+      </button>
+
+      <button type="button"
+        class="interrogation-tab"
+        data-interrogation-tab="results"
+        role="tab" aria-selected="false">
+        Результаты
+      </button>
     </div>
 
-    <div class="interrogation-questions">
-      ${questions.map(q => {
-        const unlocked = hasAll(q.requires);
-        const asked = interrogationHistory.asked.includes(q.id);
+    <section class="interrogation-panel"
+      data-interrogation-panel="dossier"
+      role="tabpanel">
 
-        return `
-          <button type="button"
-            class="clue interrogation-question ${asked ? "question-asked" : ""}"
-            data-question="${esc(q.id)}"
-            ${unlocked ? "" : "disabled"}>
-            <strong>${esc(q.title)}</strong>
-            <small>${
-              !unlocked
-                ? "Нужны новые улики"
-                : asked
-                  ? "Перечитать ответ"
-                  : "Задать вопрос"
-            }</small>
-          </button>`;
-      }).join("")}
-    </div>
+      <h4 class="interrogation-section-title">
+        Профиль подозреваемого
+      </h4>
 
-    <div id="interrogationAnswer"
-      class="hypothesis-feedback" aria-live="polite">
-      Выбери вопрос, чтобы начать допрос.
+      <article class="interrogation-dossier">
+        <div class="interrogation-dossier-label">
+          Известные сведения
+        </div>
+        <p>${esc(p.desc)}</p>
+      </article>
+
+      <h4 class="interrogation-section-title"
+          style="margin-top:24px">
+        Материалы дела
+      </h4>
+
+      ${foundEvidenceHtml}
+    </section>
+
+    <section class="interrogation-panel"
+      data-interrogation-panel="interview"
+      role="tabpanel" hidden>
+
+      <div class="interrogation-status">
+        <span class="insight-icon">◆</span>
+        <span>
+          Сопоставляй ответы с уликами.
+          Подозрение ещё не означает доказанную вину.
+        </span>
+      </div>
+
+      
+<div id="interrogationPressure"
+     style="margin:16px 0;padding:14px;
+            border:1px solid #343b49;
+            border-radius:10px;background:#171b23;">
+
+  <div style="display:flex;justify-content:space-between;
+              gap:12px;align-items:center;margin-bottom:9px;">
+    <strong id="interrogationMoodTitle"
+            style="font-size:12px;letter-spacing:.7px;">
+      ДЕРЖИТСЯ УВЕРЕННО
+    </strong>
+
+    <span id="interrogationPressureValue"
+          style="font-size:12px;color:#aab2c2;">
+      0 / 100
+    </span>
+  </div>
+
+  <div style="height:6px;background:#303644;
+              border-radius:10px;overflow:hidden;">
+    <div id="interrogationPressureFill"
+         style="width:0%;height:100%;
+                background:#8d96a8;
+                border-radius:10px;
+                transition:width .35s ease,background .35s ease;">
     </div>
+  </div>
+
+  <p id="interrogationMoodDescription"
+     style="font-size:12px;color:#aab2c2;
+            margin:9px 0 0;">
+    Пока у следствия недостаточно подтверждённых зацепок.
+  </p>
+</div>
+
+      <div class="interrogation-questions">
+        ${questions.map(q => {
+          const unlocked = hasAll(q.requires);
+          const asked = interrogationHistory.asked.includes(q.id);
+
+          return `
+            <button type="button"
+              class="clue interrogation-question ${
+                asked ? "question-asked" : ""
+              }"
+              data-question="${esc(q.id)}"
+              ${unlocked ? "" : "disabled"}>
+              <strong>${esc(q.title)}</strong>
+              <small>${
+                !unlocked
+                  ? "Нужны новые улики"
+                  : asked
+                    ? "Перечитать ответ"
+                    : "Задать вопрос"
+              }</small>
+            </button>
+          `;
+        }).join("")}
+      </div>
+
+      <div class="interrogation-evidence">
+        <h4 class="interrogation-section-title">
+          Предъявить улику
+        </h4>
+
+        <p class="interrogation-meta">
+          Выбери материал дела и посмотри на реакцию подозреваемого.
+        </p>
+
+        <div class="interrogation-presented-list">
+          ${foundEvidence.length
+            ? foundEvidence.map(e => {
+                const presented =
+                  interrogationHistory.presented[e.id];
+
+                return `
+                  <button type="button"
+                    class="clue interrogation-question ${presented ? "question-asked evidence-presented" : ""}"
+                    data-present-evidence="${esc(e.id)}">
+                    <strong>${esc(e.title)}</strong>
+                    <small>${
+                      presented
+                        ? "Посмотреть реакцию"
+                        : "Предъявить материал"
+                    }</small>
+                  </button>
+                `;
+              }).join("")
+            : `
+              <div class="interrogation-empty">
+                Пока нечего предъявлять. Сначала найди улики.
+              </div>
+            `
+          }
+        </div>
+      </div>
+      <div id="interrogationAnswer"
+        class="hypothesis-feedback"
+        aria-live="polite">
+        Выбери вопрос, чтобы начать допрос.
+      </div>
+    </section>
+
+    <section class="interrogation-panel"
+      data-interrogation-panel="results"
+      role="tabpanel" hidden>
+    </section>
   `;
+
+   
+  // Обновление психологического состояния подозреваемого
+  const updateInterrogationPressure = () => {
+    const pressure = getInterrogationPressure(
+      interrogationHistory
+    );
+
+    const mood = getInterrogationMood(pressure, id);
+
+    const title = content.querySelector(
+      "#interrogationMoodTitle"
+    );
+
+    const value = content.querySelector(
+      "#interrogationPressureValue"
+    );
+
+    const fill = content.querySelector(
+      "#interrogationPressureFill"
+    );
+
+    const description = content.querySelector(
+      "#interrogationMoodDescription"
+    );
+
+    if (title) {
+      title.textContent = mood.title;
+      title.style.color = mood.color;
+    }
+
+    if (value) {
+      value.textContent = pressure + " / 100";
+    }
+
+    if (fill) {
+      fill.style.width = pressure + "%";
+      fill.style.background = mood.color;
+    }
+
+    if (description) {
+      description.textContent = mood.description;
+    }
+  };
+
+  updateInterrogationPressure();
+
+  // Переключение вкладок без перезагрузки окна
+  content.querySelectorAll("[data-interrogation-tab]")
+    .forEach(tab => {
+      tab.addEventListener("click", () => {
+        const target = tab.dataset.interrogationTab;
+
+        content.querySelectorAll("[data-interrogation-tab]")
+          .forEach(item => {
+            const active = item === tab;
+            item.classList.toggle("active", active);
+            item.setAttribute("aria-selected", String(active));
+          });
+
+        content.querySelectorAll("[data-interrogation-panel]")
+          .forEach(panel => {
+            panel.hidden =
+              panel.dataset.interrogationPanel !== target;
+          });
+
+        if (target === "results") {
+          renderResults();
+        }
+      });
+    });
 
   content.querySelectorAll("[data-question]").forEach(button => {
     button.addEventListener("click", () => {
@@ -2295,11 +4156,43 @@ function inspectSuspect(id) {
         return;
       }
 
+      
       // Первый ответ сохраняется в истории
-      answerBox.textContent = question.answer;
+      let displayedAnswer = getDynamicInterrogationAnswer(
+  activeId,
+  id,
+  question,
+  interrogationHistory
+);
+
+      const finding =
+        INTERROGATION_FINDINGS[activeId]?.[id]?.[questionId];
+
+      // Фиксируем важный результат только один раз.
+      if (
+        finding &&
+        !interrogationHistory.findings[questionId]
+      ) {
+        interrogationHistory.findings[questionId] = {
+          title: finding.title,
+          text: finding.text
+        };
+
+        displayedAnswer +=
+          "\n\n◆ РЕЗУЛЬТАТ ЗАФИКСИРОВАН В ДЕЛЕ\n" +
+          finding.title +
+          "\n\n" +
+          finding.text +
+          "\n\n+10 очков за новый результат.";
+
+        state.score = (Number(state.score) || 0) + 10;
+      }
+
+      answerBox.textContent = displayedAnswer;
+      updateInterrogationPressure();
 
       interrogationHistory.asked.push(questionId);
-      interrogationHistory.answers[questionId] = question.answer;
+      interrogationHistory.answers[questionId] = displayedAnswer;
 
       button.classList.add("question-asked");
 
@@ -2307,10 +4200,498 @@ function inspectSuspect(id) {
       if (label) label.textContent = "Перечитать ответ";
 
       saveState();
+      ping(finding ? 700 : 360, 0.1);
+
+      button.classList.add("question-asked");
+
+      const questionLabel = button.querySelector("small");
+if (questionLabel) {
+  questionLabel.textContent = "Перечитать ответ";
+}
+
+      saveState();
       ping(360, 0.1);
     });
   });
 
+  // Предъявление найденной улики подозреваемому
+  content.querySelectorAll("[data-present-evidence]")
+    .forEach(button => {
+      button.addEventListener("click", () => {
+        const evidenceId = button.dataset.presentEvidence;
+
+        const evidence = foundEvidence.find(
+          item => item.id === evidenceId
+        );
+
+        if (!evidence) return;
+
+        const answerBox = content.querySelector(
+          "#interrogationAnswer"
+        );
+
+        if (!answerBox) return;
+
+        const previous =
+          interrogationHistory.presented[evidenceId];
+
+        // Повторное предъявление не начисляет очки снова
+        if (previous) {
+          answerBox.textContent = previous.response;
+          return;
+        }
+
+    
+        const specificReaction =
+          EVIDENCE_REACTIONS[activeId]?.[id]?.[evidenceId];
+const contradiction =
+EVIDENCE_CONTRADICTIONS[activeId]?.[id]?.[evidenceId];
+
+        const presentedCount = Object.keys(
+interrogationHistory.presented
+).length;
+
+const genericReaction =
+presentedCount >= 3
+? `«Вы уже показали мне несколько материалов. Но количество документов не заменяет доказательств. Если у вас есть конкретные обвинения — задавайте вопросы». \n\n` +
+`Подозреваемый становится заметно менее разговорчивым. Похоже, дальнейший допрос потребует более точных аргументов.`
+: presentedCount >= 1
+? `«Вы продолжаете показывать мне документы. Видимо, у вас появилась определённая версия событий». \n\n` +
+`Подозреваемый начинает осторожнее подбирать слова. Теперь важно проверить, совпадают ли его объяснения с фактами.`
+: `«Я вижу, что вы нашли этот документ. Но само его наличие ещё не объясняет, как именно я связан с произошедшим». \n\n` +
+`Реакция зафиксирована. Сопоставь её с показаниями и другими уликами.`;
+
+const response = contradiction
+? `${contradiction.title}\n\n${contradiction.text}`
+: specificReaction
+? `${p.name} изучает улику «${evidence.title}».\n\n` +
+`${specificReaction.text}`
+: `${p.name} внимательно изучает материал «${evidence.title}».\n\n` +
+genericReaction;
+
+
+
+        interrogationHistory.presented[evidenceId] = {
+title: evidence.title,
+response,
+contradiction: Boolean(contradiction)
+};
+
+const completedChains = [];
+
+const chains = EVIDENCE_CHAINS[activeId] || [];
+
+if (!interrogationHistory.chains) {
+interrogationHistory.chains = {};
+}
+
+for (const chain of chains) {
+if (chain.suspect !== id) continue;
+if (interrogationHistory.chains[chain.id]) continue;
+
+const hasAllEvidence = chain.evidence.every(
+clueId => Boolean(interrogationHistory.presented[clueId])
+);
+
+if (hasAllEvidence) {
+const confession =
+CHAIN_CONFESSIONS[activeId]?.[chain.id];
+
+const validConfession =
+confession && confession.suspect === id
+? confession
+: null;
+
+interrogationHistory.chains[chain.id] = {
+title: chain.title,
+result: chain.result,
+completedAt: Date.now(),
+confession: validConfession
+? {
+title: validConfession.title,
+text: validConfession.text
+}
+: null
+};
+
+if (validConfession) {
+const findingId = `confession_${chain.id}`;
+
+
+interrogationHistory.findings[findingId] = {
+  title: validConfession.title,
+  text: validConfession.text
+};
+
+
+}
+
+completedChains.push({
+...chain,
+confession: validConfession
+});
+}
+
+}
+
+if (completedChains.length) {
+  const chainMessages = completedChains.map(chain => {
+    let message =
+      `ЦЕПОЧКА ДОКАЗАТЕЛЬСТВ: ${chain.title}\n` +
+      `${chain.result}`;
+
+    if (chain.confession) {
+      message +=
+        `\n\nНОВОЕ ПРИЗНАНИЕ: ${chain.confession.title}\n` +
+        `${chain.confession.text}`;
+    }
+
+    return message;
+  });
+
+  answerBox.textContent +=
+    "\n\n" +
+    chainMessages.join("\n\n") +
+    "\n\n+" +
+    (completedChains.length * 15) +
+    " очков за завершение цепочки!";
+}
+
+const bonus = contradiction ? 10 : 0;
+const chainBonus = completedChains.length * 15;
+
+state.score =
+(Number(state.score) || 0) +
+5 +
+bonus +
+chainBonus;
+
+
+  // Фиксируем завершение цепочки в хронологии
+  completedChains.forEach(chain => {
+    recordInterrogationEvent({
+      id: "chain_" + chain.id,
+      type: "chain",
+      title: "Завершена цепочка: " + chain.title,
+      text: chain.result
+    });
+
+    if (chain.confession) {
+      recordInterrogationEvent({
+        id: "confession_" + chain.id,
+        type: "confession",
+        title: "Получено признание: " + chain.confession.title,
+        text: chain.confession.text
+      });
+    }
+  });
+
+let fullResponse =
+  response +
+  "\n\n+5 очков за первое предъявление улики." +
+  (contradiction
+    ? "\n+10 очков за обнаруженное противоречие!"
+    : "") +
+  (completedChains.length
+    ? "\n+" + chainBonus + " очков за цепочку доказательств!"
+    : "");
+
+if (completedChains.length) {
+  const chainMessages = completedChains.map(chain => {
+    let message =
+      "\n\nЦЕПОЧКА ДОКАЗАТЕЛЬСТВ: " +
+      chain.title +
+      "\n" +
+      chain.result;
+
+    if (chain.confession) {
+      message +=
+        "\n\nНОВОЕ ПРИЗНАНИЕ: " +
+        chain.confession.title +
+        "\n" +
+        chain.confession.text;
+    }
+
+    return message;
+  });
+
+  fullResponse += chainMessages.join("");
+}
+
+answerBox.textContent = fullResponse;
+updateInterrogationPressure();
+
+
+  // МГНОВЕННОЕ ОТКРЫТИЕ НОВЫХ ВОПРОСОВ ПОСЛЕ ЦЕПОЧКИ
+  if (completedChains.length || contradiction) {
+    const extraQuestions =
+      CONFESSION_QUESTIONS[activeId]?.[id] || [];
+
+    const questionList = content.querySelector(
+      ".interrogation-questions"
+    );
+
+    const newQuestions = [];
+
+    
+    // Новые вопросы после обнаружения противоречий
+    if (contradiction) {
+      const contradictionQuestions = {
+        zero: {
+          director: {
+            server: {
+              id: "contradiction_server",
+              title: "Почему вы скрыли отключение сегмента?",
+              text:
+                "Вы уточняете, что отключили только исследовательский сегмент. Почему этого уточнения нет в официальном отчёте?"
+            },
+            backup: {
+              id: "contradiction_backup",
+              title: "Кто утвердил официальную версию?",
+              text:
+                "Вы допускаете штатный экспорт данных, но отчёт утверждает, что сервер был отключён. Кто согласовал формулировку отчёта?"
+            },
+            payment: {
+              id: "contradiction_payment",
+              title: "Что именно вы знали о подрядчике?",
+              text:
+                "Ваша подпись подтверждает финансирование. Какие сведения о работе подрядчика вы получили до утверждения платежа?"
+            }
+          },
+          vendor: {
+            account: {
+              id: "contradiction_account",
+              title: "Кто передал вам доступ?",
+              text:
+                "Вы утверждаете, что получили готовые учётные данные. Кто передал их вам и объяснил, какие права они предоставляют?"
+            },
+            invoice: {
+              id: "contradiction_invoice",
+              title: "За что вам заплатили?",
+              text:
+                "Вы отказываетесь от ответственности за кадровые записи. Какую конкретную услугу вы оказали по этому счёту?"
+            }
+          }
+        }
+      };
+
+      const candidate =
+        contradictionQuestions[activeId]?.[id]?.[evidenceId];
+
+      if (
+        candidate &&
+        !questions.some(q => q.id === candidate.id) &&
+        !interrogationHistory.asked.includes(candidate.id)
+      ) {
+        const newQuestion = {
+          ...candidate,
+          requires: [],
+          answer: candidate.text
+        };
+
+        questions.push(newQuestion);
+        newQuestions.push(newQuestion);
+      }
+    }
+
+    const chainIds = {
+      after_funding: "project_funding",
+      after_export: "data_export",
+      after_identity: "ghost_identity",
+      after_protocol: "project_funding",
+      after_backup: "data_export",
+      after_invoice: "ghost_identity",
+      after_server: "data_export"
+    };
+
+    const requiredEvidenceByQuestion = {
+      after_protocol: ["protocol"],
+      after_backup: ["backup", "server"],
+      after_invoice: ["invoice"],
+      after_server: ["server"]
+    };
+
+    extraQuestions.forEach(q => {
+      // Не добавляем вопрос повторно
+      if (questions.some(existing => existing.id === q.id)) {
+        return;
+      }
+
+      const chainId = chainIds[q.id];
+      if (!chainId) return;
+
+      const chain = interrogationHistory.chains?.[chainId];
+
+      if (!chain?.confession) return;
+
+      const requiredEvidence =
+        requiredEvidenceByQuestion[q.id] || [];
+
+      const allPresented = requiredEvidence.every(
+        evidenceId =>
+          Boolean(interrogationHistory.presented[evidenceId])
+      );
+
+      if (!allPresented) return;
+
+      const newQuestion = {
+        ...q,
+        requires: [],
+        answer: q.text
+      };
+
+      questions.push(newQuestion);
+      newQuestions.push(newQuestion);
+    });
+
+    if (newQuestions.length && questionList) {
+      // Уведомление показываем один раз за обновление
+      let notice = content.querySelector(
+        "#newInterrogationQuestionNotice"
+      );
+
+      if (!notice) {
+        notice = document.createElement("div");
+        notice.id = "newInterrogationQuestionNotice";
+        notice.style.cssText =
+          "padding:12px 14px;margin-bottom:12px;" +
+          "border:1px solid #a98b52;border-radius:8px;" +
+          "background:#29251d;color:#e5c982;font-size:13px;";
+
+        questionList.prepend(notice);
+      }
+
+      notice.textContent =
+        "◆ Появился новый вопрос: " +
+        newQuestions.map(q => q.title).join(" · ");
+
+      newQuestions.forEach(question => {
+        const newButton = document.createElement("button");
+
+        newButton.type = "button";
+        newButton.className = "clue interrogation-question";
+        newButton.dataset.question = question.id;
+
+        newButton.innerHTML =
+          "<strong>" + esc(question.title) + "</strong>" +
+          "<small>Задать вопрос</small>";
+
+        newButton.addEventListener("click", () => {
+          const answerBox = content.querySelector(
+            "#interrogationAnswer"
+          );
+
+          if (!answerBox) return;
+
+          // Если вопрос уже задан, повторно очки не начисляем
+          if (interrogationHistory.asked.includes(question.id)) {
+            answerBox.textContent =
+              interrogationHistory.answers[question.id] ||
+              question.answer;
+
+            return;
+          }
+
+          let displayedAnswer = getDynamicInterrogationAnswer(
+            activeId,
+            id,
+            question,
+            interrogationHistory
+          );
+
+          const finding =
+            INTERROGATION_FINDINGS[activeId]?.[id]?.[question.id];
+
+          if (
+            finding &&
+            !interrogationHistory.findings[question.id]
+          ) {
+            interrogationHistory.findings[question.id] = {
+              title: finding.title,
+              text: finding.text
+            };
+
+            
+            recordInterrogationEvent({
+              id: "finding_" + question.id,
+              type: "finding",
+              title: finding.title,
+              text: finding.text
+            });
+
+            displayedAnswer +=
+              "\n\n◆ РЕЗУЛЬТАТ ЗАФИКСИРОВАН В ДЕЛЕ\n" +
+              finding.title +
+              "\n\n" +
+              finding.text +
+              "\n\n+10 очков за новый результат.";
+
+            state.score =
+              (Number(state.score) || 0) + 10;
+          }
+
+          answerBox.textContent = displayedAnswer;
+
+          interrogationHistory.asked.push(question.id);
+          interrogationHistory.answers[question.id] =
+            displayedAnswer;
+
+          newButton.classList.add("question-asked");
+
+          const label = newButton.querySelector("small");
+          if (label) label.textContent = "Перечитать ответ";
+
+          const counter = content.querySelector(
+            ".interrogation-counter strong"
+          );
+
+          if (counter) {
+            counter.textContent =
+              interrogationHistory.asked.length +
+              " / " +
+              questions.length;
+          }
+
+          saveState();
+          ping(finding ? 700 : 360, 0.1);
+        });
+
+        questionList.appendChild(newButton);
+      });
+
+      // Обновляем счётчик в заголовке допроса
+      const counter = content.querySelector(
+        ".interrogation-counter strong"
+      );
+
+      if (counter) {
+        counter.textContent =
+          interrogationHistory.asked.length +
+          " / " +
+          questions.length;
+      }
+
+      saveState();
+      ping(800, 0.12);
+    }
+  }
+
+button.classList.add("question-asked");
+button.classList.add("evidence-presented");
+
+button.style.background = "#252a35";
+button.style.borderColor = "#50596b";
+button.style.color = "#8d96a8";
+
+const label = button.querySelector("small");
+if (label) label.textContent = "Посмотреть реакцию";
+
+
+saveState();
+ping(contradiction ? 760 : 620, 0.1);
+
+      });
+    });
   viewer.classList.remove("hidden");
   document.body.style.overflow = "hidden";
   ping(360, 0.1);
@@ -2330,16 +4711,253 @@ function renderVerdict(){
  document.getElementById("backChapter").onclick=()=>{chapterIndex=c.chapters.length-1;renderChapter();};
  renderSidebar();window.scrollTo({top:0,behavior:"smooth"});
 }
-function chooseVerdict(id){
- const c=CASES.find(x=>x.id===activeId),s=caseState(activeId);
- const choice=c.choices.find(x=>x.id===id);
- if(!choice)return;
- const ending=c.endings[choice.ending];
- const completeness=s.found.length/c.evidence.length;
- s.finished=true;s.ending=choice.ending;
- const bonus=choice.score+(completeness>=.75?30:completeness>=.5?15:0);
- if(!s.score){s.score=bonus;state.score=(state.score||0)+bonus;}
- saveState();renderEnding();ping(choice.ending==="truth"?880:280,.22);
+
+const VERDICT_REQUIREMENTS = {
+  session: {
+    minimumEvidence: ["clock", "log"],
+    minimumLinks: ["clock|log"],
+    minimumHypotheses: ["doctor"],
+minimumFindings: [
+  { suspect: "levin", question: "evidence" }
+],
+truthFindings: [
+  { suspect: "levin", question: "timeline" }
+],
+    truthEvidence: ["archive", "tape"],
+    truthLinks: ["archive|tape"],
+    truthHypotheses: ["mark"]
+  },
+
+  room: {
+    minimumEvidence: ["clock", "glass"],
+    minimumLinks: ["clock|glass"],
+    minimumHypotheses: ["staged"],
+
+    truthEvidence: ["letters", "will", "panel"],
+    truthLinks: ["letters|will", "clock|panel"],
+    truthHypotheses: ["inheritance"]
+  },
+
+  zero: {
+    minimumEvidence: ["account", "invoice"],
+    minimumLinks: ["account|invoice"],
+    minimumHypotheses: ["identity"],
+minimumFindings: [
+  { suspect: "director", question: "evidence" }
+],
+truthFindings: [
+  { suspect: "director", question: "timeline" },
+  { suspect: "vendor", question: "protocol" }
+],
+    truthEvidence: ["backup", "server", "protocol", "payment"],
+    truthLinks: ["backup|server", "payment|protocol"],
+    truthHypotheses: ["erasure"]
+  }
+};
+
+
+function chooseVerdict(id) {
+  const c = CASES.find(x => x.id === activeId);
+  const s = caseState(activeId);
+
+  if (!c || !s) {
+    toast("Не удалось загрузить дело.");
+    return;
+  }
+
+  if (s.finished) {
+    toast("Это дело уже завершено.");
+    return;
+  }
+
+  const choice = (c.choices || []).find(x => x.id === id);
+
+  if (!choice) return;
+
+  const ending = c.endings?.[choice.ending];
+
+  if (!ending) {
+    toast("Не удалось загрузить концовку.");
+    return;
+  }
+
+  const rules = VERDICT_REQUIREMENTS[activeId];
+
+  if (!rules) {
+    toast("Для этого дела пока не настроены условия вердикта.");
+    return;
+  }
+
+  const found = Array.isArray(s.found) ? s.found : [];
+  const links = Array.isArray(s.links) ? s.links : [];
+  const hypotheses = Array.isArray(s.hypotheses)
+    ? s.hypotheses
+    : [];
+
+  const interrogations =
+    s.interrogations &&
+    typeof s.interrogations === "object"
+      ? s.interrogations
+      : {};
+
+  const hasFinding = ({ suspect, question }) =>
+    Boolean(interrogations[suspect]?.findings?.[question]);
+
+  const missingFrom = (required, actual) =>
+    (required || []).filter(item => !actual.includes(item));
+
+  // Минимальные требования для любого вердикта.
+  const missingEvidence = missingFrom(
+    rules.minimumEvidence,
+    found
+  );
+
+  const missingLinks = missingFrom(
+    rules.minimumLinks,
+    links
+  );
+
+  const missingHypotheses = missingFrom(
+    rules.minimumHypotheses,
+    hypotheses
+  );
+
+  const missingFindings = (rules.minimumFindings || [])
+    .filter(finding => !hasFinding(finding));
+
+  if (
+    missingEvidence.length ||
+    missingLinks.length ||
+    missingHypotheses.length ||
+    missingFindings.length
+  ) {
+    const reasons = [];
+
+    if (missingEvidence.length) {
+      reasons.push(
+        `улики: ${missingEvidence.length}`
+      );
+    }
+
+    if (missingLinks.length) {
+      reasons.push(
+        `связи между уликами: ${missingLinks.length}`
+      );
+    }
+
+    if (missingHypotheses.length) {
+      reasons.push(
+        `непроверенные гипотезы: ${missingHypotheses.length}`
+      );
+    }
+
+    if (missingFindings.length) {
+      reasons.push(
+        `результаты допросов: ${missingFindings.length}`
+      );
+    }
+
+    toast(
+      "Рано выносить вердикт. Не выполнено: " +
+      reasons.join("; ") +
+      "."
+    );
+
+    ping(250, 0.12);
+    return;
+  }
+
+  // Для правильной концовки нужны дополнительные доказательства.
+  if (choice.ending === "truth") {
+    const missingTruthEvidence = missingFrom(
+      rules.truthEvidence,
+      found
+    );
+
+    const missingTruthLinks = missingFrom(
+      rules.truthLinks,
+      links
+    );
+
+    const missingTruthHypotheses = missingFrom(
+      rules.truthHypotheses,
+      hypotheses
+    );
+
+    const missingTruthFindings = (rules.truthFindings || [])
+      .filter(finding => !hasFinding(finding));
+
+    if (
+      missingTruthEvidence.length ||
+      missingTruthLinks.length ||
+      missingTruthHypotheses.length ||
+      missingTruthFindings.length
+    ) {
+      const reasons = [];
+
+      if (missingTruthEvidence.length) {
+        reasons.push(
+          `ключевые улики: ${missingTruthEvidence.length}`
+        );
+      }
+
+      if (missingTruthLinks.length) {
+        reasons.push(
+          `ключевые связи: ${missingTruthLinks.length}`
+        );
+      }
+
+      if (missingTruthHypotheses.length) {
+        reasons.push(
+          `дополнительные гипотезы: ${missingTruthHypotheses.length}`
+        );
+      }
+
+      if (missingTruthFindings.length) {
+        reasons.push(
+          `дополнительные результаты допросов: ${missingTruthFindings.length}`
+        );
+      }
+
+      toast(
+        "Обвинение пока не доказано. Не хватает: " +
+        reasons.join("; ") +
+        "."
+      );
+
+      ping(250, 0.12);
+      return;
+    }
+  }
+
+  // Оцениваем полноту собранных улик.
+  const totalEvidence = Array.isArray(c.evidence)
+    ? c.evidence.length
+    : 0;
+
+  const completeness = totalEvidence > 0
+    ? found.length / totalEvidence
+    : 0;
+
+  const baseScore = Number(choice.score) || 0;
+
+  const completenessBonus =
+    completeness >= 0.75 ? 30 :
+    completeness >= 0.5 ? 15 : 0;
+
+  const bonus = baseScore + completenessBonus;
+
+  // Сохраняем награду за завершение расследования.
+  s.score = (Number(s.score) || 0) + bonus;
+  state.score = (Number(state.score) || 0) + bonus;
+
+  s.finished = true;
+  s.ending = choice.ending;
+
+  saveState();
+  renderEnding();
+
+  ping(choice.ending === "truth" ? 880 : 280, 0.22);
 }
 function renderEnding(){
  const c=CASES.find(x=>x.id===activeId),s=caseState(activeId);
