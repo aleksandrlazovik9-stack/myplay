@@ -3075,33 +3075,80 @@ function inspectClue(id){
  box.innerHTML=`<div class="notice"><strong>${esc(e[1])}</strong><br>${esc(e[2])}</div>`;
 }
 
+
 const EVIDENCE_CHAINS = {
-zero: [
-{
-id: "data_export",
-title: "Цепочка восстановленного журнала",
-evidence: ["server", "backup"],
-suspect: "director",
-result:
-"Серверные события и резервная копия подтверждают экспорт данных перед удалением журнала."
-},
-{
-id: "ghost_identity",
-title: "Цепочка фиктивной личности",
-evidence: ["account", "invoice"],
-suspect: "vendor",
-result:
-"Аккаунт без кадрового номера связан с реальными выплатами подрядчику."
-},
-{
-id: "project_funding",
-title: "Цепочка финансирования ZERO",
-evidence: ["protocol", "payment"],
-suspect: "director",
-result:
-"Протокол испытаний и подписанная платёжная ведомость связывают проект с руководством."
-}
-]
+  session: [
+    {
+      id: "session_timeline",
+      title: "Противоречие во времени",
+      evidence: ["clock", "log"],
+      suspect: "levin",
+      result:
+        "Остановившиеся часы и журнал доступа не подтверждают слова Левина о том, что он покинул клинику до позднего визита. Его объяснение времени требует пересмотра."
+    },
+    {
+      id: "session_identity",
+      title: "След старого дела",
+      evidence: ["archive", "tape"],
+      suspect: "levin",
+      result:
+        "Резервная запись и пустая папка архива связывают конфликт вокруг настоящего имени Марка с удалёнными документами пятилетней давности."
+    }
+  ],
+
+  room: [
+    {
+      id: "room_timeline",
+      title: "Подмена времени",
+      evidence: ["glass", "clock"],
+      suspect: "secretary",
+      result:
+        "Разбитый бокал и остановленные часы показывают, что время на камине не совпадает с последовательностью событий. Версия о смерти около десяти часов требует проверки."
+    },
+    {
+      id: "room_motive",
+      title: "Мотив секретаря",
+      evidence: ["letters", "will"],
+      suspect: "secretary",
+      result:
+        "Письма и новое завещание подтверждают, что секретарь рисковал потерять доступ к коллекции. Это устанавливает возможный мотив, но само по себе ещё не доказывает убийство."
+    },
+    {
+      id: "room_mechanism",
+      title: "Механизм ложного времени",
+      evidence: ["clock", "panel"],
+      suspect: "secretary",
+      result:
+        "Остановленные часы и скрытый канал показывают, как время могли изменить из соседнего служебного прохода. Теперь необходимо сопоставить этот механизм с мотивом и показаниями."
+    }
+  ],
+
+  zero: [
+    {
+      id: "data_export",
+      title: "Цепочка восстановленного журнала",
+      evidence: ["server", "backup"],
+      suspect: "director",
+      result:
+        "Серверные события и резервная копия подтверждают экспорт данных перед удалением журнала."
+    },
+    {
+      id: "ghost_identity",
+      title: "Цепочка фиктивной личности",
+      evidence: ["account", "invoice"],
+      suspect: "vendor",
+      result:
+        "Аккаунт без кадрового номера связан с реальными выплатами подрядчику."
+    },
+    {
+      id: "project_funding",
+      title: "Цепочка финансирования ZERO",
+      evidence: ["protocol", "payment"],
+      suspect: "director",
+      result:
+        "Протокол испытаний и подписанная платёжная ведомость связывают проект с руководством."
+    }
+  ]
 };
 
 const CHAIN_CONFESSIONS = {
