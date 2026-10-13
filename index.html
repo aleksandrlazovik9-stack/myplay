@@ -1503,10 +1503,14 @@ footer { text-align:center; color:#626d82; font-size:12px; padding:22px }
 <body>
 <header class="topbar">
   <div class="brand">MIND <span>LAB</span></div>
-  <div class="top-actions">
+  
+<div class="top-actions">
     <button class="small-btn" id="soundBtn" type="button">♫ Звук: выкл.</button>
+    <button class="small-btn" id="exportSaveBtn" type="button">Скачать сохранение</button>
+    <button class="small-btn" id="importSaveBtn" type="button">Восстановить сохранение</button>
+    <input id="importSaveFile" type="file" accept=".json,application/json" hidden>
     <button class="small-btn" id="resetBtn" type="button">Сбросить прогресс</button>
-  </div>
+</div>
 </header>
 
 <main>
@@ -5525,6 +5529,123 @@ document.getElementById("soundBtn").onclick=()=>{
  soundOn=!soundOn;
  document.getElementById("soundBtn").textContent=`♫ Звук: ${soundOn?"вкл.":"выкл."}`;
  if(soundOn)ping(600,.12);
+};
+
+function exportSaveBackup() {
+  try {
+    const backup = {
+      format: "mindlab-save-v1",
+      createdAt: new Date().toISOString(),
+      storeKey: STORE_KEY,
+      state: JSON.parse(JSON.stringify(state))
+    };
+
+    const blob = new Blob(
+      [JSON.stringify(backup, null, 2)],
+      { type: "application/json;charset=utf-8" }
+    );
+
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement("a");
+
+    link.href = url;
+    link.download =
+      "mind-lab-save-" +
+      new Date().toISOString().slice(0, 10) +
+      ".json";
+
+    document.body.appendChild(link);
+    link.click();
+    link.remove();
+
+    setTimeout(() => URL.revokeObjectURL(url), 1000);
+    toast("Копия сохранения подготовлена.");
+  } catch (error) {
+    console.error("MIND LAB backup export error:", error);
+    toast("Не удалось создать копию сохранения.");
+  }
+}
+
+function importSaveBackup(file) {
+  if (!file) return;
+
+  const reader = new FileReader();
+
+  reader.onerror = () => {
+    toast("Не удалось прочитать файл.");
+  };
+
+  reader.onload = () => {
+    try {
+      const backup = JSON.parse(reader.result);
+
+      if (
+        backup?.format !== "mindlab-save-v1" ||
+        backup?.storeKey !== STORE_KEY ||
+        !backup.state ||
+        typeof backup.state !== "object" ||
+        Array.isArray(backup.state) ||
+        !backup.state.cases ||
+        typeof backup.state.cases !== "object" ||
+        Array.isArray(backup.state.cases) ||
+        !Number.isFinite(Number(backup.state.score))
+      ) {
+        toast("Это не распознанная копия MIND LAB.");
+        return;
+      }
+
+      const validCaseIds = new Set(
+        CASES.map(item => item.id)
+      );
+
+      const cases = backup.state.cases;
+
+      if (
+        Object.keys(cases).some(id => !validCaseIds.has(id)) ||
+        Object.values(cases).some(
+          item => !item || typeof item !== "object" || Array.isArray(item)
+        )
+      ) {
+        toast("В копии обнаружены неизвестные данные дела.");
+        return;
+      }
+
+      const confirmed = confirm(
+        "Восстановить это сохранение?\n\n" +
+        "Текущий прогресс будет заменён данными из файла. " +
+        "Перед восстановлением скачай копию текущего сохранения."
+      );
+
+      if (!confirmed) return;
+
+      state = JSON.parse(JSON.stringify(backup.state));
+      saveState();
+
+      toast("Сохранение восстановлено. Перезагружаю игру.");
+
+      setTimeout(() => location.reload(), 500);
+    } catch (error) {
+      console.error("MIND LAB backup import error:", error);
+      toast("Файл повреждён или имеет неверный формат.");
+    }
+  };
+
+  reader.readAsText(file);
+}
+
+document.getElementById("exportSaveBtn").onclick = () => {
+  saveState();
+  exportSaveBackup();
+};
+
+document.getElementById("importSaveBtn").onclick = () => {
+  document.getElementById("importSaveFile").click();
+};
+
+document.getElementById("importSaveFile").onchange = event => {
+  const file = event.target.files?.[0];
+  importSaveBackup(file);
+  event.target.value = "";
 };
 document.getElementById("resetBtn").onclick=()=>{
  if(confirm("Сбросить весь прогресс, найденные улики и очки на этом устройстве?")){
