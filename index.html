@@ -2156,14 +2156,23 @@ const missingFindings = (hypothesis.requiresFindings || [])
     s.unlockedTwists = [];
   }
 
+  
+  // Бонус за новую зацепку начисляется только один раз.
+  // Общий счёт и счёт конкретного дела должны совпадать.
   if (
     hypothesis.result === "twist" &&
     !s.unlockedTwists.includes(id)
   ) {
     s.unlockedTwists.push(id);
-    state.score = (Number(state.score) || 0) + 30;
+
+    const twistBonus = 30;
+
+    s.score = (Number(s.score) || 0) + twistBonus;
+    state.score = (Number(state.score) || 0) + twistBonus;
+
     s.lastHypothesisFeedback +=
       "\n\n+30 очков: открыта новая зацепка.";
+
     ping(950, 0.18);
   } else if (hypothesis.result === "good") {
     ping(750, 0.12);
