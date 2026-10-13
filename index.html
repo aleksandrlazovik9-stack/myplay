@@ -101,6 +101,63 @@ p { margin:8px 0 15px }
 .choice span { color:var(--muted); font-size:13px }
 .badge { display:inline-block; color:var(--cyan); font-size:11px; letter-spacing:.1em; font-weight:800 }
 .notice { padding:13px 15px; background:#1c202b; border-left:3px solid var(--gold); border-radius:5px; color:#d8dbea; margin:16px 0 }
+
+/* MIND LAB — чек-лист перед финальным выводом */
+.verdict-checklist {
+  margin: 16px 0;
+  padding: 16px;
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  background: var(--panel);
+}
+
+.verdict-checklist h3 {
+  margin: 14px 0 8px;
+  font-size: 14px;
+}
+
+.verdict-checklist h3:first-child {
+  margin-top: 0;
+}
+
+.verdict-checklist p {
+  margin: 5px 0 10px;
+  color: var(--muted);
+  font-size: 12px;
+}
+
+.verdict-checklist ul {
+  display: grid;
+  gap: 7px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.verdict-checklist li {
+  padding: 9px 11px;
+  border: 1px solid var(--line);
+  border-radius: 7px;
+  font-size: 12px;
+  line-height: 1.55;
+}
+
+.verdict-checklist li.done {
+  border-color: #397b7a;
+  background: #142526;
+}
+
+.verdict-checklist li.missing {
+  border-color: #8c6740;
+  background: #292219;
+}
+
+.verdict-checklist .check-status {
+  display: block;
+  margin-top: 3px;
+  font-size: 11px;
+  opacity: .85;
+}
 .footer-actions { display:flex; gap:9px; flex-wrap:wrap; margin-top:22px }
 .ending { text-align:center; padding:clamp(24px,6vw,60px) 10px }
 .ending-mark { font-size:48px; color:var(--gold) }
@@ -1422,6 +1479,25 @@ footer { text-align:center; color:#626d82; font-size:12px; padding:22px }
   display: none;
 }
 
+
+/* MIND LAB — заметные подсказки */
+.hint-feedback {
+  margin-top: 14px;
+  padding: 14px 16px;
+  border: 1px solid #397b7a;
+  border-left: 3px solid var(--cyan);
+  border-radius: 9px;
+  background: #142526;
+  color: var(--text);
+  font-size: 13px;
+  line-height: 1.7;
+  white-space: pre-line;
+}
+
+.hint-feedback:empty {
+  display: none;
+}
+
 </style>
 </head>
 <body>
@@ -2639,8 +2715,10 @@ function renderChapter(){
  document.getElementById("noticeArea").innerHTML=`<div class="notice">${esc(ch.next)}</div>`;
  const storyContent=document.getElementById("storyContent");
  storyContent.innerHTML=`<div class="badge">ОБНАРУЖЕННЫЕ СВЕДЕНИЯ</div>
- <p class="muted">Открой улики справа. Затем переходи дальше, когда будешь готов.</p>
- <div class="footer-actions">
+ 
+<p class="muted">Открой улики справа. Затем переходи дальше, когда будешь готов.</p>
+<div id="hintFeedback" class="hint-feedback" role="status" aria-live="polite"></div>
+<div class="footer-actions">
  <button class="btn btn-primary" id="continueBtn">${chapterIndex<c.chapters.length-1?"Продолжить расследование →":"Перейти к выводу →"}</button>
  <button class="btn" id="hintBtn">Подсказка</button>
  </div>`;
@@ -2649,11 +2727,30 @@ function renderChapter(){
    chapterIndex++;s.chapter=chapterIndex;saveState();renderChapter();ping(690,.1);
   }else{renderVerdict();}
  };
- document.getElementById("hintBtn").onclick=()=>{
-  const missing=ch.clues.filter(id=>!s.found.includes(id));
-  toast(missing.length?`В этой главе ещё есть улики: ${missing.length}.`:"Ты изучил все улики этой главы.");
-  ping(400,.1);
- };
+ 
+document.getElementById("hintBtn").onclick = () => {
+  const missing = ch.clues.filter(id => !s.found.includes(id));
+  const hintFeedback = document.getElementById("hintFeedback");
+
+  if (!hintFeedback) return;
+
+  if (missing.length > 0) {
+    const clueNames = missing.map(id => {
+      const clue = c.evidence.find(item => item[0] === id);
+      return clue ? clue[1] : id;
+    });
+
+    hintFeedback.textContent =
+      "В этой главе ещё можно изучить:\n" +
+      clueNames.map(name => "• " + name).join("\n") +
+      "\n\nНайди эти материалы в разделе «Материалы дела» справа и нажми на каждую улику.";
+  } else {
+    hintFeedback.textContent =
+      "Ты изучил все улики этой главы. Теперь сопоставь найденные факты на доске расследования и проверь показания подозреваемых.";
+  }
+
+  ping(400, 0.1);
+};
  renderSidebar();
 }
 
@@ -5011,13 +5108,129 @@ ping(contradiction ? 760 : 620, 0.1);
   ping(360, 0.1);
 }
 
+
+function renderVerdictChecklist(c, s) {
+  const rules = VERDICT_REQUIREMENTS[activeId];
+
+  if (!rules) {
+    return '<div class="notice">Для этого дела пока нет чек-листа.</div>';
+  }
+
+  const found = Array.isArray(s.found) ? s.found : [];
+  const links = Array.isArray(s.links) ? s.links : [];
+  const hypotheses = Array.isArray(s.hypotheses)
+    ? s.hypotheses
+    : [];
+  const interrogations = s.interrogations || {};
+
+  const evidenceName = id =>
+    c.evidence.find(item => item[0] === id)?.[1] || id;
+
+  const linkName = key =>
+    key.split("|").map(evidenceName).join(" ↔ ");
+
+  const hypothesisName = id =>
+    (HYPOTHESES[activeId] || []).find(h => h.id === id)?.title || id;
+
+  const suspectName = id =>
+    c.suspects.find(person => person.id === id)?.name || id;
+
+  const questionName = id => ({
+    evidence: "Что показывает улика?",
+    timeline: "Вопрос о хронологии",
+    protocol: "Вопрос о протоколе"
+  }[id] || id);
+
+  const hasFinding = ({ suspect, question }) =>
+    Boolean(interrogations[suspect]?.findings?.[question]);
+
+  const row = (label, done) => `
+    <li class="${done ? "done" : "missing"}">
+      ${done ? "✓" : "○"} ${esc(label)}
+      <span class="check-status">
+        ${done ? "Выполнено" : "Ещё не выполнено"}
+      </span>
+    </li>`;
+
+  const section = (title, description, items) => `
+    <h3>${esc(title)}</h3>
+    <p>${esc(description)}</p>
+    <ul>${items.join("")}</ul>`;
+
+  const minimumItems = [
+    ...(rules.minimumEvidence || []).map(id =>
+      row("Изучить: " + evidenceName(id), found.includes(id))
+    ),
+    ...(rules.minimumLinks || []).map(key =>
+      row("Установить связь: " + linkName(key), links.includes(key))
+    ),
+    ...(rules.minimumHypotheses || []).map(id =>
+      row("Проверить версию: " + hypothesisName(id), hypotheses.includes(id))
+    ),
+    ...(rules.minimumFindings || []).map(item =>
+      row(
+        suspectName(item.suspect) + " — " + questionName(item.question),
+        hasFinding(item)
+      )
+    )
+  ];
+
+  const truthItems = [
+    ...(rules.truthEvidence || []).map(id =>
+      row("Ключевая улика: " + evidenceName(id), found.includes(id))
+    ),
+    ...(rules.truthLinks || []).map(key =>
+      row("Ключевая связь: " + linkName(key), links.includes(key))
+    ),
+    ...(rules.truthHypotheses || []).map(id =>
+      row("Дополнительная версия: " + hypothesisName(id), hypotheses.includes(id))
+    ),
+    ...(rules.truthFindings || []).map(item =>
+      row(
+        suspectName(item.suspect) + " — " + questionName(item.question),
+        hasFinding(item)
+      )
+    )
+  ];
+
+  const minimumReady = minimumItems.every(item =>
+    !item.includes('class="missing"')
+  );
+
+  const truthReady = truthItems.every(item =>
+    !item.includes('class="missing"')
+  );
+
+  return `
+    <div class="verdict-checklist">
+      <h3>Готовность к финальному выводу</h3>
+      <p>Проверь обязательные пункты перед выбором версии.</p>
+      ${section(
+        "1. Обязательные условия",
+        minimumReady
+          ? "Все обязательные условия выполнены."
+          : "Сначала выполни все пункты со статусом «Ещё не выполнено».",
+        minimumItems
+      )}
+      ${section(
+        "2. Полная концовка",
+        truthReady
+          ? "Все дополнительные условия выполнены."
+          : "Для полной концовки нужны дополнительные доказательства.",
+        truthItems
+      )}
+      <p>Просмотр этого списка не завершает дело и не меняет очки.</p>
+    </div>`;
+}
+
 function renderVerdict(){
     selectedEvidence = [];
  const c=CASES.find(x=>x.id===activeId),s=caseState(activeId);
  document.getElementById("storyEyebrow").textContent="ФИНАЛЬНЫЙ ВЫВОД";
  document.getElementById("storyTitle").textContent="Собери версию событий";
  document.getElementById("storyText").textContent=c.finalQuestion;
- document.getElementById("noticeArea").innerHTML=`<div class="notice">Перед выбором проверь улики. После решения ты увидишь разбор событий и результат расследования.</div>`;
+ document.getElementById("noticeArea").innerHTML =
+  renderVerdictChecklist(c, s);
  document.getElementById("storyContent").innerHTML=`<div class="choice-list">${c.choices.map(ch=>
  `<button class="choice" data-choice="${ch.id}"><strong>${esc(ch.label)}</strong><span>${esc(ch.desc)}</span></button>`
  ).join("")}</div><div class="footer-actions"><button class="btn" id="backChapter">← Вернуться к материалам</button></div>`;
