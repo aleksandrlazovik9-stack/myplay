@@ -2159,6 +2159,7 @@ const missingFindings = (hypothesis.requiresFindings || [])
   
   // Бонус за новую зацепку начисляется только один раз.
   // Общий счёт и счёт конкретного дела должны совпадать.
+  
   if (
     hypothesis.result === "twist" &&
     !s.unlockedTwists.includes(id)
@@ -2166,7 +2167,6 @@ const missingFindings = (hypothesis.requiresFindings || [])
     s.unlockedTwists.push(id);
 
     const twistBonus = 30;
-
     s.score = (Number(s.score) || 0) + twistBonus;
     state.score = (Number(state.score) || 0) + twistBonus;
 
@@ -2338,6 +2338,7 @@ function pickDeductionEvidence(id) {
 }
 
 
+
 function analyzeSuspectDeduction(evidenceId, suspectId) {
   const s = caseState(activeId);
 
@@ -2355,17 +2356,13 @@ function analyzeSuspectDeduction(evidenceId, suspectId) {
     return;
   }
 
-  const found = Array.isArray(s.found)
-    ? s.found
-    : [];
-
-  if (!found.includes(evidenceId)) {
+  if (!Array.isArray(s.found) || !s.found.includes(evidenceId)) {
     deductionMessage = "Сначала изучи эту улику.";
     return;
   }
 
-  
-  // Ключ хранится в порядке: улика → подозреваемый.
+  // Новый формат: улика → подозреваемый.
+  // Старый формат мог хранить те же части в алфавитном порядке.
   const key = evidenceId + "|" + suspectId;
   const legacyKey = [evidenceId, suspectId].sort().join("|");
 
@@ -2377,10 +2374,27 @@ function analyzeSuspectDeduction(evidenceId, suspectId) {
     s.suspectLinks = [];
   }
 
-  if (s.suspectLinks.includes(key)) {
+  // Не даём повторно начислить очки за старую или новую запись.
+  const existingKey = s.suspectLinks.includes(key)
+    ? key
+    : s.suspectLinks.includes(legacyKey)
+      ? legacyKey
+      : null;
+
+  if (existingKey) {
+    // Переводим старую запись в новый формат,
+    // чтобы история дедукций продолжала её отображать.
+    if (existingKey !== key) {
+      s.suspectLinks = s.suspectLinks.map(item =>
+        item === existingKey ? key : item
+      );
+      saveState();
+    }
+
     deductionMessage =
       suspect.name + " — " + evidence[1] + "\n\n" +
       "Ты уже проверял эту связь. Повторно очки не начисляются.";
+
     ping(450, 0.08);
     renderSidebar();
     return;
@@ -2391,6 +2405,7 @@ function analyzeSuspectDeduction(evidenceId, suspectId) {
       evidence[1] + " — " + suspect.name + "\n\n" +
       "Эта комбинация пока не подтверждается. " +
       "Само по себе совпадение улики и подозреваемого не доказывает причастность.";
+
     ping(300, 0.10);
     renderSidebar();
     return;
@@ -2855,7 +2870,8 @@ if (deductionHint) {
   if (deductionResult) {
     deductionResult.classList.toggle("hidden", !deductionMessage);
     deductionResult.className = "notice " +
-      (deductionMessage.includes("+20 очков")
+      ((deductionMessage.includes("+20 очков") ||
+ deductionMessage.includes("+15 очков"))
         ? "deduction-good"
         : deductionMessage.includes("не подтверждается")
           ? "deduction-bad"
