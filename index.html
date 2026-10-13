@@ -2355,8 +2355,14 @@ function analyzeSuspectDeduction(evidenceId, suspectId) {
     return;
   }
 
-  const key = [evidenceId, suspectId].sort().join("|");
-  const known = SUSPECT_DEDUCTIONS[activeId]?.[key];
+  
+  // Ключ хранится в порядке: улика → подозреваемый.
+  const key = evidenceId + "|" + suspectId;
+  const legacyKey = [evidenceId, suspectId].sort().join("|");
+
+  const known =
+    SUSPECT_DEDUCTIONS[activeId]?.[key] ||
+    SUSPECT_DEDUCTIONS[activeId]?.[legacyKey];
 
   if (!Array.isArray(s.suspectLinks)) {
     s.suspectLinks = [];
@@ -2628,6 +2634,7 @@ function renderChapter(){
 }
 
 
+
 function renderInvestigationRoute() {
   const container = document.getElementById("investigationRoute");
   const nextStep = document.getElementById("routeNextStep");
@@ -2636,67 +2643,101 @@ function renderInvestigationRoute() {
 
   const c = CASES.find(item => item.id === activeId);
   const s = caseState(activeId);
+  const rules = VERDICT_REQUIREMENTS[activeId];
 
-  if (!c || !s) return;
+  if (!c || !s || !rules) return;
 
-  const evidence = c.evidence.filter(e =>
-    Array.isArray(e) &&
-    e.length >= 3 &&
-    (
-      activeId !== "session" ||
-      !["protocol", "metadata"].includes(e[0]) ||
-      (Array.isArray(s.branchClues) &&
-        s.branchClues.includes(e[0]))
-    )
+  const found = Array.isArray(s.found) ? s.found : [];
+  const links = Array.isArray(s.links) ? s.links : [];
+  const hypotheses = Array.isArray(s.hypotheses)
+    ? s.hypotheses
+    : [];
+
+  const interrogations =
+    s.interrogations && typeof s.interrogations === "object"
+      ? s.interrogations
+      : {};
+
+  // Проверяем только обязательные улики для базового вердикта.
+  const missingEvidence = (rules.minimumEvidence || [])
+    .filter(id => !found.includes(id));
+
+  const evidenceComplete = missingEvidence.length === 0;
+
+  // Учитываем именно обязательные связи между уликами.
+  // Связи с подозреваемыми не заменяют их.
+  const missingLinks = (rules.minimumLinks || [])
+    .filter(key => !links.includes(key));
+
+  const linksComplete = missingLinks.length === 0;
+
+  // Проверяем обязательные результаты допросов.
+  const hasFinding = ({ suspect, question }) =>
+    Boolean(interrogations[suspect]?.findings?.[question]);
+
+  const requiredFindings = rules.minimumFindings || [];
+  const missingFindings = requiredFindings.filter(
+    finding => !hasFinding(finding)
   );
 
-  const foundAllEvidence =
-    evidence.length > 0 &&
-    evidence.every(e => (s.found || []).includes(e[0]));
-
-  const hasLinks =
-    (Array.isArray(s.links) && s.links.length > 0) ||
-    (Array.isArray(s.suspectLinks) && s.suspectLinks.length > 0);
-
-  const interrogations = Object.values(s.interrogations || {});
-
-  const hasInterrogation = interrogations.some(history =>
-    (Array.isArray(history.asked) && history.asked.length > 0) ||
-    Object.keys(history.findings || {}).length > 0 ||
-    Object.keys(history.presented || {}).length > 0
+  // В делах без обязательного результата допроса
+  // показываем этап завершённым после реальной работы с досье.
+  const hasInterrogation = Object.values(interrogations).some(history =>
+    (Array.isArray(history?.asked) && history.asked.length > 0) ||
+    Object.keys(history?.findings || {}).length > 0 ||
+    Object.keys(history?.presented || {}).length > 0
   );
 
-  const hypothesisResults = Object.values(s.hypothesisResults || {});
+  const suspectsComplete = requiredFindings.length > 0
+    ? missingFindings.length === 0
+    : hasInterrogation;
 
-  const hasCheckedHypothesis = hypothesisResults.some(result =>
-    ["supported", "twist"].includes(result?.status)
-  );
+  // Выбранные гипотезы уже записываются в s.hypotheses
+  // при проверке версии. Сверяем их с требованиями дела.
+  const missingHypotheses = (rules.minimumHypotheses || [])
+    .filter(id => !hypotheses.includes(id));
+
+  const hypothesesComplete = missingHypotheses.length === 0;
+
+  const verdictComplete = Boolean(s.finished && s.ending);
 
   const steps = [
     {
-      title: "Изучить материалы дела",
-      description: "Открой доступные улики и внимательно прочитай детали.",
-      done: foundAllEvidence
+      title: "Изучить материалы",
+      description: evidenceComplete
+        ? "Обязательные улики изучены."
+        : `Нужно изучить обязательных улик: ${missingEvidence.length}.`,
+      done: evidenceComplete
     },
     {
       title: "Сопоставить улики",
-      description: "Проверь, что подтверждают найденные связи.",
-      done: hasLinks
+      description: linksComplete
+        ? "Обязательные связи проверены."
+        : `Нужно проверить обязательных связей: ${missingLinks.length}.`,
+      done: linksComplete
     },
     {
       title: "Проверить подозреваемых",
-      description: "Изучи показания и проверь противоречия.",
-      done: hasInterrogation
+      description: suspectsComplete
+        ? "Необходимые проверки выполнены."
+        : requiredFindings.length
+          ? `Не хватает результатов допроса: ${missingFindings.length}.`
+          : "Изучи досье и проверь показания хотя бы одного подозреваемого.",
+      done: suspectsComplete
     },
     {
       title: "Проверить гипотезу",
-      description: "Сопоставь факты и проверь версию событий.",
-      done: hasCheckedHypothesis
+      description: hypothesesComplete
+        ? "Обязательная версия проверена."
+        : `Нужно проверить обязательных гипотез: ${missingHypotheses.length}.`,
+      done: hypothesesComplete
     },
     {
       title: "Вынести вердикт",
-      description: "Когда будешь готов, перейди к итоговому решению.",
-      done: Boolean(s.finished && s.ending)
+      description: verdictComplete
+        ? "Дело завершено."
+        : "Когда выполнишь обязательные условия, переходи к итоговому решению.",
+      done: verdictComplete
     }
   ];
 
@@ -2709,11 +2750,11 @@ function renderInvestigationRoute() {
         ? "active"
         : "";
 
-    const marker = step.done ? "✓" : String(index + 1);
-
     return `
       <div class="route-step ${status}">
-        <span class="route-step-marker">${marker}</span>
+        <span class="route-step-marker">
+          ${step.done ? "✓" : index + 1}
+        </span>
         <div>
           <span class="route-step-title">${esc(step.title)}</span>
           <span class="route-step-description">
@@ -2725,10 +2766,13 @@ function renderInvestigationRoute() {
   }).join("");
 
   if (activeStep === -1) {
-    nextStep.textContent = "Расследование завершено. Все этапы пройдены.";
+    nextStep.textContent =
+      "Расследование завершено. Все пять этапов пройдены.";
   } else {
     nextStep.textContent =
-      "Следующий шаг: " + steps[activeStep].title + ". " +
+      "Следующий шаг: " +
+      steps[activeStep].title +
+      ". " +
       steps[activeStep].description;
   }
 }
@@ -5227,6 +5271,7 @@ function renderEnding(){
  <button class="btn btn-primary" id="archiveBtn">Вернуться в архив →</button>
  <button class="btn" id="replayBtn">Переиграть дело</button>
  </div></div>`;
+ renderInvestigationRoute();
  document.getElementById("archiveBtn").onclick=()=>{renderCatalog();window.scrollTo({top:0,behavior:"smooth"});};
  document.getElementById("replayBtn").onclick=()=>{
   const old=caseState(activeId);
