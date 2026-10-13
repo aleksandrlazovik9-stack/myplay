@@ -1300,90 +1300,108 @@ footer { text-align:center; color:#626d82; font-size:12px; padding:22px }
 }
 
 
-/* MIND LAB — маршрут расследования */
-.investigation-route {
-  position: relative;
-  overflow: hidden;
+
+/* MIND LAB — закреплённый маршрут расследования */
+.investigation-route-dock {
+  position: fixed;
+  z-index: 20;
+  left: 50%;
+  bottom: 0;
+  transform: translateX(-50%);
+  width: min(1500px, 100%);
+  padding: 12px 28px 14px;
+  background: rgba(9, 11, 16, 0.96);
+  border: 1px solid var(--line);
+  border-bottom: 0;
+  border-radius: 14px 14px 0 0;
+  box-shadow: 0 -10px 35px #0006;
+  backdrop-filter: blur(16px);
+}
+
+#game {
+  padding-bottom: 150px;
+}
+
+.route-dock-heading {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  margin-bottom: 10px;
+}
+
+.route-dock-caption {
+  color: var(--muted);
+  font-size: 12px;
 }
 
 .route-steps {
   display: grid;
-  gap: 0;
-  margin-top: 18px;
+  grid-template-columns: repeat(5, minmax(0, 1fr));
+  gap: 10px;
 }
 
 .route-step {
   position: relative;
-  display: grid;
-  grid-template-columns: 30px minmax(0, 1fr);
-  gap: 10px;
-  padding: 0 0 18px;
-}
-
-.route-step:last-child {
-  padding-bottom: 0;
-}
-
-.route-step:not(:last-child)::after {
-  content: "";
-  position: absolute;
-  left: 14px;
-  top: 30px;
-  bottom: 0;
-  width: 1px;
-  background: var(--line);
-}
-
-.route-step.completed:not(:last-child)::after {
-  background: #397b7a;
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  min-width: 0;
+  padding: 9px 11px;
+  border: 1px solid var(--line);
+  border-radius: 9px;
+  background: var(--panel);
 }
 
 .route-step-marker {
-  position: relative;
-  z-index: 1;
   display: grid;
   place-items: center;
-  width: 29px;
-  height: 29px;
+  flex: 0 0 27px;
+  width: 27px;
+  height: 27px;
   border: 1px solid var(--line);
   border-radius: 50%;
   background: var(--panel2);
   color: var(--muted);
-  font-size: 12px;
+  font-size: 11px;
   font-weight: 800;
+}
+
+.route-step-title {
+  display: block;
+  min-width: 0;
+  font-size: 12px;
+  line-height: 1.4;
+  font-weight: 750;
+  overflow-wrap: anywhere;
+}
+
+.route-step-description {
+  display: none;
+}
+
+.route-step.active {
+  border-color: var(--gold);
+  background: #302819;
 }
 
 .route-step.active .route-step-marker {
   color: var(--gold);
   border-color: var(--gold);
-  background: #302819;
-  box-shadow: 0 0 0 3px #f0c67412;
+}
+
+.route-step.active .route-step-title {
+  color: var(--gold);
+}
+
+.route-step.completed {
+  border-color: #397b7a;
+  background: #142526;
 }
 
 .route-step.completed .route-step-marker {
   color: var(--cyan);
   border-color: #397b7a;
-  background: #142526;
-}
-
-.route-step-title {
-  display: block;
-  padding-top: 3px;
-  font-size: 13px;
-  line-height: 1.45;
-  font-weight: 750;
-}
-
-.route-step-description {
-  display: block;
-  margin-top: 4px;
-  color: var(--muted);
-  font-size: 12px;
-  line-height: 1.6;
-}
-
-.route-step.active .route-step-title {
-  color: var(--gold);
 }
 
 .route-step.completed .route-step-title {
@@ -1391,14 +1409,13 @@ footer { text-align:center; color:#626d82; font-size:12px; padding:22px }
 }
 
 .route-next-step {
-  margin: 18px 0 0;
-  padding: 12px;
+  margin: 9px 0 0;
+  padding: 7px 10px;
   border-left: 2px solid var(--gold);
-  border-radius: 0 7px 7px 0;
   background: #f0c6740a;
   color: var(--text);
   font-size: 12px;
-  line-height: 1.7;
+  line-height: 1.5;
 }
 
 .route-next-step:empty {
@@ -1512,14 +1529,6 @@ footer { text-align:center; color:#626d82; font-size:12px; padding:22px }
       <div class="clue-list" id="clueList"></div>
     </section>
 
-    <section class="panel sidebar-section investigation-route">
-      <div class="eyebrow">INVESTIGATION ROUTE</div>
-      <h3>Путь расследования</h3>
-      <p class="muted">Двигайся от изучения фактов к обоснованному выводу.</p>
-      <div id="investigationRoute" class="route-steps"></div>
-      <p id="routeNextStep" class="route-next-step" aria-live="polite"></p>
-    </section>
-
     <section class="panel sidebar-section">
       <div class="eyebrow">DEDUCTION</div>
       <h3>Проверка связей</h3>
@@ -1556,6 +1565,18 @@ footer { text-align:center; color:#626d82; font-size:12px; padding:22px }
 
   </aside>
 </div>
+
+<div class="investigation-route-dock investigation-route">
+  <div class="route-dock-heading">
+    <span class="eyebrow">MIND LAB / INVESTIGATION ROUTE</span>
+    <span class="route-dock-caption">Путь расследования</span>
+  </div>
+
+  <div id="investigationRoute" class="route-steps"></div>
+
+  <p id="routeNextStep" class="route-next-step" aria-live="polite"></p>
+</div>
+
 <section class="panel hypothesis-panel"> <div class="eyebrow">CASE THEORY / 01</div> <h3>Во что ты веришь?</h3> <p class="muted"> Выбери версию событий. По мере появления доказательств ты сможешь подтвердить её или полностью пересмотреть дело. </p> <div class="hypothesis-list" id="hypothesisList"></div> <div id="hypothesisFeedback" class="hypothesis-feedback" aria-live="polite"> Пока нет выбранной версии. </div> </section>
 
   <div id="toast" class="toast hidden" role="status"></div>
