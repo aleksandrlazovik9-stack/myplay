@@ -5580,7 +5580,11 @@ updateInterrogationPressure();
 
 
   // МГНОВЕННОЕ ОТКРЫТИЕ НОВЫХ ВОПРОСОВ ПОСЛЕ ЦЕПОЧКИ
-  if (completedChains.length || contradiction) {
+  if (
+  completedChains.length ||
+  contradiction ||
+  specificReaction
+    ) {
     const extraQuestions =
       CONFESSION_QUESTIONS[activeId]?.[id] || [];
 
