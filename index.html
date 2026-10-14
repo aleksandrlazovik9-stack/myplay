@@ -1804,6 +1804,65 @@ body {
   box-shadow: 0 0 12px #e0bd72a0;
 }
 
+
+.board-node-media {
+  position: relative;
+  display: flex;
+  min-height: 112px;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  border: 1px solid #b99a6030;
+  border-radius: 3px;
+  background:
+    radial-gradient(ellipse at center, #b99a6018, transparent 70%),
+    #111318;
+}
+
+#boardNodes .board-node-image {
+  width: 100%;
+  height: 145px;
+  object-fit: cover;
+  border-radius: 2px;
+}
+
+.board-node-placeholder {
+  display: flex;
+  width: 100%;
+  min-height: 112px;
+  align-items: center;
+  justify-content: center;
+  padding: 12px;
+  color: #a38b60;
+  font: 10px monospace;
+  letter-spacing: .1em;
+  text-align: center;
+}
+
+#boardNodes .board-node.is-undiscovered {
+  border-style: dashed;
+  border-color: #8d795255;
+  background: linear-gradient(145deg, #202020, #151619);
+}
+
+#boardNodes .board-node.is-undiscovered .board-node-title {
+  color: #d4c5a8;
+}
+
+#boardNodes .board-node.is-undiscovered .board-node-description {
+  color: #8e877b;
+}
+
+#boardNodes .board-node.is-undiscovered:hover {
+  border-color: #d0ad6a;
+  border-style: solid;
+}
+
+#deductionHint,
+#deductionResult {
+  margin-top: 14px;
+}
+
 </style>
 </head>
 <body>
@@ -1887,6 +1946,10 @@ body {
       </div>
 
       
+        <div id="deductionHint" class="notice hidden" aria-live="polite"></div>
+        <div id="deductionResult" class="notice hidden" aria-live="polite"></div>
+
+      
 <div class="board-progress">
   <span class="muted">Собранные улики</span>
   <strong id="boardProgress">0%</strong>
@@ -1924,8 +1987,7 @@ body {
   Или выбери одну улику, а затем подозреваемого, чтобы проверить его причастность.
 </p>
 <div class="clue-list" id="deductionList"></div>
-<div id="deductionHint" class="notice hidden" aria-live="polite"></div>
-<div id="deductionResult" class="notice hidden" aria-live="polite"></div>
+
 
 
     </section>
@@ -3275,13 +3337,13 @@ function renderInvestigationRoute() {
     switch (activeStep) {
       case 0:
         instruction =
-          "Открой «Материалы дела» и изучи: " +
+          "На доске изучи материалы: " +
           missingEvidence.map(evidenceName).join(", ") + ".";
         break;
 
       case 1:
         instruction =
-          "На доске дедукции сопоставь: " +
+          "На доске сопоставь: " +
           missingLinks.map(linkName).join("; ") + ".";
         break;
 
@@ -6828,6 +6890,7 @@ renderCatalog();
 // MIND LAB — визуальная доска улик
 
 
+
 function renderVisualBoard() {
   const board = document.getElementById("visualBoard");
   const nodes = document.getElementById("boardNodes");
@@ -6837,27 +6900,27 @@ function renderVisualBoard() {
   const insight = document.getElementById("boardInsight");
   const progress = document.getElementById("boardProgress");
 
-  if (!board || !nodes || !svg) return;
-  if (!activeId) return;
+  if (!board || !nodes || !svg || !activeId) return;
 
   const c = CASES.find(item => item.id === activeId);
   if (!c) return;
 
   const s = caseState(activeId);
-
-  const discovered = c.evidence.filter(
-    e => Array.isArray(e) &&
-      e.length >= 3 &&
-      s.found.includes(e[0]) &&
-      (!["protocol", "metadata"].includes(e[0]) ||
-        (Array.isArray(s.branchClues) && s.branchClues.includes(e[0])))
+  const visibleEvidence = c.evidence.filter(e =>
+    Array.isArray(e) &&
+    e.length >= 3 &&
+    (
+      activeId !== "session" ||
+      !["protocol", "metadata"].includes(e[0]) ||
+      (Array.isArray(s.branchClues) && s.branchClues.includes(e[0]))
+    )
   );
 
-  const knownLinks = (Array.isArray(s.links) ? s.links : []).filter(key => {
-    return DEDUCTIONS[activeId]?.[key]?.good === true;
-  });
+  const foundIds = Array.isArray(s.found) ? s.found : [];
+  const knownLinks = (Array.isArray(s.links) ? s.links : []).filter(
+    key => DEDUCTIONS[activeId]?.[key]?.good === true
+  );
 
-  // Изображения для улик. Неизвестные улики получают нейтральную обложку.
   const imageById = {
     clock: "https://images.unsplash.com/photo-1523275335684-37898b6baf30?auto=format&fit=crop&w=640&q=80",
     cup: "https://images.unsplash.com/photo-1514228742587-6b1558fcca3d?auto=format&fit=crop&w=640&q=80",
@@ -6878,116 +6941,146 @@ function renderVisualBoard() {
     server: "https://images.unsplash.com/photo-1558494949-ef010cbdcc31?auto=format&fit=crop&w=640&q=80"
   };
 
-  counter.textContent = `УЛИКИ: ${discovered.length}`;
-  progress.textContent = `${knownLinks.length} ${
-    knownLinks.length === 1 ? "связь установлена" : "связей установлено"
-  }`;
+  const evidenceSignature = visibleEvidence.map(e => e[0]).join("|");
 
-  if (empty) empty.style.display = discovered.length ? "none" : "flex";
-
-  
-  // Пересоздаём карточки только тогда, когда изменился
-  // состав доступных улик. При выборе сохраняем DOM на месте.
-  const evidenceSignature = discovered.map(e => e[0]).join("|");
-
+  // Перестраиваем карточки только при изменении набора материалов.
   if (nodes.dataset.evidenceSignature !== evidenceSignature) {
-    nodes.innerHTML = discovered.map((e, i) => {
-      const id = e[0];
-      const title = e[1];
-      const description = e[2] || "Материал расследования";
-      const imageUrl = imageById[id];
+    nodes.innerHTML = visibleEvidence.map((e, i) => `
+      <button
+        type="button"
+        class="board-node"
+        data-board-evidence="${esc(e[0])}"
+        aria-pressed="false"
+      >
+        <span class="board-node-number">
+          EVIDENCE / ${String(i + 1).padStart(2, "0")}
+        </span>
 
-      return `
-        <button
-          type="button"
-          class="board-node"
-          data-board-evidence="${esc(id)}"
-          aria-pressed="false"
-          title="${esc(description)}"
-        >
-          <span class="board-node-number">
-            EVIDENCE / ${String(i + 1).padStart(2, "0")}
+        <span class="board-node-media">
+          <img
+            class="board-node-image hidden"
+            data-evidence-image
+            alt=""
+            loading="lazy"
+          >
+          <span class="board-node-placeholder" data-evidence-placeholder>
+            МАТЕРИАЛ НЕ ИЗУЧЕН
           </span>
-          ${
-            imageUrl
-              ? `<img class="board-node-image" src="${esc(imageUrl)}" alt="${esc(title)}" loading="lazy">`
-              : `<span class="board-node-placeholder">◆</span>`
-          }
-          <span class="board-node-title">${esc(title)}</span>
-          <span class="board-node-description">${esc(description)}</span>
-          <span class="board-node-status"></span>
-        </button>
-      `;
-    }).join("");
+        </span>
+
+        <span class="board-node-title">${esc(e[1])}</span>
+        <span class="board-node-description" data-evidence-description></span>
+        <span class="board-node-status" data-evidence-status></span>
+      </button>
+    `).join("");
 
     nodes.dataset.evidenceSignature = evidenceSignature;
   }
 
-  // Обработчик назначается один раз и продолжает работать
-  // даже после появления новых карточек.
+  // Один обработчик на контейнер: не плодим обработчики при обновлении.
   if (nodes.dataset.boardClickBound !== "true") {
     nodes.addEventListener("click", event => {
       const button = event.target.closest("[data-board-evidence]");
       if (!button || !nodes.contains(button)) return;
 
-      pickDeductionEvidence(button.dataset.boardEvidence);
+      const id = button.dataset.boardEvidence;
+      const currentCase = CASES.find(item => item.id === activeId);
+      const currentState = caseState(activeId);
+      const isFound = Array.isArray(currentState.found) &&
+        currentState.found.includes(id);
+
+      if (!isFound) {
+        inspectClue(id);
+      } else {
+        pickDeductionEvidence(id);
+      }
     });
 
     nodes.dataset.boardClickBound = "true";
   }
 
-  // Обновляем только состояние карточек — без пересоздания DOM.
+  // Меняем только содержимое и классы — сами карточки остаются на месте.
   nodes.querySelectorAll("[data-board-evidence]").forEach(button => {
     const id = button.dataset.boardEvidence;
+    const evidence = visibleEvidence.find(e => e[0] === id);
+    if (!evidence) return;
+
+    const found = foundIds.includes(id);
     const selected = selectedEvidence.includes(id);
     const linked = knownLinks.some(key => key.split("|").includes(id));
 
+    button.classList.toggle("is-undiscovered", !found);
     button.classList.toggle("is-selected", selected);
     button.classList.toggle("is-linked", linked);
     button.setAttribute("aria-pressed", String(selected));
+    button.title = found ? evidence[2] : "Нажми, чтобы изучить материал";
 
-    const status = button.querySelector(".board-node-status");
-    if (status) {
-      status.textContent = selected
-        ? "◆ ВЫБРАНО"
+    const img = button.querySelector("[data-evidence-image]");
+    const placeholder = button.querySelector("[data-evidence-placeholder]");
+    const description = button.querySelector("[data-evidence-description]");
+    const status = button.querySelector("[data-evidence-status]");
+    const imageUrl = imageById[id];
+
+    if (found && imageUrl) {
+      if (img.getAttribute("src") !== imageUrl) {
+        img.setAttribute("src", imageUrl);
+      }
+      img.alt = evidence[1];
+      img.classList.remove("hidden");
+      placeholder.classList.add("hidden");
+    } else {
+      img.classList.add("hidden");
+      placeholder.classList.remove("hidden");
+    }
+
+    description.textContent = found
+      ? evidence[2]
+      : "Нажми, чтобы изучить материал";
+
+    status.textContent = selected
+      ? "◆ ВЫБРАНО"
+      : !found
+        ? "◇ ИЗУЧИТЬ МАТЕРИАЛ"
         : linked
           ? "● ЕСТЬ СВЯЗЬ"
-          : "◇ ВЫБРАТЬ УЛИКУ";
-    }
+          : "◇ ВЫБРАТЬ ДЛЯ ДЕДУКЦИИ";
   });
 
+  const foundCount = visibleEvidence.filter(e => foundIds.includes(e[0])).length;
+  counter.textContent = `УЛИКИ: ${foundCount} / ${visibleEvidence.length}`;
+  progress.textContent = `${knownLinks.length} ${
+    knownLinks.length === 1 ? "связь установлена" : "связей установлено"
+  }`;
+
+  if (empty) empty.style.display = visibleEvidence.length ? "none" : "flex";
+
   if (insight) {
-    if (!discovered.length) {
-      insight.textContent = "Изучи первую улику, чтобы начать расследование.";
-    } else if (selectedEvidence.length === 1) {
-      insight.textContent = "Теперь выбери вторую улику, чтобы проверить связь.";
-    } else if (!knownLinks.length) {
-      insight.textContent = "Выбери две карточки на доске и проверь свою версию.";
+    if (selectedEvidence.length === 1) {
+      insight.textContent =
+        "Первая улика выбрана. Нажми на вторую изученную улику, чтобы проверить связь, или выбери подозреваемого справа.";
+    } else if (foundCount === 0) {
+      insight.textContent = "Нажми на карточку, чтобы изучить первый материал дела.";
+    } else if (foundCount < visibleEvidence.length) {
+      insight.textContent =
+        "Изучай новые материалы и выбирай две улики, которые могут быть связаны.";
     } else {
-      insight.textContent = "Сопоставь подтверждённые связи с показаниями подозреваемых.";
+      insight.textContent =
+        "Сопоставляй улики и проверяй выводы по показаниям подозреваемых.";
     }
   }
 
+  // Рисуем линии подтверждённых связей между карточками.
   requestAnimationFrame(() => {
     if (!board.isConnected || !svg.isConnected) return;
 
     const boardRect = board.getBoundingClientRect();
-    svg.setAttribute(
-      "viewBox",
-      `0 0 ${board.clientWidth} ${board.clientHeight}`
-    );
+    svg.setAttribute("viewBox", `0 0 ${board.clientWidth} ${board.clientHeight}`);
     svg.innerHTML = "";
 
     knownLinks.forEach(key => {
       const [a, b] = key.split("|");
-
-      const first = nodes.querySelector(
-        `[data-board-evidence="${a}"]`
-      );
-      const second = nodes.querySelector(
-        `[data-board-evidence="${b}"]`
-      );
-
+      const first = nodes.querySelector(`[data-board-evidence="${a}"]`);
+      const second = nodes.querySelector(`[data-board-evidence="${b}"]`);
       if (!first || !second) return;
 
       const r1 = first.getBoundingClientRect();
@@ -6997,13 +7090,9 @@ function renderVisualBoard() {
       const y1 = r1.top + r1.height / 2 - boardRect.top;
       const x2 = r2.left + r2.width / 2 - boardRect.left;
       const y2 = r2.top + r2.height / 2 - boardRect.top;
-
       const curve = Math.max(24, Math.abs(x2 - x1) * 0.12);
-      const path = document.createElementNS(
-        "http://www.w3.org/2000/svg",
-        "path"
-      );
 
+      const path = document.createElementNS("http://www.w3.org/2000/svg", "path");
       path.setAttribute(
         "d",
         `M ${x1} ${y1} C ${x1 + curve} ${y1}, ${x2 - curve} ${y2}, ${x2} ${y2}`
