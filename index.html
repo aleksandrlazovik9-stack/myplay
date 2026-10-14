@@ -2666,9 +2666,39 @@ function loadState(){
  try{return JSON.parse(localStorage.getItem(STORE_KEY))||{cases:{},score:0};}
  catch(e){return {cases:{},score:0};}
 }
-function saveState(){
- try{localStorage.setItem(STORE_KEY,JSON.stringify(state));}
- catch(e){toast("Браузер не разрешил сохранить прогресс.");}
+
+
+function refreshVerdictChecklist() {
+  const eyebrow = document.getElementById("storyEyebrow");
+  const noticeArea = document.getElementById("noticeArea");
+
+  // Обновляем только на экране финального вывода.
+  if (
+    !eyebrow ||
+    eyebrow.textContent.trim() !== "ФИНАЛЬНЫЙ ВЫВОД" ||
+    !noticeArea ||
+    !activeId
+  ) {
+    return;
+  }
+
+  const c = CASES.find(item => item.id === activeId);
+  const s = caseState(activeId);
+
+  if (!c || !s) return;
+
+  noticeArea.innerHTML = renderVerdictChecklist(c, s);
+}
+
+
+function saveState() {
+  try {
+    localStorage.setItem(STORE_KEY, JSON.stringify(state));
+  } catch (e) {
+    toast("Браузер не разрешил сохранить прогресс.");
+  }
+
+  refreshVerdictChecklist();
 }
 
 function caseState(id) {
