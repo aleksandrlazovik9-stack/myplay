@@ -1901,22 +1901,608 @@ body {
   font-size: 12px;
 }
 
+
+/* =========================================
+   MIND LAB — FULLSCREEN INVESTIGATION v1
+   ========================================= */
+
+#game.ml-game-screen:not(.hidden) {
+  position: fixed;
+  inset: 0;
+  z-index: 50;
+  width: 100vw;
+  height: 100vh;
+  height: 100dvh;
+  margin: 0;
+  padding: 0;
+  overflow: hidden;
+  background: #101113;
+  isolation: isolate;
+}
+
+#game.ml-game-screen .ml-topbar {
+  position: absolute;
+  z-index: 12;
+  inset: 0 0 auto;
+  min-height: 68px;
+  display: flex;
+  align-items: center;
+  gap: 17px;
+  padding: 10px 22px;
+  border-bottom: 1px solid #ffffff15;
+  background: #151619;
+}
+
+.ml-case-heading {
+  min-width: 130px;
+  flex-shrink: 0;
+}
+
+.ml-case-heading .eyebrow {
+  color: #d5ad66;
+  font-size: 9px;
+  letter-spacing: .16em;
+}
+
+.ml-case-heading .chapter-label {
+  display: block;
+  color: #e8dfcb;
+  font-size: 12px;
+  letter-spacing: .07em;
+}
+
+#game.ml-game-screen .ml-back {
+  flex-shrink: 0;
+  color: #c9c1b4;
+  background: transparent;
+  border-color: #ffffff20;
+}
+
+.ml-progress-slot {
+  display: flex;
+  align-items: center;
+  margin-left: auto;
+  flex-shrink: 0;
+}
+
+.ml-progress-slot .board-progress {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 0;
+  color: #d5ad66;
+  font-size: 10px;
+}
+
+.ml-progress-slot .board-progress .muted {
+  color: #99958c;
+}
+
+.ml-tools {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 5px;
+  flex-shrink: 0;
+}
+
+.ml-tools button {
+  padding: 9px 10px;
+  color: #c2bdb3;
+  background: transparent;
+  border: 1px solid transparent;
+  border-radius: 4px;
+  font-size: 11px;
+  white-space: nowrap;
+  transition: .18s ease;
+}
+
+.ml-tools button:hover,
+.ml-tools button.active {
+  color: #f0d49b;
+  border-color: #d5ad6650;
+  background: #d5ad660c;
+}
+
+#game.ml-game-screen .game-layout.investigation-layout {
+  position: absolute;
+  inset: 78px 16px 12px;
+  display: block;
+  width: auto;
+  margin: 0;
+  padding: 0;
+  overflow: hidden;
+}
+
+#game.ml-game-screen .investigation-main {
+  display: flex;
+  width: 100%;
+  height: 100%;
+  min-height: 0;
+  margin: 0;
+  padding: 0;
+}
+
+#game.ml-game-screen .investigation-sidebar {
+  display: none !important;
+}
+
+#game.ml-game-screen #visualBoardPanel {
+  display: flex;
+  flex: 1 1 auto;
+  flex-direction: column;
+  width: 100%;
+  height: 100%;
+  min-width: 0;
+  min-height: 0;
+  margin: 0;
+  padding: 18px 20px 12px;
+  overflow: hidden;
+  border: 1px solid #76624770;
+  border-radius: 7px;
+  background:
+    radial-gradient(ellipse at 22% 20%, #a47c3b18, transparent 42%),
+    radial-gradient(ellipse at 83% 82%, #75453a12, transparent 45%),
+    repeating-linear-gradient(
+      8deg,
+      transparent 0 6px,
+      #dfc18a05 7px,
+      transparent 8px
+    ),
+    #211f1b;
+  box-shadow: inset 0 0 90px #0005, 0 15px 45px #0003;
+}
+
+#game.ml-game-screen .board-heading {
+  flex: 0 0 auto;
+  align-items: center;
+  margin-bottom: 12px;
+}
+
+#game.ml-game-screen .board-heading .eyebrow {
+  color: #d5ad66;
+  font-size: 9px;
+  letter-spacing: .17em;
+}
+
+#game.ml-game-screen .board-heading h3 {
+  margin: 5px 0;
+  color: #eee3cf;
+  font-size: 21px;
+  font-weight: 650;
+}
+
+#game.ml-game-screen .board-heading p {
+  margin: 0;
+  color: #aaa091;
+  font-size: 11px;
+}
+
+#game.ml-game-screen .board-counter {
+  color: #d5ad66;
+  font: 10px monospace;
+  letter-spacing: .08em;
+}
+
+#game.ml-game-screen #visualBoard {
+  position: relative;
+  flex: 1 1 auto;
+  width: 100%;
+  min-height: 0;
+  overflow: auto;
+  border: 1px solid #c7a76b16;
+  border-radius: 3px;
+  background:
+    radial-gradient(ellipse at center, #b28a4510, transparent 70%),
+    repeating-linear-gradient(90deg, #00000008 0 1px, transparent 1px 5px),
+    #25221d;
+}
+
+#game.ml-game-screen #boardNodes {
+  position: relative;
+  z-index: 2;
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  align-content: start;
+  align-items: start;
+  gap: 18px;
+  width: 100%;
+  min-height: 100%;
+  padding: 24px;
+}
+
+#game.ml-game-screen #boardNodes .board-node {
+  position: relative;
+  width: 100%;
+  min-width: 0;
+  padding: 10px 10px 12px;
+  color: #28251f;
+  text-align: left;
+  border: 1px solid #f5e9cf;
+  border-radius: 2px;
+  background: #e8dfcb;
+  box-shadow: 0 7px 17px #0005, 0 1px 1px #0008;
+  transform: rotate(-.6deg);
+  transition:
+    transform .18s ease,
+    box-shadow .18s ease,
+    border-color .18s ease;
+}
+
+#game.ml-game-screen #boardNodes .board-node:nth-child(3n) {
+  transform: rotate(1deg);
+}
+
+#game.ml-game-screen #boardNodes .board-node:nth-child(4n) {
+  transform: rotate(-1.3deg);
+}
+
+#game.ml-game-screen #boardNodes .board-node:hover {
+  z-index: 4;
+  transform: rotate(0) translateY(-4px);
+  box-shadow: 0 13px 25px #0008;
+}
+
+#game.ml-game-screen #boardNodes .board-node.is-selected {
+  z-index: 5;
+  transform: rotate(0) scale(.98);
+  border: 2px solid #d5ad66;
+  box-shadow: 0 0 0 3px #d5ad6620, 0 0 24px #d5ad6633;
+}
+
+#game.ml-game-screen #boardNodes .board-node.is-linked {
+  border-bottom: 4px solid #a64c46;
+}
+
+#game.ml-game-screen #boardNodes .board-node-number {
+  color: #8d795a;
+  font-size: 9px;
+  letter-spacing: .12em;
+}
+
+#game.ml-game-screen #boardNodes .board-node-media {
+  min-height: 120px;
+  margin: 7px 0;
+  border: 1px solid #c7b99d;
+  border-radius: 0;
+  background: #34312b;
+}
+
+#game.ml-game-screen #boardNodes .board-node-image {
+  height: 140px;
+  border-radius: 0;
+  filter: sepia(.15) saturate(.8) contrast(1.05);
+}
+
+#game.ml-game-screen #boardNodes .board-node-placeholder {
+  min-height: 120px;
+  color: #b69a65;
+  background: #292824;
+  font-size: 9px;
+  letter-spacing: .12em;
+}
+
+#game.ml-game-screen #boardNodes .board-node-title {
+  color: #29251f;
+  font-size: 13px;
+  font-weight: 800;
+  line-height: 1.35;
+}
+
+#game.ml-game-screen #boardNodes .board-node-description {
+  margin-top: 4px;
+  color: #756d60;
+  font-size: 10px;
+  line-height: 1.45;
+}
+
+#game.ml-game-screen #boardNodes .board-node-status {
+  margin-top: 8px;
+  padding-top: 7px;
+  color: #997440;
+  border-top: 1px solid #cfc5ae;
+  font-size: 8px;
+  letter-spacing: .08em;
+}
+
+#game.ml-game-screen #boardNodes .board-node.is-undiscovered {
+  border: 1px dashed #93805d;
+  background: #292a2a;
+}
+
+#game.ml-game-screen #boardNodes .board-node.is-undiscovered .board-node-title {
+  color: #e0d1b6;
+}
+
+#game.ml-game-screen #boardNodes .board-node.is-undiscovered .board-node-description {
+  color: #a59a87;
+}
+
+#game.ml-game-screen #boardConnections {
+  z-index: 1;
+  pointer-events: none;
+}
+
+#game.ml-game-screen .board-line {
+  fill: none;
+  stroke: #b55249;
+  stroke-width: 2;
+  opacity: .82;
+  filter: drop-shadow(0 1px 2px #0008);
+}
+
+#game.ml-game-screen .board-insight {
+  flex: 0 0 auto;
+  margin-top: 10px;
+  padding: 10px 12px;
+  color: #c9bca6;
+  border-left: 2px solid #d5ad66;
+  background: #00000020;
+  font-size: 11px;
+  line-height: 1.5;
+}
+
+#game.ml-game-screen .board-progress {
+  color: #d5ad66;
+}
+
+.ml-scrim {
+  position: absolute;
+  z-index: 20;
+  inset: 68px 0 0;
+  background: #0008;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity .22s ease;
+}
+
+.ml-scrim.open {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+.ml-drawer {
+  position: absolute;
+  z-index: 21;
+  top: 68px;
+  right: 0;
+  bottom: 0;
+  width: min(440px, 94vw);
+  padding: 22px;
+  overflow: auto;
+  color: #e8dfcb;
+  border-left: 1px solid #d5ad6640;
+  background: #191a1d;
+  box-shadow: -25px 0 60px #0008;
+  transform: translateX(105%);
+  transition: transform .24s ease;
+}
+
+.ml-drawer.open {
+  transform: translateX(0);
+}
+
+.ml-drawer-head {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 12px;
+  margin-bottom: 20px;
+}
+
+.ml-drawer-head .eyebrow {
+  color: #d5ad66;
+  font-size: 9px;
+}
+
+.ml-drawer-head h2 {
+  margin: 5px 0 0;
+  color: #f0e5d2;
+  font-size: 22px;
+}
+
+.ml-close {
+  flex-shrink: 0;
+  width: 34px;
+  height: 34px;
+  color: #d8d0c4;
+  border: 1px solid #ffffff20;
+  border-radius: 4px;
+  background: transparent;
+  font-size: 21px;
+}
+
+.ml-tool-panel {
+  display: none;
+}
+
+.ml-tool-panel.active {
+  display: block;
+}
+
+#mlDrawer .panel,
+#mlDrawer .sidebar-section,
+#mlDrawer .hypothesis-panel {
+  width: 100%;
+  margin: 0 0 12px;
+  padding: 16px;
+  border: 1px solid #ffffff18;
+  border-radius: 5px;
+  background: #ffffff04;
+}
+
+#mlDrawer #materialsSidebarSection,
+#mlDrawer #deductionSidebarSection {
+  display: block !important;
+}
+
+#mlDrawer .hypothesis-list {
+  grid-template-columns: minmax(0, 1fr);
+}
+
+#mlDrawer .deduction-history {
+  margin-top: 12px;
+}
+
+#mlDrawer .investigation-route-dock {
+  margin-top: 12px;
+}
+
+#mlDrawer .clue,
+#mlDrawer .suspect {
+  width: 100%;
+  box-sizing: border-box;
+}
+
+#mlDrawer .story-panel {
+  width: 100%;
+  margin: 0;
+}
+
+#mlDrawer .story-panel .story-text {
+  font-size: 14px;
+  line-height: 1.8;
+}
+
+#mlDrawer .story-panel .footer-actions {
+  gap: 8px;
+}
+
+#mlDrawer .top-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+#mlDrawer .top-actions input {
+  max-width: 100%;
+}
+
+#mlDrawer #deductionHint,
+#mlDrawer #deductionResult {
+  margin: 12px 0;
+}
+
+@media (max-width: 1050px) {
+  #game.ml-game-screen .ml-topbar {
+    gap: 10px;
+    padding: 9px 12px;
+  }
+
+  .ml-case-heading {
+    min-width: 100px;
+  }
+
+  .ml-progress-slot {
+    display: none;
+  }
+
+  .ml-tools {
+    flex: 1;
+    overflow-x: auto;
+    justify-content: flex-start;
+  }
+
+  .ml-tools button {
+    padding: 8px;
+  }
+
+  #game.ml-game-screen #boardNodes {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 12px;
+    padding: 16px;
+  }
+}
+
+@media (max-width: 650px) {
+  #game.ml-game-screen .ml-topbar {
+    align-items: flex-start;
+    flex-wrap: wrap;
+    min-height: 104px;
+    gap: 7px;
+  }
+
+  .ml-case-heading {
+    flex: 1;
+  }
+
+  .ml-tools {
+    order: 3;
+    flex-basis: 100%;
+    width: 100%;
+    padding-bottom: 2px;
+  }
+
+  #game.ml-game-screen .game-layout.investigation-layout {
+    inset: 112px 7px 7px;
+  }
+
+  #game.ml-game-screen #visualBoardPanel {
+    padding: 12px 9px 9px;
+  }
+
+  #game.ml-game-screen .board-heading h3 {
+    font-size: 17px;
+  }
+
+  #game.ml-game-screen #boardNodes {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 10px;
+    padding: 10px;
+  }
+
+  #game.ml-game-screen #boardNodes .board-node {
+    padding: 7px;
+  }
+
+  #game.ml-game-screen #boardNodes .board-node-image {
+    height: 90px;
+  }
+
+  #game.ml-game-screen #boardNodes .board-node-title {
+    font-size: 11px;
+  }
+
+  #game.ml-game-screen #boardNodes .board-node-description {
+    font-size: 9px;
+  }
+
+  .ml-drawer {
+    top: 104px;
+    width: 100%;
+    padding: 15px;
+  }
+
+  .ml-scrim {
+    top: 104px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  #game.ml-game-screen *,
+  #game.ml-game-screen *::before,
+  #game.ml-game-screen *::after {
+    transition: none !important;
+    animation: none !important;
+  }
+}
+
 </style>
 </head>
 <body>
 <header class="topbar">
   <div class="brand">MIND <span>LAB</span></div>
   
-<div class="top-actions">
+    <div class="top-actions">
     <button class="small-btn" id="soundBtn" type="button">♫ Звук: выкл.</button>
     <button class="small-btn" id="exportSaveBtn" type="button">Скачать сохранение</button>
     <button class="small-btn" id="importSaveBtn" type="button">Восстановить сохранение</button>
     <input id="importSaveFile" type="file" accept=".json,application/json" hidden>
     <button class="small-btn" id="resetBtn" type="button">Сбросить прогресс</button>
-</div>
-</header>
+    </div>
+    </header>
 
-<main>
+    <main>
   <section id="catalog">
     <div class="hero">
       <div class="hero-copy">
@@ -1940,10 +2526,49 @@ body {
   </section>
 
   <section id="game" class="hidden">
-    <div class="story-top">
-      <button class="small-btn" id="backBtn" type="button">← К архиву</button>
-      <span class="chapter-label" id="caseNumber">ДЕЛО 001</span>
+    
+    <div class="ml-topbar">
+  <button class="small-btn ml-back" id="backBtn" type="button">← Архив</button>
+
+  <div class="ml-case-heading">
+    <div class="eyebrow">MIND LAB / CASE FILE</div>
+    <span class="chapter-label" id="caseNumber">ДЕЛО 001</span>
+  </div>
+
+  <div class="ml-progress-slot" id="mlProgressSlot"></div>
+
+  <nav class="ml-tools" aria-label="Инструменты расследования">
+    <button type="button" data-ml-tool="story">Досье</button>
+    <button type="button" data-ml-tool="materials">Материалы</button>
+    <button type="button" data-ml-tool="deduction">Связи</button>
+    <button type="button" data-ml-tool="suspects">Подозреваемые</button>
+    <button type="button" data-ml-tool="theories">Теории</button>
+    <button type="button" data-ml-tool="progress">Ход дела</button>
+    <button type="button" data-ml-tool="settings">Настройки</button>
+  </nav>
     </div>
+
+    <div class="ml-scrim" id="mlScrim"></div>
+
+    <aside class="ml-drawer" id="mlDrawer" aria-label="Инструменты расследования">
+  <div class="ml-drawer-head">
+    <div>
+      <div class="eyebrow">MIND LAB / INVESTIGATION TOOLS</div>
+      <h2 id="mlDrawerTitle">Досье дела</h2>
+    </div>
+    <button class="ml-close" id="mlCloseDrawer" type="button" aria-label="Закрыть панель">×</button>
+  </div>
+
+  <div class="ml-drawer-content">
+    <section class="ml-tool-panel" data-ml-panel="story"></section>
+    <section class="ml-tool-panel" data-ml-panel="materials"></section>
+    <section class="ml-tool-panel" data-ml-panel="deduction"></section>
+    <section class="ml-tool-panel" data-ml-panel="suspects"></section>
+    <section class="ml-tool-panel" data-ml-panel="theories"></section>
+    <section class="ml-tool-panel" data-ml-panel="progress"></section>
+    <section class="ml-tool-panel" data-ml-panel="settings"></section>
+  </div>
+</aside>
 
 <div class="game-layout investigation-layout">
 
@@ -7197,6 +7822,199 @@ document.addEventListener("keydown", event => {
     closeEvidenceViewer();
   }
 });
+
+
+/* =========================================
+   MIND LAB — FULLSCREEN DRAWER CONTROLLER
+   ========================================= */
+
+(() => {
+  const game = document.getElementById("game");
+  const drawer = document.getElementById("mlDrawer");
+  const scrim = document.getElementById("mlScrim");
+  const title = document.getElementById("mlDrawerTitle");
+  const drawerContent = document.querySelector(".ml-drawer-content");
+
+  if (!game || !drawer || !scrim || !drawerContent) return;
+
+  game.classList.add("ml-game-screen");
+
+  const panelNames = {
+    story: "Досье дела",
+    materials: "Материалы дела",
+    deduction: "Проверка связей",
+    suspects: "Досье подозреваемых",
+    theories: "Теории расследования",
+    progress: "Ход расследования",
+    settings: "Настройки и сохранения"
+  };
+
+  const panelFor = key =>
+    drawer.querySelector(`[data-ml-panel="${key}"]`);
+
+  function moveInto(selector, key) {
+    const element = document.querySelector(selector);
+    const target = panelFor(key);
+
+    if (element && target && !target.contains(element)) {
+      target.appendChild(element);
+    }
+
+    return element;
+  }
+
+  // Переносим существующие игровые элементы, не создавая дубликаты ID.
+  moveInto("#storyPanel", "story");
+  moveInto("#materialsSidebarSection", "materials");
+  moveInto("#deductionSidebarSection", "deduction");
+
+  const suspectsSection = document
+    .getElementById("suspectList")
+    ?.closest(".sidebar-section");
+
+  if (suspectsSection) {
+    panelFor("suspects").appendChild(suspectsSection);
+  }
+
+  moveInto(".hypothesis-panel", "theories");
+
+  const progressSection = document
+    .getElementById("progressText")
+    ?.closest(".sidebar-section");
+
+  if (progressSection) {
+    panelFor("progress").appendChild(progressSection);
+  }
+
+  moveInto("#deductionHint", "deduction");
+  moveInto("#deductionResult", "deduction");
+  moveInto(".deduction-history", "progress");
+  moveInto(".investigation-route-dock", "progress");
+  moveInto(".board-progress", "progress");
+
+  // Настройки и управление сохранениями временно доступны внутри игры.
+  const originalTopActions = document.querySelector("header.topbar .top-actions");
+  const settingsPanel = panelFor("settings");
+
+  function syncSettingsLocation() {
+    if (!originalTopActions || !settingsPanel) return;
+
+    if (!game.classList.contains("hidden")) {
+      if (!settingsPanel.contains(originalTopActions)) {
+        settingsPanel.appendChild(originalTopActions);
+      }
+    } else {
+      const header = document.querySelector("header.topbar");
+      if (header && !header.contains(originalTopActions)) {
+        header.appendChild(originalTopActions);
+      }
+    }
+  }
+
+  function closeDrawer() {
+    drawer.classList.remove("open");
+    scrim.classList.remove("open");
+
+    document.querySelectorAll("[data-ml-tool]").forEach(button => {
+      button.classList.remove("active");
+      button.setAttribute("aria-expanded", "false");
+    });
+  }
+
+  function openTool(key) {
+    const target = panelFor(key);
+    if (!target) return;
+
+    const alreadyOpen =
+      drawer.classList.contains("open") &&
+      target.classList.contains("active");
+
+    if (alreadyOpen) {
+      closeDrawer();
+      return;
+    }
+
+    drawer.querySelectorAll(".ml-tool-panel").forEach(panel => {
+      panel.classList.toggle("active", panel === target);
+    });
+
+    title.textContent = panelNames[key] || "Инструменты расследования";
+    drawer.classList.add("open");
+    scrim.classList.add("open");
+
+    document.querySelectorAll("[data-ml-tool]").forEach(button => {
+      const active = button.dataset.mlTool === key;
+      button.classList.toggle("active", active);
+      button.setAttribute("aria-expanded", String(active));
+    });
+  }
+
+  document.querySelectorAll("[data-ml-tool]").forEach(button => {
+    button.setAttribute("aria-expanded", "false");
+
+    button.addEventListener("click", () => {
+      syncSettingsLocation();
+      openTool(button.dataset.mlTool);
+    });
+  });
+
+  document.getElementById("mlCloseDrawer")
+    ?.addEventListener("click", closeDrawer);
+
+  scrim.addEventListener("click", closeDrawer);
+
+  document.addEventListener("keydown", event => {
+    if (event.key === "Escape") closeDrawer();
+  });
+
+  // Когда открываем дело или возвращаемся в архив,
+  // сохраняем правильное расположение верхних настроек.
+  const gameObserver = new MutationObserver(() => {
+    syncSettingsLocation();
+
+    if (game.classList.contains("hidden")) {
+      closeDrawer();
+    }
+  });
+
+  gameObserver.observe(game, {
+    attributes: true,
+    attributeFilter: ["class"]
+  });
+
+  // Финальный вывод и концовка должны сразу становиться видимыми.
+  const storyEyebrow = document.getElementById("storyEyebrow");
+  const storyContent = document.getElementById("storyContent");
+
+  if (storyEyebrow) {
+    const verdictObserver = new MutationObserver(() => {
+      if (storyEyebrow.textContent.trim() === "ФИНАЛЬНЫЙ ВЫВОД") {
+        openTool("story");
+      }
+    });
+
+    verdictObserver.observe(storyEyebrow, {
+      childList: true,
+      characterData: true,
+      subtree: true
+    });
+  }
+
+  if (storyContent) {
+    const endingObserver = new MutationObserver(() => {
+      if (storyContent.querySelector(".ending")) {
+        openTool("story");
+      }
+    });
+
+    endingObserver.observe(storyContent, {
+      childList: true,
+      subtree: true
+    });
+  }
+
+  syncSettingsLocation();
+})();
 
 </script>
 </body>
