@@ -2659,6 +2659,7 @@ function analyzeDeduction(a, b) {
   }
 
   saveState();
+  renderInvestigationRoute();
 }
 
 function loadState(){
@@ -5462,6 +5463,7 @@ if (questionLabel) {
 
       saveState();
       ping(360, 0.1);
+      renderInvestigationRoute();
     });
   });
 
@@ -5929,6 +5931,7 @@ updateInterrogationPressure();
 
           saveState();
           ping(finding ? 700 : 360, 0.1);
+          renderInvestigationRoute();
         });
 
         questionList.appendChild(newButton);
@@ -5951,25 +5954,26 @@ updateInterrogationPressure();
     }
   }
 
-button.classList.add("question-asked");
-button.classList.add("evidence-presented");
+    button.classList.add("question-asked");
+    button.classList.add("evidence-presented");
 
-button.style.background = "#252a35";
-button.style.borderColor = "#50596b";
-button.style.color = "#8d96a8";
+    button.style.background = "#252a35";
+    button.style.borderColor = "#50596b";
+    button.style.color = "#8d96a8";
 
-const label = button.querySelector("small");
-if (label) label.textContent = "Посмотреть реакцию";
+    const label = button.querySelector("small");
+    if (label) label.textContent = "Посмотреть реакцию";
 
 
-saveState();
-ping(contradiction ? 760 : 620, 0.1);
+    saveState();
+    ping(contradiction ? 760 : 620, 0.1);
+    renderInvestigationRoute();
 
-      });
-    });
-  viewer.classList.remove("hidden");
-  document.body.style.overflow = "hidden";
-  ping(360, 0.1);
+        });
+        });
+    viewer.classList.remove("hidden");
+    document.body.style.overflow = "hidden";
+    ping(360, 0.1);
 }
 
 
