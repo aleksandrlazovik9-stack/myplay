@@ -2944,15 +2944,68 @@ function renderInvestigationRoute() {
     `;
   }).join("");
 
+  
+  const evidenceName = id =>
+    c.evidence.find(item => item[0] === id)?.[1] || id;
+
+  const suspectName = id =>
+    c.suspects.find(person => person.id === id)?.name || id;
+
+  const hypothesisName = id =>
+    (HYPOTHESES[activeId] || [])
+      .find(item => item.id === id)?.title || id;
+
+  const linkName = key =>
+    key.split("|").map(evidenceName).join(" ↔ ");
+
   if (activeStep === -1) {
     nextStep.textContent =
       "Расследование завершено. Все пять этапов пройдены.";
   } else {
-    nextStep.textContent =
-      "Следующий шаг: " +
-      steps[activeStep].title +
-      ". " +
-      steps[activeStep].description;
+    let instruction = "";
+
+    switch (activeStep) {
+      case 0:
+        instruction =
+          "Открой «Материалы дела» и изучи: " +
+          missingEvidence.map(evidenceName).join(", ") + ".";
+        break;
+
+      case 1:
+        instruction =
+          "На доске дедукции сопоставь: " +
+          missingLinks.map(linkName).join("; ") + ".";
+        break;
+
+      case 2:
+        instruction = requiredFindings.length
+          ? "Открой досье и уточни показания: " +
+            missingFindings.map(item =>
+              suspectName(item.suspect) +
+              " — вопрос о " +
+              ({
+                alibi: "алиби",
+                evidence: "уликах",
+                timeline: "хронологии",
+                protocol: "протоколе"
+              }[item.question] || "обстоятельствах дела")
+            ).join("; ") + "."
+          : "Открой досье любого подозреваемого и задай хотя бы один вопрос.";
+        break;
+
+      case 3:
+        instruction =
+          "В разделе версий проверь гипотезу: " +
+          missingHypotheses.map(hypothesisName).join(", ") + ".";
+        break;
+
+      case 4:
+        instruction =
+          "Обязательные условия выполнены. Нажми «Перейти к выводу» и выбери версию событий.";
+        break;
+    }
+
+    nextStep.textContent = "Следующий шаг: " + instruction;
   }
 }
 
