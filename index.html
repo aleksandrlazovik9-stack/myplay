@@ -1869,6 +1869,38 @@ body {
   display: none !important;
 }
 
+
+/* Теории в правой панели */
+.investigation-sidebar .hypothesis-panel {
+  margin-top: 0;
+  padding: 18px;
+  border-top: 1px solid var(--line);
+}
+
+.investigation-sidebar .hypothesis-panel h3 {
+  margin: 8px 0;
+  font-size: 19px;
+}
+
+.investigation-sidebar .hypothesis-panel > p {
+  font-size: 12px;
+  line-height: 1.6;
+}
+
+.investigation-sidebar .hypothesis-list {
+  grid-template-columns: minmax(0, 1fr);
+  gap: 9px;
+  margin-top: 14px;
+}
+
+.investigation-sidebar .hypothesis-card {
+  padding: 13px;
+}
+
+.investigation-sidebar .hypothesis-feedback {
+  font-size: 12px;
+}
+
 </style>
 </head>
 <body>
@@ -2031,7 +2063,18 @@ body {
   <p id="routeNextStep" class="route-next-step" aria-live="polite"></p>
 </div>
 
-<section class="panel hypothesis-panel"> <div class="eyebrow">CASE THEORY / 01</div> <h3>Во что ты веришь?</h3> <p class="muted"> Выбери версию событий. По мере появления доказательств ты сможешь подтвердить её или полностью пересмотреть дело. </p> <div class="hypothesis-list" id="hypothesisList"></div> <div id="hypothesisFeedback" class="hypothesis-feedback" aria-live="polite"> Пока нет выбранной версии. </div> </section>
+
+<section class="panel sidebar-section hypothesis-panel">
+  <div class="eyebrow">CASE THEORY / 01</div>
+  <h3>Теории расследования</h3>
+  <p class="muted">
+    Выбирай версию событий и проверяй её по собранным уликам.
+  </p>
+  <div class="hypothesis-list" id="hypothesisList"></div>
+  <div id="hypothesisFeedback" class="hypothesis-feedback" aria-live="polite">
+    Пока нет выбранной версии.
+  </div>
+</section>
 
   <div id="toast" class="toast hidden" role="status"></div>
 
