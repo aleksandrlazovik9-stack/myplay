@@ -1257,6 +1257,35 @@ footer { text-align:center; color:#626d82; font-size:12px; padding:22px }
   line-height: 1.5;
 }
 
+/* MIND LAB — визуальное выделение перекрёстных допросов */
+.interrogation-question.cross-examination-question:not(.question-asked) {
+  border-color: rgba(201, 166, 91, 0.65);
+  background:
+    linear-gradient(
+      115deg,
+      rgba(166, 126, 52, 0.13),
+      rgba(25, 29, 38, 0.92)
+    );
+  box-shadow: inset 3px 0 0 #c9a65b;
+}
+
+.interrogation-question.cross-examination-question:not(.question-asked):hover {
+  border-color: #e0bd72;
+  background: rgba(166, 126, 52, 0.2);
+}
+
+.cross-question-label {
+  display: inline-block;
+  margin-top: 10px;
+  padding: 4px 7px;
+  border: 1px solid rgba(201, 166, 91, 0.4);
+  border-radius: 5px;
+  color: #e0bd72;
+  font-size: 9px;
+  font-weight: 750;
+  letter-spacing: 0.08em;
+}
+
 .interrogation-question small {
   display: block;
   margin-top: 8px;
@@ -5157,12 +5186,21 @@ ${timelineHtml}
           return `
             <button type="button"
               class="clue interrogation-question ${
-                asked ? "question-asked" : ""
-              }"
+            asked ? "question-asked" : ""
+            } ${
+            q.id.startsWith("cross_")
+                ? "cross-examination-question"
+                : ""
+            }"
               data-question="${esc(q.id)}"
               ${unlocked ? "" : "disabled"}>
               <strong>${esc(q.title)}</strong>
-              <small>${
+                ${
+                q.id.startsWith("cross_") && !asked
+                    ? '<span class="cross-question-label">СОПОСТАВИТЬ ПОКАЗАНИЯ</span>'
+                    : ""
+                }
+                <small>${
                 !unlocked
                   ? "Нужны новые улики"
                   : asked
