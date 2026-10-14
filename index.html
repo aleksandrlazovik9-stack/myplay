@@ -6885,44 +6885,76 @@ function renderVisualBoard() {
 
   if (empty) empty.style.display = discovered.length ? "none" : "flex";
 
-  nodes.innerHTML = discovered.map((e, i) => {
-    const id = e[0];
-    const title = e[1];
-    const description = e[2] || "Материал расследования";
+  
+  // Пересоздаём карточки только тогда, когда изменился
+  // состав доступных улик. При выборе сохраняем DOM на месте.
+  const evidenceSignature = discovered.map(e => e[0]).join("|");
+
+  if (nodes.dataset.evidenceSignature !== evidenceSignature) {
+    nodes.innerHTML = discovered.map((e, i) => {
+      const id = e[0];
+      const title = e[1];
+      const description = e[2] || "Материал расследования";
+      const imageUrl = imageById[id];
+
+      return `
+        <button
+          type="button"
+          class="board-node"
+          data-board-evidence="${esc(id)}"
+          aria-pressed="false"
+          title="${esc(description)}"
+        >
+          <span class="board-node-number">
+            EVIDENCE / ${String(i + 1).padStart(2, "0")}
+          </span>
+          ${
+            imageUrl
+              ? `<img class="board-node-image" src="${esc(imageUrl)}" alt="${esc(title)}" loading="lazy">`
+              : `<span class="board-node-placeholder">◆</span>`
+          }
+          <span class="board-node-title">${esc(title)}</span>
+          <span class="board-node-description">${esc(description)}</span>
+          <span class="board-node-status"></span>
+        </button>
+      `;
+    }).join("");
+
+    nodes.dataset.evidenceSignature = evidenceSignature;
+  }
+
+  // Обработчик назначается один раз и продолжает работать
+  // даже после появления новых карточек.
+  if (nodes.dataset.boardClickBound !== "true") {
+    nodes.addEventListener("click", event => {
+      const button = event.target.closest("[data-board-evidence]");
+      if (!button || !nodes.contains(button)) return;
+
+      pickDeductionEvidence(button.dataset.boardEvidence);
+    });
+
+    nodes.dataset.boardClickBound = "true";
+  }
+
+  // Обновляем только состояние карточек — без пересоздания DOM.
+  nodes.querySelectorAll("[data-board-evidence]").forEach(button => {
+    const id = button.dataset.boardEvidence;
     const selected = selectedEvidence.includes(id);
     const linked = knownLinks.some(key => key.split("|").includes(id));
-    const imageUrl = imageById[id];
 
-    return `
-      <button
-        type="button"
-        class="board-node ${selected ? "is-selected" : ""} ${linked ? "is-linked" : ""}"
-        data-board-evidence="${esc(id)}"
-        aria-pressed="${selected}"
-        title="${esc(description)}"
-      >
-        <span class="board-node-number">EVIDENCE / ${String(i + 1).padStart(2, "0")}</span>
-       ${
-  imageUrl
-    ? `<img class="board-node-image" src="${esc(imageUrl)}" alt="${esc(title)}" loading="lazy">`
-    : `<span class="board-node-placeholder">◆</span>`
-}
-        <span class="board-node-title">${esc(title)}</span>
-        <span class="board-node-description">${esc(description)}</span>
-        <span class="board-node-status">
-          ${selected ? "◆ ВЫБРАНО" : linked ? "● ЕСТЬ СВЯЗЬ" : "◇ ВЫБРАТЬ УЛИКУ"}
-        </span>
-      </button>
-    `;
-  }).join("");
+    button.classList.toggle("is-selected", selected);
+    button.classList.toggle("is-linked", linked);
+    button.setAttribute("aria-pressed", String(selected));
 
-
-
-    nodes.querySelectorAll("[data-board-evidence]").forEach(button => {
-    button.addEventListener("click", () => {
-        pickDeductionEvidence(button.dataset.boardEvidence);
-    });
-    });
+    const status = button.querySelector(".board-node-status");
+    if (status) {
+      status.textContent = selected
+        ? "◆ ВЫБРАНО"
+        : linked
+          ? "● ЕСТЬ СВЯЗЬ"
+          : "◇ ВЫБРАТЬ УЛИКУ";
+    }
+  });
 
   if (insight) {
     if (!discovered.length) {
