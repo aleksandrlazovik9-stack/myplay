@@ -1863,6 +1863,12 @@ body {
   margin-top: 14px;
 }
 
+
+#materialsSidebarSection,
+#deductionSidebarSection {
+  display: none !important;
+}
+
 </style>
 </head>
 <body>
@@ -1971,14 +1977,14 @@ body {
 
   <aside class="investigation-sidebar">
 
-    <section class="panel sidebar-section">
+    <section class="panel sidebar-section" id="materialsSidebarSection">
       <div class="eyebrow">CASE FILE / 01</div>
       <h3>Материалы дела</h3>
       <p class="muted">Изучи каждую деталь. Важное может скрываться на виду.</p>
       <div class="clue-list" id="clueList"></div>
     </section>
 
-    <section class="panel sidebar-section">
+    <section class="panel sidebar-section" id="deductionSidebarSection">
       <div class="eyebrow">DEDUCTION</div>
       <h3>Проверка связей</h3>
       
