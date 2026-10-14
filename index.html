@@ -3075,83 +3075,134 @@ function inspectClue(id){
  box.innerHTML=`<div class="notice"><strong>${esc(e[1])}</strong><br>${esc(e[2])}</div>`;
 }
 
-
 const EVIDENCE_CHAINS = {
-  session: [
-    {
-      id: "session_timeline",
-      title: "Противоречие во времени",
-      evidence: ["clock", "log"],
-      suspect: "levin",
-      result:
-        "Остановившиеся часы и журнал доступа не подтверждают слова Левина о том, что он покинул клинику до позднего визита. Его объяснение времени требует пересмотра."
-    },
-    {
-      id: "session_identity",
-      title: "След старого дела",
-      evidence: ["archive", "tape"],
-      suspect: "levin",
-      result:
-        "Резервная запись и пустая папка архива связывают конфликт вокруг настоящего имени Марка с удалёнными документами пятилетней давности."
-    }
-  ],
+session: [
+{
+id: "session_timeline",
+title: "Противоречие во времени",
+evidence: ["clock", "log"],
+suspect: "levin",
+result:
+"Остановившиеся часы и журнал доступа не подтверждают слова Левина о том, что он покинул клинику до позднего визита. Его объяснение времени требует пересмотра."
+},
+{
+id: "session_identity",
+title: "След старого дела",
+evidence: ["archive", "tape"],
+suspect: "levin",
+result:
+"Резервная запись и материалы архива связывают историю настоящего имени Марка с документами пятилетней давности."
+}
+],
 
-  room: [
-    {
-      id: "room_timeline",
-      title: "Подмена времени",
-      evidence: ["glass", "clock"],
-      suspect: "secretary",
-      result:
-        "Разбитый бокал и остановленные часы показывают, что время на камине не совпадает с последовательностью событий. Версия о смерти около десяти часов требует проверки."
-    },
-    {
-      id: "room_motive",
-      title: "Мотив секретаря",
-      evidence: ["letters", "will"],
-      suspect: "secretary",
-      result:
-        "Письма и новое завещание подтверждают, что секретарь рисковал потерять доступ к коллекции. Это устанавливает возможный мотив, но само по себе ещё не доказывает убийство."
-    },
-    {
-      id: "room_mechanism",
-      title: "Механизм ложного времени",
-      evidence: ["clock", "panel"],
-      suspect: "secretary",
-      result:
-        "Остановленные часы и скрытый канал показывают, как время могли изменить из соседнего служебного прохода. Теперь необходимо сопоставить этот механизм с мотивом и показаниями."
-    }
-  ],
+room: [
+{
+id: "room_timeline",
+title: "Подмена времени",
+evidence: ["glass", "clock"],
+suspect: "secretary",
+result:
+"Разбитый бокал и остановленные часы показывают, что время на камине не совпадает с последовательностью событий. Версия о смерти около десяти часов требует проверки."
+},
+{
+id: "room_motive",
+title: "Мотив секретаря",
+evidence: ["letters", "will"],
+suspect: "secretary",
+result:
+"Письма и новое завещание подтверждают, что секретарь рисковал потерять доступ к коллекции. Это устанавливает возможный мотив, но само по себе ещё не доказывает убийство."
+},
+{
+id: "room_mechanism",
+title: "Механизм ложного времени",
+evidence: ["clock", "panel"],
+suspect: "secretary",
+result:
+"Остановленные часы и скрытый канал показывают, как время могли изменить из соседнего служебного прохода. Теперь необходимо сопоставить этот механизм с мотивом и показаниями."
+}
+],
 
-  zero: [
-    {
-      id: "data_export",
-      title: "Цепочка восстановленного журнала",
-      evidence: ["server", "backup"],
-      suspect: "director",
-      result:
-        "Серверные события и резервная копия подтверждают экспорт данных перед удалением журнала."
-    },
-    {
-      id: "ghost_identity",
-      title: "Цепочка фиктивной личности",
-      evidence: ["account", "invoice"],
-      suspect: "vendor",
-      result:
-        "Аккаунт без кадрового номера связан с реальными выплатами подрядчику."
-    },
-    {
-      id: "project_funding",
-      title: "Цепочка финансирования ZERO",
-      evidence: ["protocol", "payment"],
-      suspect: "director",
-      result:
-        "Протокол испытаний и подписанная платёжная ведомость связывают проект с руководством."
-    }
-  ]
+zero: [
+{
+id: "data_export",
+title: "Цепочка восстановленного журнала",
+evidence: ["server", "backup"],
+suspect: "director",
+result:
+"Серверные события и резервная копия подтверждают экспорт данных перед удалением журнала."
+},
+{
+id: "ghost_identity",
+title: "Цепочка фиктивной личности",
+evidence: ["account", "invoice"],
+suspect: "vendor",
+result:
+"Аккаунт без кадрового номера связан с реальными выплатами подрядчику."
+},
+{
+id: "project_funding",
+title: "Цепочка финансирования ZERO",
+evidence: ["protocol", "payment"],
+suspect: "director",
+result:
+"Протокол испытаний и подписанная платёжная ведомость связывают проект с руководством."
+}
+]
 };
 
+
 const CHAIN_CONFESSIONS = {
+session: {
+session_timeline: {
+suspect: "levin",
+title: "Левин признаёт неточность хронологии",
+text:
+"Левин внимательно изучает журнал доступа и часы.\n\n" +
+"«Да, журнал не подтверждает мою первоначальную версию. Я ещё находился в клинике, когда Марк вернулся. Но это не означает, что я знаю, куда он ушёл потом».\n\n" +
+"Он больше не настаивает, что покинул клинику до позднего визита.\n\n" +
+"НОВАЯ ДЕТАЛЬ: Левин скрывал, что оставался в клинике во время последней встречи с Марком."
+},
+session_identity: {
+suspect: "levin",
+title: "Левин раскрывает след старого дела",
+text:
+"Левин долго рассматривает запись и материалы архива.\n\n" +
+"«После истории с Алексеем Орловым документы действительно меняли. Я участвовал в оформлении бумаг. Тогда я считал, что так удастся избежать нового скандала».\n\n" +
+"Он не объясняет, почему старые материалы исчезли, и отказывается утверждать, что знает нынешнее местонахождение Марка.\n\n" +
+"НОВАЯ ДЕТАЛЬ: Левин подтверждает, что документы после старого инцидента изменялись не случайно."
+}
+},
+
+room: {
+room_timeline: {
+suspect: "secretary",
+title: "Секретарь отказывается от прежней хронологии",
+text:
+"Воронцов смотрит на осколки бокала и остановившиеся часы.\n\n" +
+"«Время 21:17 нельзя считать точным временем смерти. Часы остановились отдельно от самого происшествия. Я понимаю, почему вы спрашиваете об этом».\n\n" +
+"Он больше не настаивает, что положение часов доказывает его алиби.\n\n" +
+"НОВАЯ ДЕТАЛЬ: время на камине не подтверждает первоначальную версию секретаря."
+},
+room_motive: {
+suspect: "secretary",
+title: "Секретарь признаёт конфликт из-за коллекции",
+text:
+"Воронцов перечитывает письмо и новое завещание.\n\n" +
+"«Да, Павел собирался лишить меня доступа к коллекции. Я знал об этом и был зол. Но мотив — ещё не доказательство того, что я его убил».\n\n" +
+"Впервые он прямо признаёт, насколько важным для него был доступ к коллекции.\n\n" +
+"НОВАЯ ДЕТАЛЬ: секретарь подтверждает серьёзный конфликт с Павлом перед его смертью."
+},
+room_mechanism: {
+suspect: "secretary",
+title: "Секретарь объясняет механизм часов",
+text:
+"Воронцов изучает схему скрытого канала за камином.\n\n" +
+"«Шнур действительно позволяет остановить механизм из служебного прохода. Значит, время на часах можно было изменить, не подходя к камину со стороны комнаты».\n\n" +
+"Он признаёт возможность такого способа, но пытается отделить знание механизма от самого убийства.\n\n" +
+"НОВАЯ ДЕТАЛЬ: скрытый канал позволял изменить показания часов из соседнего прохода."
+}
+},
+
 zero: {
 data_export: {
 suspect: "director",
@@ -3184,66 +3235,102 @@ text:
 };
 
 
+
 const CONFESSION_QUESTIONS = {
-  zero: {
-    director: [
-      {
-        id: "after_funding",
-        title: "Кто распорядился удалить журнал?",
-        text:
-          "«Я согласовал финансирование, но не отдавал приказа об удалении журнала. Доступ к серверу был у нескольких сотрудников. Проверьте время экспорта и права доступа»."
-      },
-      {
-        id: "after_export",
-        title: "Почему официальный отчёт не совпадает с журналом?",
-        text:
-          "«Отчёт готовили после инцидента. Я отвечал за проект, но технические детали собирал отдел безопасности. Возможно, формулировка об отключении сегмента была слишком общей»."
-      },
-      {
-        id: "after_protocol",
-        title: "Кто разрешил испытания без идентификатора пациента?",
-        text:
-          "«Протокол проходил несколько этапов согласования. Я утверждал финансирование, но не могу подтвердить, кто именно разрешил конкретную процедуру»."
-      },
-      {
-        id: "after_backup",
-        title: "Почему резервная копия сохранилась после удаления журнала?",
-        text:
-          "«Резервное копирование выполнялось автоматически. Я не управлял расписанием сервера. Нужно установить, кто знал о существовании этой копии»."
-      }
-    ],
 
-    vendor: [
-      {
-        id: "after_identity",
-        title: "Кто оформил вашу учётную запись?",
-        text:
-          "«Документы передали через координатора проекта. Я не видел кадрового приказа и не знаю, кто внёс запись в систему. Имя человека, который передал доступ, должно быть в переписке о контракте»."
-      },
-      {
-        id: "after_invoice",
-        title: "За какую услугу вам перечислили деньги?",
-        text:
-          "«Оплата прошла по договору с подрядчиком. Я выполнял поручения, которые получал, но не участвовал в согласовании исследовательской программы»."
-      }
-    ],
-
-    engineer: [
-      {
-        id: "after_server",
-        title: "Кто имел доступ к серверу в момент экспорта?",
-        text:
-          "«Одного журнала недостаточно, чтобы установить человека за клавиатурой. Нужны права доступа, время операции и данные резервного копирования»."
-      },
-      {
-        id: "after_protocol",
-        title: "Почему последовательность испытаний не отражена в отчёте?",
-        text:
-          "«Технические записи и итоговый отчёт создавались в разное время. Если сведения расходятся, нужно установить, кто изменял документ и на каком этапе»."
-      }
+    session: {
+    levin: [
+    {
+    id: "after_session_timeline",title: "Почему вы скрыли последнюю встречу?",text:"«Я не хотел, чтобы эта встреча стала частью официального дела. Но я не могу утверждать, что знаю, куда Марк направился после клиники»."},{
+    id: "after_session_identity",
+    title: "Что произошло с делом пятилетней давности?",
+    text:
+    "«После инцидента с Алексеем Орловым документы действительно менялись. Я участвовал в оформлении бумаг, но не всё, что произошло потом, находилось под моим контролем»."
+    }
     ]
-  }
+    },
+
+    room: {
+    secretary: [
+    {
+    id: "after_room_timeline",
+    title: "Почему часы остановились на 21:17?",
+    text:
+    "«Это время нельзя считать точным. Теперь вы знаете, что механизм можно было остановить отдельно от остальных событий. Я не стану утверждать, что часы доказывают время смерти»."
+    },
+    {
+    id: "after_room_motive",
+    title: "Что вы собирались делать после оглашения завещания?",
+    text:
+    "«Я собирался поговорить с Павлом. Потеря доступа к коллекции означала для меня многое. Но я не собираюсь признавать преступление только потому, что у меня был повод для конфликта»."
+    },
+    {
+    id: "after_room_mechanism",
+    title: "Как можно было использовать канал за камином?",
+    text:
+    "«Через него можно было добраться до механизма часов со стороны служебного прохода. Я знал устройство дома, но это ещё не устанавливает, кто именно воспользовался шнуром»."
+    }
+    ]
+    },
+
+    zero: {
+    director: [
+    {
+    id: "after_funding",
+    title: "Кто распорядился удалить журнал?",
+    text:
+    "«Я согласовал финансирование, но не отдавал приказа об удалении журнала. Доступ к серверу был у нескольких сотрудников. Проверьте время экспорта и права доступа»."
+    },
+    {
+    id: "after_export",
+    title: "Почему официальный отчёт не совпадает с журналом?",
+    text:
+    "«Отчёт готовили после инцидента. Я отвечал за проект, но технические детали собирал отдел безопасности. Возможно, формулировка об отключении сегмента была слишком общей»."
+    },
+    {
+    id: "after_protocol",
+    title: "Кто разрешил испытания без идентификатора пациента?",
+    text:
+    "«Протокол проходил несколько этапов согласования. Я утверждал финансирование, но не могу подтвердить, кто именно разрешил конкретную процедуру»."
+    },
+    {
+    id: "after_backup",
+    title: "Почему резервная копия сохранилась после удаления журнала?",
+    text:
+    "«Резервное копирование выполнялось автоматически. Я не управлял расписанием сервера. Нужно установить, кто знал о существовании этой копии»."
+    }
+    ],
+    vendor: [
+    {
+    id: "after_identity",
+    title: "Кто оформил вашу учётную запись?",
+    text:
+    "«Документы передали через координатора проекта. Я не видел кадрового приказа и не знаю, кто внёс запись в систему. Имя человека, который передал доступ, должно быть в переписке о контракте»."
+    },
+    {
+    id: "after_invoice",
+    title: "За какую услугу вам перечислили деньги?",
+    text:
+    "«Оплата прошла по договору с подрядчиком. Я выполнял поручения, которые получал, но не участвовал в согласовании исследовательской программы»."
+    }
+    ],
+    engineer: [
+    {
+    id: "after_server",
+    title: "Кто имел доступ к серверу в момент экспорта?",
+    text:
+    "«Одного журнала недостаточно, чтобы установить человека за клавиатурой. Нужны права доступа, время операции и данные резервного копирования»."
+    },
+    {
+    id: "after_protocol_engineer",
+    title: "Почему последовательность испытаний не отражена в отчёте?",
+    text:
+    "«Технические записи и итоговый отчёт создавались в разное время. Если сведения расходятся, нужно установить, кто изменял документ и на каком этапе»."
+    }
+    ]
+    }
 };
+
 
 
 const EVIDENCE_CONTRADICTIONS = {
@@ -3610,62 +3697,148 @@ function getInterrogationMood(pressure, suspectId) {
 }
 
 function getDynamicInterrogationAnswer(
-  caseId,
-  suspectId,
-  question,
-  history
-) {
-  const baseAnswer = question.answer || question.text || "";
-  const presented = history?.presented || {};
-  const chains = history?.chains || {};
+    caseId,
+    suspectId,
+    question,
+    history
+    ) {
+    const baseAnswer = question.answer || question.text || "";
+    const presented = history?.presented || {};
+    const chains = history?.chains || {};
+    const title = (question.title || "").toLowerCase();
 
-  if (caseId !== "zero") {
-    return baseAnswer;
-  }
+    // «Последний сеанс»: после проверки хронологии
+    if (
+    caseId === "session" &&
+    suspectId === "levin" &&
+    chains.session_timeline?.confession &&
+    ["время", "хронолог", "встреч", "алиби", "журнал"].some(word =>
+    title.includes(word)
+    )
+    ) {
+    return (
+    baseAnswer +
+    "\n\nПосле сопоставления часов и журнала Левину труднее настаивать, " +
+    "что он покинул клинику до позднего визита. Он признаёт неточность " +
+    "своей первоначальной версии, но по-прежнему не раскрывает, куда ушёл Марк."
+    );
+    }
 
-  // Крамер: после раскрытия финансирования
-  if (
+    // «Последний сеанс»: после раскрытия следа старого дела
+    if (
+    caseId === "session" &&
+    suspectId === "levin" &&
+    chains.session_identity?.confession &&
+    ["архив", "имя", "прошл", "марк", "документ", "дело"].some(word =>
+    title.includes(word)
+    )
+    ) {
+    return (
+    baseAnswer +
+    "\n\nПосле признания о старых документах Левин уже не может " +
+    "объяснять исчезновение материалов обычной ошибкой архива. " +
+    "Однако его слова пока не устанавливают нынешнее местонахождение Марка."
+    );
+    }
+
+    // «Запертая комната»: время смерти и алиби
+    if (
+    caseId === "room" &&
+    suspectId === "secretary" &&
+    chains.room_timeline?.confession &&
+    ["время", "час", "хронолог", "алиби", "смерт"].some(word =>
+    title.includes(word)
+    )
+    ) {
+    return (
+    baseAnswer +
+    "\n\nСекретарь уже признал, что показания часов не подтверждают " +
+    "его версию времени. Для проверки алиби нужны другие улики, " +
+    "а не только цифры на циферблате."
+    );
+    }
+
+    // «Запертая комната»: мотив
+    if (
+    caseId === "room" &&
+    suspectId === "secretary" &&
+    chains.room_motive?.confession &&
+    ["мотив", "завещ", "коллекц", "наслед", "павел"].some(word =>
+    title.includes(word)
+    )
+    ) {
+    return (
+    baseAnswer +
+    "\n\nСекретарь уже подтвердил, что потеря доступа к коллекции " +
+    "была для него серьёзным конфликтом. Мотив объясняет возможную " +
+    "заинтересованность, но сам по себе не доказывает способ убийства."
+    );
+    }
+
+    // «Запертая комната»: скрытый механизм
+    if (
+    caseId === "room" &&
+    suspectId === "secretary" &&
+    chains.room_mechanism?.confession &&
+    ["механизм", "канал", "панел", "час", "шнур", "проход"].some(word =>
+    title.includes(word)
+    )
+    ) {
+    return (
+    baseAnswer +
+    "\n\nПосле проверки скрытого канала секретарю труднее отрицать, " +
+    "что часы можно было остановить из служебного прохода. " +
+    "Теперь нужно сопоставить этот способ с остальными обстоятельствами."
+    );
+    }
+
+    // «Нулевой пациент»: признание о финансировании
+    if (
+    caseId === "zero" &&
     suspectId === "director" &&
     chains.project_funding?.confession &&
     ["funding", "project", "budget"].some(word =>
-      (question.title || "").toLowerCase().includes(word)
+    title.includes(word)
     )
-  ) {
+    ) {
     return (
-      baseAnswer +
-      "\n\nКрамер уже подтвердил связь руководства с финансированием. " +
-      "Теперь ему труднее отрицать, что проект находился под контролем его отдела."
+    baseAnswer +
+    "\n\nКрамер уже подтвердил связь руководства с финансированием. " +
+    "Теперь ему труднее отрицать, что проект находился под контролем его отдела."
     );
-  }
+    }
 
-  // Крамер: журнал и резервная копия
-  if (
+    // «Нулевой пациент»: сервер и резервная копия
+    if (
+    caseId === "zero" &&
     suspectId === "director" &&
     presented.backup &&
     presented.server
-  ) {
+    ) {
     return (
-      baseAnswer +
-      "\n\nПосле сопоставления журнала и резервной копии Крамер " +
-      "становится осторожнее: теперь недостаточно просто ссылаться " +
-      "на отсутствие доказательств конкретного исполнителя."
+    baseAnswer +
+    "\n\nПосле сопоставления журнала и резервной копии Крамер " +
+    "становится осторожнее: теперь недостаточно просто ссылаться " +
+    "на отсутствие доказательств конкретного исполнителя."
     );
-  }
+    }
 
-  // Вейл: после раскрытия фиктивной личности
-  if (
+    // «Нулевой пациент»: фиктивная личность подрядчика
+    if (
+    caseId === "zero" &&
     suspectId === "vendor" &&
     chains.ghost_identity?.confession
-  ) {
+    ) {
     return (
-      baseAnswer +
-      "\n\nВейл уже признал, что получил готовую учётную запись. " +
-      "Его прежнее объяснение о происхождении доступа больше не снимает вопросов."
+    baseAnswer +
+    "\n\nВейл уже признал, что получил готовую учётную запись. " +
+    "Его прежнее объяснение о происхождении доступа больше не снимает вопросов."
     );
-  }
+    }
 
-  return baseAnswer;
+    return baseAnswer;
 }
+
 
 function inspectSuspect(id) {
   const c = CASES.find(x => x.id === activeId);
@@ -3743,6 +3916,9 @@ if (
   ) {
     interrogationHistory.presented = {};
   }
+  if (!Array.isArray(interrogationHistory.unlockedQuestions)) {
+  interrogationHistory.unlockedQuestions = [];
+    }
   s.interrogations[id] = interrogationHistory;
 
   const has = clueId => s.found.includes(clueId);
@@ -4333,6 +4509,30 @@ ${timelineHtml}
         </div>
       `;
 
+      // Восстанавливаем дополнительные вопросы из сохранённой истории.
+        if (!Array.isArray(interrogationHistory.unlockedQuestions)) {
+        interrogationHistory.unlockedQuestions = [];
+        }
+
+        interrogationHistory.unlockedQuestions.forEach(savedQuestion => {
+        if (
+            !savedQuestion ||
+            !savedQuestion.id ||
+            questions.some(q => q.id === savedQuestion.id)
+        ) {
+            return;
+        }
+
+        questions.push({
+            ...savedQuestion,
+            requires: [],
+            answer: savedQuestion.answer || savedQuestion.text || ""
+        });
+        });
+
+        // Сохраняем нормализованную историю допроса.
+        s.interrogations[id] = interrogationHistory;
+        
   content.innerHTML = `
     <div class="eyebrow">MIND LAB / CASE INTERROGATION</div>
 
@@ -4651,11 +4851,12 @@ ${timelineHtml}
       }
 
       answerBox.textContent = displayedAnswer;
-      updateInterrogationPressure();
+      
 
       interrogationHistory.asked.push(questionId);
       interrogationHistory.answers[questionId] = displayedAnswer;
 
+      updateInterrogationPressure();
       button.classList.add("question-asked");
 
       const label = button.querySelector("small");
@@ -4706,8 +4907,8 @@ if (questionLabel) {
     
         const specificReaction =
           EVIDENCE_REACTIONS[activeId]?.[id]?.[evidenceId];
-const contradiction =
-EVIDENCE_CONTRADICTIONS[activeId]?.[id]?.[evidenceId];
+        const contradiction =
+        EVIDENCE_CONTRADICTIONS[activeId]?.[id]?.[evidenceId];
 
         const presentedCount = Object.keys(
 interrogationHistory.presented
@@ -4899,43 +5100,108 @@ updateInterrogationPressure();
     // Новые вопросы после обнаружения противоречий
     if (contradiction) {
       const contradictionQuestions = {
-        zero: {
-          director: {
-            server: {
-              id: "contradiction_server",
-              title: "Почему вы скрыли отключение сегмента?",
-              text:
-                "Вы уточняете, что отключили только исследовательский сегмент. Почему этого уточнения нет в официальном отчёте?"
-            },
-            backup: {
-              id: "contradiction_backup",
-              title: "Кто утвердил официальную версию?",
-              text:
-                "Вы допускаете штатный экспорт данных, но отчёт утверждает, что сервер был отключён. Кто согласовал формулировку отчёта?"
-            },
-            payment: {
-              id: "contradiction_payment",
-              title: "Что именно вы знали о подрядчике?",
-              text:
-                "Ваша подпись подтверждает финансирование. Какие сведения о работе подрядчика вы получили до утверждения платежа?"
-            }
-          },
-          vendor: {
-            account: {
-              id: "contradiction_account",
-              title: "Кто передал вам доступ?",
-              text:
-                "Вы утверждаете, что получили готовые учётные данные. Кто передал их вам и объяснил, какие права они предоставляют?"
-            },
-            invoice: {
-              id: "contradiction_invoice",
-              title: "За что вам заплатили?",
-              text:
-                "Вы отказываетесь от ответственности за кадровые записи. Какую конкретную услугу вы оказали по этому счёту?"
-            }
-          }
+        session: {
+        levin: {
+        clock: {
+        id: "session_contradiction_clock",
+        title: "Почему вы назвали другое время?",
+        text:
+        "«Я назвал время по памяти. Если часы остановились, мои слова нельзя считать точной хронологией. Но это ещё не доказывает, что я участвовал в исчезновении Марка»."
+        },
+        log: {
+        id: "session_contradiction_log",
+        title: "Почему журнал противоречит вашим словам?",
+        text:
+        "«Я не учёл одну из записей, когда рассказывал о своём уходе. Да, журнал ставит под сомнение мои слова. Я должен был объяснить это раньше»."
+        },
+        archive: {
+        id: "session_contradiction_archive",
+        title: "Почему в архиве не хватает документов?",
+        text:
+        "«После старого инцидента с документами работали несколько человек. Я участвовал в оформлении бумаг, но не могу объяснить отсутствие каждой записи»."
+        },
+        tape: {
+        id: "session_contradiction_tape",
+        title: "Что скрывает старая запись?",
+        text:
+        "«Запись подтверждает, что старое дело не было таким простым, как его представили в отчётах. Но по одной записи нельзя восстановить всю последовательность событий»."
         }
-      };
+        }
+        },
+
+        room: {
+        secretary: {
+        clock: {
+        id: "room_contradiction_clock",
+        title: "Почему вы ссылались на остановленные часы?",
+        text:
+        "«Я использовал время на камине как ориентир. Но теперь ясно, что механизм могли остановить отдельно. Я не должен был представлять эти показания как точное доказательство»."
+        },
+        glass: {
+        id: "room_contradiction_glass",
+        title: "Что вы знаете о разбитом бокале?",
+        text:
+        "«Я слышал о бокале, но его состояние само по себе не устанавливает, кто находился рядом в тот момент. Нужно сопоставить осколки с остальными обстоятельствами»."
+        },
+        letters: {
+        id: "room_contradiction_letters",
+        title: "Почему вы не упомянули письма?",
+        text:
+        "«Я знал, что Павел собирался изменить наши отношения. Я не считал нужным рассказывать о личном конфликте, пока меня прямо об этом не спросили»."
+        },
+        will: {
+        id: "room_contradiction_will",
+        title: "Что для вас означало новое завещание?",
+        text:
+        "«Я понимал, что могу потерять доступ к коллекции. Это было для меня серьёзным ударом. Но я не согласен, что одного мотива достаточно, чтобы объявить меня убийцей»."
+        },
+        panel: {
+        id: "room_contradiction_panel",
+        title: "Вы знали о скрытом канале?",
+        text:
+        "«Я знал устройство дома. Через канал действительно можно было добраться до механизма часов. Я понимаю, почему вы проверяете, кто мог им воспользоваться»."
+        }
+        }
+        },
+
+        zero: {
+        director: {
+        server: {
+        id: "director_server_contradiction",
+        title: "Почему вы отрицали работу сервера?",
+        text:
+        "«Я говорил о состоянии исследовательского сегмента, а не о всей системе. Возможно, в отчёте это различие было изложено недостаточно ясно»."
+        },
+        backup: {
+        id: "director_backup_contradiction",
+        title: "Почему резервная копия сохранила данные?",
+        text:
+        "«Резервная копия могла сохраниться автоматически. Но теперь нужно установить, кто знал о ней и кто имел доступ после удаления журнала»."
+        },
+        payment: {
+        id: "director_payment_contradiction",
+        title: "Почему ваша подпись стоит на платеже?",
+        text:
+        "«Я утверждал финансирование проекта. Это подтверждает мою административную роль, но не означает, что я лично выполнял каждую техническую операцию»."
+        }
+        },
+        vendor: {
+        account: {
+        id: "vendor_account_contradiction",
+        title: "Почему у аккаунта нет кадрового номера?",
+        text:
+        "«Учётную запись мне передали уже готовой. Я не оформлял её через кадровую службу и не могу назвать человека, который внёс данные»."
+        },
+        invoice: {
+        id: "vendor_invoice_contradiction",
+        title: "За что вы получили оплату?",
+        text:
+        "«Оплата прошла по договору с подрядчиком. Я выполнял поручения, но не участвовал в согласовании исследовательской программы»."
+        }
+        }
+        }
+        };
+
 
       const candidate =
         contradictionQuestions[activeId]?.[id]?.[evidenceId];
@@ -4953,25 +5219,60 @@ updateInterrogationPressure();
 
         questions.push(newQuestion);
         newQuestions.push(newQuestion);
+
+        if (!Array.isArray(interrogationHistory.unlockedQuestions)) {
+        interrogationHistory.unlockedQuestions = [];
+        }
+
+        if (
+        !interrogationHistory.unlockedQuestions.some(
+            q => q.id === newQuestion.id
+        )
+        ) {
+        interrogationHistory.unlockedQuestions.push(newQuestion);
+        }
       }
     }
 
     const chainIds = {
-      after_funding: "project_funding",
-      after_export: "data_export",
-      after_identity: "ghost_identity",
-      after_protocol: "project_funding",
-      after_backup: "data_export",
-      after_invoice: "ghost_identity",
-      after_server: "data_export"
+        // «Последний сеанс»
+        after_session_timeline: "session_timeline",
+        after_session_identity: "session_identity",
+
+        // «Запертая комната»
+        after_room_timeline: "room_timeline",
+        after_room_motive: "room_motive",
+        after_room_mechanism: "room_mechanism",
+
+        // «Нулевой пациент»
+        after_funding: "project_funding",
+        after_export: "data_export",
+        after_identity: "ghost_identity",
+        after_protocol: "project_funding",
+        after_backup: "data_export",
+        after_invoice: "ghost_identity",
+        after_server: "data_export",
+        after_protocol_engineer: "data_export"
     };
 
     const requiredEvidenceByQuestion = {
-      after_protocol: ["protocol"],
-      after_backup: ["backup", "server"],
-      after_invoice: ["invoice"],
-      after_server: ["server"]
+        // «Последний сеанс»
+        after_session_timeline: ["clock", "log"],
+        after_session_identity: ["archive", "tape"],
+
+        // «Запертая комната»
+        after_room_timeline: ["glass", "clock"],
+        after_room_motive: ["letters", "will"],
+        after_room_mechanism: ["clock", "panel"],
+
+        // «Нулевой пациент»
+        after_protocol: ["protocol"],
+        after_backup: ["backup", "server"],
+        after_invoice: ["invoice"],
+        after_server: ["server"],
+        after_protocol_engineer: ["server", "backup"]
     };
+
 
     extraQuestions.forEach(q => {
       // Не добавляем вопрос повторно
@@ -5007,6 +5308,33 @@ updateInterrogationPressure();
     });
 
     if (newQuestions.length && questionList) {
+        // Надёжно сохраняем каждый разблокированный вопрос.
+        if (!Array.isArray(interrogationHistory.unlockedQuestions)) {
+        interrogationHistory.unlockedQuestions = [];
+        }
+
+        newQuestions.forEach(question => {
+        const alreadySaved =
+            interrogationHistory.unlockedQuestions.some(
+            saved => saved.id === question.id
+            );
+
+        if (!alreadySaved) {
+            interrogationHistory.unlockedQuestions.push({
+            id: question.id,
+            title: question.title,
+            text: question.text || question.answer || "",
+            answer: question.answer || question.text || "",
+            requires: Array.isArray(question.requires)
+                ? question.requires
+                : []
+            });
+        }
+        });
+
+        // Обновляем сохранение до создания кнопок.
+        s.interrogations[id] = interrogationHistory;
+        saveState();
       // Уведомление показываем один раз за обновление
       let notice = content.querySelector(
         "#newInterrogationQuestionNotice"
