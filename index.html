@@ -4004,6 +4004,86 @@ body.ml-page-scroll > main {
   }
 }
 
+
+/* =========================================================
+   MIND LAB — VARIANT C
+   Большая доска A + компактная правая панель B
+   ========================================================= */
+
+#game.ml-game-screen.ml-scroll-page.ml-scroll-hybrid
+.game-layout.investigation-layout {
+  grid-template-columns:
+    minmax(190px, .72fr)
+    minmax(0, 2.2fr)
+    minmax(220px, .72fr) !important;
+  gap: 12px !important;
+  margin-inline: 12px !important;
+}
+
+/* Центральная доска получает больше пространства */
+#game.ml-game-screen.ml-scroll-page.ml-scroll-hybrid
+#visualBoardPanel {
+  min-width: 0 !important;
+  width: 100% !important;
+}
+
+/* Сохраняем просторную доску и свободный рост по высоте */
+#game.ml-game-screen.ml-scroll-page.ml-scroll-hybrid
+#visualBoard {
+  min-height: 650px !important;
+  height: auto !important;
+  overflow: visible !important;
+}
+
+/* Правая колонка — компактнее */
+#game.ml-game-screen.ml-scroll-page.ml-scroll-hybrid
+.investigation-sidebar {
+  min-width: 0 !important;
+  gap: 8px !important;
+}
+
+/* Меньше внутренних отступов в правых разделах */
+#game.ml-game-screen.ml-scroll-page.ml-scroll-hybrid
+.investigation-sidebar > .sidebar-section {
+  padding: 10px !important;
+  margin-bottom: 0 !important;
+}
+
+/* Заголовки не должны занимать лишнюю высоту */
+#game.ml-game-screen.ml-scroll-page.ml-scroll-hybrid
+.investigation-sidebar > .sidebar-section h2,
+#game.ml-game-screen.ml-scroll-page.ml-scroll-hybrid
+.investigation-sidebar > .sidebar-section h3 {
+  margin-top: 0 !important;
+  margin-bottom: 7px !important;
+}
+
+/* Компактнее промежутки между материалами и карточками */
+#game.ml-game-screen.ml-scroll-page.ml-scroll-hybrid
+.investigation-sidebar .sidebar-section > * + * {
+  margin-top: 7px;
+}
+
+/* Карточки на доске оставляем небольшими, как фотографии улик */
+#game.ml-game-screen.ml-scroll-page.ml-scroll-hybrid
+#boardNodes {
+  grid-template-columns: repeat(3, minmax(0, 1fr)) !important;
+  align-content: start !important;
+}
+
+/* Адаптация гибрида для небольших окон */
+@media (min-width: 1101px) and (max-width: 1250px) {
+  #game.ml-game-screen.ml-scroll-page.ml-scroll-hybrid
+  .game-layout.investigation-layout {
+    grid-template-columns:
+      minmax(175px, .7fr)
+      minmax(0, 1.8fr)
+      minmax(210px, .75fr) !important;
+    gap: 9px !important;
+    margin-inline: 9px !important;
+  }
+}
+
 </style>
 </head>
 <body>
@@ -4061,6 +4141,9 @@ body.ml-page-scroll > main {
     </button>
     <button type="button" data-layout-mode="board" aria-pressed="true">
         B · Только доска
+    </button>
+    <button type="button" data-layout-mode="hybrid" aria-pressed="false">
+        C · Гибрид
     </button>
     </div>
 
@@ -9352,7 +9435,6 @@ document.addEventListener("keydown", event => {
 
 </script>
 
-
 <script>
 (() => {
   const game = document.getElementById("game");
@@ -9363,14 +9445,21 @@ document.addEventListener("keydown", event => {
   if (!game || !layout || !routeDock || !buttons?.length) return;
 
   function setLayoutMode(mode) {
-    const pageMode = mode === "page";
+    if (!["page", "board", "hybrid"].includes(mode)) {
+      mode = "board";
+    }
+
+    const pageMode = mode === "page" || mode === "hybrid";
+    const hybridMode = mode === "hybrid";
 
     game.classList.toggle("ml-scroll-page", pageMode);
     game.classList.toggle("ml-scroll-board", !pageMode);
+    game.classList.toggle("ml-scroll-hybrid", hybridMode);
+
     document.body.classList.toggle("ml-page-scroll", pageMode);
 
-    /* В режиме A маршрут идёт перед доской в потоке страницы.
-       В режиме B возвращаем его на исходное место. */
+    /* A и C: маршрут расположен перед основной раскладкой.
+       B: маршрут возвращается после раскладки. */
     if (pageMode) {
       layout.parentNode.insertBefore(routeDock, layout);
     } else {
@@ -9396,10 +9485,9 @@ document.addEventListener("keydown", event => {
     });
   });
 
-  /* При открытии дела сохраняем привычный режим B */
+  /* По умолчанию открываем привычный режим B */
   setLayoutMode("board");
 })();
 </script>
-
 </body>
 </html>
