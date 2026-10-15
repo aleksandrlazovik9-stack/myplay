@@ -3298,101 +3298,107 @@ body {
 }
 
 
-/* MIND LAB — перенос маршрута расследования наверх */
+
+/* MIND LAB — верхний маршрут без перекрытия доски */
 
 #game.ml-game-screen:not(.hidden) .investigation-route-dock {
   position: absolute !important;
   top: 68px !important;
   bottom: auto !important;
   left: 0 !important;
+  right: 0 !important;
   transform: none !important;
 
-  width: 100% !important;
+  width: auto !important;
   max-width: none !important;
-  padding: 7px 18px 9px !important;
+  padding: 7px 14px !important;
 
   border: 0 !important;
   border-bottom: 1px solid #d5ad6630 !important;
   border-radius: 0 !important;
-
   background: #151619 !important;
   box-shadow: none !important;
   backdrop-filter: blur(12px);
-
   z-index: 11 !important;
 }
 
-#game.ml-game-screen:not(.hidden) .investigation-route-dock .route-dock-heading {
-  margin-bottom: 5px;
+/* Компактная шапка маршрута */
+#game.ml-game-screen:not(.hidden) .route-dock-heading {
+  margin-bottom: 5px !important;
+  gap: 10px;
 }
 
-#game.ml-game-screen:not(.hidden) .investigation-route-dock .route-dock-heading .eyebrow {
-  font-size: 9px;
+#game.ml-game-screen:not(.hidden) .route-dock-heading .eyebrow,
+#game.ml-game-screen:not(.hidden) .route-dock-caption {
+  font-size: 9px !important;
 }
 
-#game.ml-game-screen:not(.hidden) .investigation-route-dock .route-dock-caption {
-  font-size: 10px;
+#game.ml-game-screen:not(.hidden) .route-steps {
+  gap: 6px !important;
 }
 
-#game.ml-game-screen:not(.hidden) .investigation-route-dock .route-steps {
-  gap: 7px;
+#game.ml-game-screen:not(.hidden) .route-step {
+  padding: 5px 8px !important;
+  gap: 6px;
+  border-radius: 5px !important;
 }
 
-#game.ml-game-screen:not(.hidden) .investigation-route-dock .route-step {
-  padding: 6px 9px;
-  border-radius: 5px;
+#game.ml-game-screen:not(.hidden) .route-step-marker {
+  flex-basis: 21px !important;
+  width: 21px !important;
+  height: 21px !important;
 }
 
-#game.ml-game-screen:not(.hidden) .investigation-route-dock .route-step-marker {
-  flex-basis: 23px;
-  width: 23px;
-  height: 23px;
+#game.ml-game-screen:not(.hidden) .route-step-title {
+  font-size: 10px !important;
 }
 
-#game.ml-game-screen:not(.hidden) .investigation-route-dock .route-step-title {
-  font-size: 10px;
+#game.ml-game-screen:not(.hidden) .route-next-step {
+  margin-top: 5px !important;
+  padding: 4px 8px !important;
+  font-size: 10px !important;
 }
 
-#game.ml-game-screen:not(.hidden) .investigation-route-dock .route-next-step {
-  margin-top: 5px;
-  padding: 5px 8px;
-  font-size: 10px;
+/* Главное: сдвигаем всё игровое пространство ниже маршрута */
+@media (min-width: 1101px) {
+  #game.ml-game-screen:not(.hidden) .game-layout.investigation-layout {
+    inset: 168px 12px 12px !important;
+  }
 }
 
-#game.ml-game-screen:not(.hidden) {
-  padding-bottom: 0 !important;
+@media (max-width: 1100px) {
+  #game.ml-game-screen:not(.hidden) .game-layout.investigation-layout {
+    top: 168px !important;
+  }
 }
 
 @media (max-width: 650px) {
   #game.ml-game-screen:not(.hidden) .investigation-route-dock {
-    top: 104px !important;
-    padding: 5px 8px 7px !important;
+    padding: 5px 7px !important;
   }
 
-  #game.ml-game-screen:not(.hidden) .investigation-route-dock .route-steps {
-    grid-template-columns: repeat(5, minmax(0, 1fr));
-    gap: 4px;
+  #game.ml-game-screen:not(.hidden) .route-steps {
+    gap: 3px !important;
   }
 
-  #game.ml-game-screen:not(.hidden) .investigation-route-dock .route-step {
-    padding: 5px 3px;
-    gap: 4px;
+  #game.ml-game-screen:not(.hidden) .route-step {
+    padding: 4px 3px !important;
+    gap: 3px;
   }
 
-  #game.ml-game-screen:not(.hidden) .investigation-route-dock .route-step-marker {
-    flex-basis: 19px;
-    width: 19px;
-    height: 19px;
-    font-size: 9px;
+  #game.ml-game-screen:not(.hidden) .route-step-marker {
+    flex-basis: 18px !important;
+    width: 18px !important;
+    height: 18px !important;
+    font-size: 9px !important;
   }
 
-  #game.ml-game-screen:not(.hidden) .investigation-route-dock .route-step-title {
-    font-size: 8px;
+  #game.ml-game-screen:not(.hidden) .route-step-title {
+    font-size: 8px !important;
   }
 
-  #game.ml-game-screen:not(.hidden) .investigation-route-dock .route-next-step {
-    max-height: 35px;
-    overflow: auto;
+  #game.ml-game-screen:not(.hidden) .game-layout.investigation-layout {
+    top: 178px !important;
   }
 }
 
