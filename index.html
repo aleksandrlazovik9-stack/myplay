@@ -4084,6 +4084,306 @@ body.ml-page-scroll > main {
   }
 }
 
+
+/* =========================================================
+   MIND LAB — VISUAL PASS 01
+   Evidence wall, paper cards and cinematic controls
+   ========================================================= */
+
+#game .investigation-board {
+  background:
+    radial-gradient(ellipse at 50% 0%, #3b3026 0%, transparent 68%),
+    #151515 !important;
+  border-color: #8e725044 !important;
+  box-shadow:
+    inset 0 0 60px #0005,
+    0 18px 45px #0004;
+}
+
+/* Фон доски: тёмная пробка с неброской текстурой */
+#game .visual-board {
+  isolation: isolate;
+  overflow: visible !important;
+  border: 1px solid #8b6d4b70 !important;
+  border-radius: 4px !important;
+  background-color: #29251f !important;
+  background-image:
+    radial-gradient(ellipse at 20% 25%, #a1814c14, transparent 35%),
+    radial-gradient(ellipse at 75% 70%, #00000026, transparent 45%),
+    repeating-linear-gradient(
+      8deg,
+      transparent 0,
+      #ffffff03 2px,
+      transparent 4px,
+      #00000008 7px
+    ) !important;
+  box-shadow:
+    inset 0 0 45px #0005,
+    0 8px 22px #0005;
+}
+
+/* Нити расследования — красные, заметные, но не неоновые */
+#game .board-line {
+  stroke: #b83b3b !important;
+  stroke-width: 2.2 !important;
+  stroke-dasharray: none !important;
+  opacity: .88 !important;
+  filter: drop-shadow(0 1px 2px #0009) !important;
+}
+
+/* Карточки превращаются в бумажные материалы дела */
+#game .board-node {
+  position: relative;
+  isolation: isolate;
+  overflow: visible !important;
+  min-height: 126px !important;
+  padding: 15px 13px 13px !important;
+
+  color: #29251f !important;
+  text-align: left;
+  background:
+    linear-gradient(135deg, #e8dfcc, #cfc3ac) !important;
+  border: 1px solid #f4ead5 !important;
+  border-radius: 2px !important;
+
+  box-shadow:
+    0 3px 5px #0006,
+    0 9px 15px #0004,
+    inset 0 0 0 3px #78664a12 !important;
+
+  transform: rotate(-.65deg);
+  transform-origin: center center;
+  transition:
+    transform .2s ease,
+    box-shadow .2s ease,
+    border-color .2s ease,
+    background .2s ease !important;
+}
+
+/* Лёгкая неровность раскладки, как у приколотых фотографий */
+#game .board-node:nth-child(4n + 2) {
+  transform: rotate(1deg);
+}
+
+#game .board-node:nth-child(4n + 3) {
+  transform: rotate(-1.2deg);
+}
+
+#game .board-node:nth-child(4n) {
+  transform: rotate(.55deg);
+}
+
+/* Красная канцелярская кнопка */
+#game .board-node::before {
+  content: "";
+  position: absolute;
+  top: -6px;
+  left: 50%;
+  z-index: 4;
+  width: 11px;
+  height: 11px;
+  border-radius: 50%;
+  background:
+    radial-gradient(circle at 32% 27%, #ffd2c7 0 9%, #d74b43 24%, #79231f 78%);
+  border: 1px solid #6e211c;
+  box-shadow:
+    0 2px 3px #0007,
+    0 0 0 2px #d9c9ad;
+  transform: translateX(-50%);
+}
+
+/* Номер материала */
+#game .board-node-number {
+  color: #76664f !important;
+  font-size: 10px !important;
+  letter-spacing: 1.4px !important;
+  margin-bottom: 10px !important;
+}
+
+/* Название улики */
+#game .board-node-title {
+  color: #29251f !important;
+  font-size: 13px !important;
+  font-weight: 800 !important;
+  line-height: 1.45 !important;
+}
+
+/* Статус материала */
+#game .board-node-status {
+  color: #5c6e62 !important;
+  font-size: 10px !important;
+  font-weight: 800;
+  letter-spacing: .5px;
+}
+
+/* Наведение: карточка чуть приподнимается */
+#game .board-node:hover {
+  z-index: 5;
+  border-color: #fff0d0 !important;
+  box-shadow:
+    0 7px 12px #0007,
+    0 15px 25px #0005 !important;
+  transform: translateY(-4px) rotate(0deg) !important;
+}
+
+/* Выбранная улика — тёплая подсветка */
+#game .board-node.is-selected {
+  z-index: 6;
+  color: #241d13 !important;
+  background: linear-gradient(135deg, #f6e4b8, #dfc58d) !important;
+  border: 2px solid #d3a34c !important;
+  box-shadow:
+    0 0 0 3px #d3a34c25,
+    0 10px 24px #0007 !important;
+  transform: translateY(-3px) rotate(0deg) !important;
+}
+
+#game .board-node.is-selected .board-node-title {
+  color: #241d13 !important;
+}
+
+#game .board-node.is-selected .board-node-status {
+  color: #80551d !important;
+}
+
+/* Связанные материалы получают спокойный бирюзовый акцент */
+#game .board-node.is-linked {
+  border-color: #8eaa9b !important;
+}
+
+/* =========================================================
+   КНОПКИ — интерфейс криминалистической лаборатории
+   ========================================================= */
+
+#game button:not(.board-node) {
+  transition:
+    background .18s ease,
+    border-color .18s ease,
+    color .18s ease,
+    box-shadow .18s ease,
+    transform .18s ease;
+}
+
+/* Основной стиль интерактивных элементов */
+#game .btn,
+#game .small-btn,
+#game .clue,
+#game .suspect,
+#game .choice,
+#game .hypothesis-card,
+#game .twist-choices button,
+#game .footer-actions button {
+  border-radius: 5px !important;
+}
+
+/* Кнопки действий */
+#game .btn,
+#game .small-btn,
+#game .footer-actions button {
+  border: 1px solid #65533b !important;
+  background: linear-gradient(180deg, #26251f, #191a19) !important;
+  color: #e9dfcd !important;
+  box-shadow: inset 0 1px #ffffff08;
+}
+
+#game .btn:hover,
+#game .small-btn:hover,
+#game .footer-actions button:hover {
+  border-color: #c8a466 !important;
+  background: linear-gradient(180deg, #393023, #242019) !important;
+  color: #ffe6b0 !important;
+  box-shadow: 0 0 0 2px #c8a46616;
+  transform: translateY(-1px);
+}
+
+/* Кнопка главного действия */
+#game .btn-primary {
+  background: linear-gradient(135deg, #a83436, #712528) !important;
+  border-color: #d45b52 !important;
+  color: #fff4e9 !important;
+  box-shadow:
+    inset 0 1px #ffffff18,
+    0 3px 12px #6e1d2433;
+}
+
+#game .btn-primary:hover {
+  background: linear-gradient(135deg, #c44243, #8b2c30) !important;
+  border-color: #f08072 !important;
+  box-shadow: 0 0 18px #c4424330;
+}
+
+/* Улики и подозреваемые в боковой панели */
+#game .clue,
+#game .suspect {
+  border: 1px solid #35332e !important;
+  background: linear-gradient(145deg, #20211f, #171918) !important;
+  color: #e3dfd5 !important;
+}
+
+#game .clue:hover,
+#game .suspect:hover {
+  border-color: #a98a55 !important;
+  background: #29271f !important;
+  transform: translateX(2px);
+}
+
+/* Найденная улика */
+#game .clue.found {
+  border-color: #547a69 !important;
+  background: linear-gradient(145deg, #1d3029, #17231f) !important;
+}
+
+/* Выбранная улика */
+#game .clue.pickable.selected {
+  border-color: #d1ad66 !important;
+  background: #352b1b !important;
+  box-shadow: inset 3px 0 #d1ad66, 0 0 12px #d1ad6610 !important;
+}
+
+/* Гипотезы — как папки с версиями следствия */
+#game .hypothesis-card {
+  background: linear-gradient(145deg, #20231f, #171918) !important;
+  border-color: #414239 !important;
+}
+
+#game .hypothesis-card:hover {
+  border-color: #9c8658 !important;
+  transform: translateY(-2px);
+}
+
+#game .hypothesis-card.selected {
+  background: linear-gradient(145deg, #352d20, #242017) !important;
+  border-color: #c9a45d !important;
+  box-shadow: inset 3px 0 #c9a45d;
+}
+
+/* Клавиатурная доступность */
+#game button:focus-visible {
+  outline: 2px solid #e4bd70 !important;
+  outline-offset: 3px;
+}
+
+/* На телефонах оставляем карточки ровными и читаемыми */
+@media (max-width: 600px) {
+  #game .board-node,
+  #game .board-node:nth-child(n) {
+    transform: none;
+    min-height: 112px !important;
+  }
+
+  #game .board-node:hover,
+  #game .board-node.is-selected {
+    transform: translateY(-2px) !important;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  #game .board-node,
+  #game button {
+    transition: none !important;
+  }
+}
+
 </style>
 </head>
 <body>
