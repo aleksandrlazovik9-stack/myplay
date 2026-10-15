@@ -5698,6 +5698,436 @@ body.ml-page-scroll > main {
   }
 }
 
+
+/* =====================================================
+   MIND LAB — BLUE HOUR
+   Unified visual identity: archive, investigation, dossier
+   ===================================================== */
+
+:root {
+  --bg: #080b14;
+  --panel: #101625;
+  --panel2: #151e30;
+  --line: #283650;
+  --text: #edf3ff;
+  --muted: #8d9db8;
+
+  --red: #f174a8;
+  --cyan: #71d8ff;
+  --gold: #a9baff;
+
+  --ml-blue: #79a8ff;
+  --ml-cyan: #71d8ff;
+  --ml-pink: #f174b7;
+  --ml-violet: #a994ff;
+  --ml-surface: #0e1422;
+  --ml-surface-raised: #151e30;
+  --ml-border: #34435f;
+}
+
+body {
+  color: var(--text);
+  background:
+    radial-gradient(ellipse at 12% 0%, #233d702e, transparent 36%),
+    radial-gradient(ellipse at 88% 12%, #843d7420, transparent 34%),
+    #080b14;
+}
+
+button:focus-visible {
+  outline: 2px solid var(--ml-cyan);
+  outline-offset: 3px;
+}
+
+.topbar,
+#game.ml-game-screen .ml-topbar {
+  background: #090e19eF !important;
+  border-color: #34445f !important;
+  backdrop-filter: blur(18px);
+}
+
+.brand span {
+  color: var(--ml-pink);
+}
+
+.eyebrow {
+  color: var(--ml-cyan);
+  letter-spacing: .17em;
+}
+
+.chapter-label {
+  color: var(--ml-violet);
+}
+
+/* Главный экран — вход в ту же систему расследования */
+
+.hero {
+  position: relative;
+  border: 1px solid #516b943d;
+  border-radius: 18px;
+  background:
+    linear-gradient(
+      100deg,
+      #090e1af7 0%,
+      #0b1120e8 46%,
+      #10182c70 100%
+    ),
+    url("https://images.unsplash.com/photo-1519608487953-e999c86e7455?auto=format&fit=crop&w=1600&q=85")
+    center / cover;
+  box-shadow:
+    inset 0 1px #ffffff0b,
+    0 22px 65px #0003;
+}
+
+.hero::after {
+  content: "";
+  position: absolute;
+  inset: auto 0 0;
+  height: 2px;
+  background: linear-gradient(
+    90deg,
+    transparent,
+    var(--ml-cyan),
+    var(--ml-violet),
+    var(--ml-pink),
+    transparent
+  );
+  opacity: .8;
+}
+
+.hero h1 {
+  max-width: 660px;
+  text-shadow: 0 4px 30px #0009;
+}
+
+.btn,
+.small-btn {
+  border: 1px solid #344661;
+  border-radius: 7px;
+  background: linear-gradient(145deg, #18243a, #111a2a);
+  color: #eaf2ff;
+  transition:
+    border-color .2s ease,
+    background .2s ease,
+    transform .2s ease;
+}
+
+.btn:hover,
+.small-btn:hover {
+  border-color: var(--ml-cyan);
+  background: #1b2b43;
+}
+
+.btn-primary {
+  color: #08111e;
+  background: linear-gradient(110deg, #8cddff, #a9baff);
+  border-color: transparent;
+  box-shadow: 0 5px 24px #71d8ff20;
+}
+
+.btn-primary:hover {
+  color: #08111e;
+  background: linear-gradient(110deg, #b2eaff, #d1c7ff);
+  border-color: transparent;
+  transform: translateY(-1px);
+}
+
+.btn-cyan {
+  color: var(--ml-cyan);
+  border-color: #71d8ff55;
+  background: #71d8ff0c;
+}
+
+/* Архив дел */
+
+.case-card {
+  background: linear-gradient(160deg, #151e30, #0e1421);
+  border: 1px solid #2e3d57;
+  border-radius: 12px;
+  box-shadow: 0 12px 35px #0002;
+  transition:
+    transform .22s ease,
+    border-color .22s ease,
+    box-shadow .22s ease;
+}
+
+.case-card:hover {
+  transform: translateY(-4px);
+  border-color: #71d8ff85;
+  box-shadow: 0 18px 40px #0005;
+}
+
+.cover {
+  border-bottom: 1px solid #8ba9dc20;
+}
+
+.cover:after {
+  background:
+    linear-gradient(180deg, transparent 10%, #0b1020ef 100%),
+    linear-gradient(100deg, #71d8ff14, #f174b71c);
+}
+
+.cover-label {
+  color: #c2eaff;
+}
+
+.card-body {
+  background:
+    radial-gradient(ellipse at top right, #7d8fff0b, transparent 65%);
+}
+
+.tag {
+  border-color: #34445f;
+  border-radius: 5px;
+  background: #8aa8ff08;
+  color: #aabbd8;
+}
+
+.progress {
+  background: #263149;
+}
+
+.progress > div {
+  background: linear-gradient(
+    90deg,
+    var(--ml-blue),
+    var(--ml-cyan),
+    var(--ml-violet)
+  );
+  box-shadow: 0 0 12px #71d8ff40;
+}
+
+.stat {
+  background: linear-gradient(145deg, #141e30, #0d1320);
+  border-color: #2b3b56;
+}
+
+.stat strong {
+  color: #d5eaff;
+}
+
+/* Рабочая область расследования */
+
+#game.ml-game-screen {
+  color: var(--text);
+}
+
+#game.ml-game-screen .panel,
+#game.ml-game-screen .sidebar-section,
+#game.ml-game-screen .story-panel,
+#game.ml-game-screen .investigation-board {
+  background:
+    linear-gradient(145deg, #141d2eeb, #0d1320f5) !important;
+  border: 1px solid #30415e !important;
+  border-radius: 10px !important;
+  box-shadow:
+    inset 0 1px #ffffff06,
+    0 12px 28px #0002;
+}
+
+#game.ml-game-screen .investigation-board {
+  background:
+    radial-gradient(ellipse at 50% 0%, #4774b51a, transparent 62%),
+    #0d1320 !important;
+}
+
+#game.ml-game-screen #visualBoard {
+  border-color: #334563 !important;
+  border-radius: 8px !important;
+  background-color: #0b1120 !important;
+  background-image:
+    linear-gradient(#8ab8ff0b 1px, transparent 1px),
+    linear-gradient(90deg, #8ab8ff0b 1px, transparent 1px),
+    radial-gradient(ellipse at 50% 20%, #344c791a, transparent 70%) !important;
+  background-size: 24px 24px, 24px 24px, auto !important;
+}
+
+/* Карточки улик */
+
+#game.ml-game-screen #boardNodes .board-node {
+  color: #edf4ff !important;
+  background: linear-gradient(145deg, #202b40, #111a2b) !important;
+  border: 1px solid #506383 !important;
+  border-radius: 5px !important;
+  box-shadow:
+    0 5px 12px #0006,
+    inset 0 1px #ffffff0b !important;
+}
+
+#game.ml-game-screen #boardNodes .board-node-title {
+  color: #edf4ff !important;
+}
+
+#game.ml-game-screen #boardNodes .board-node-number {
+  color: #93a8ce !important;
+}
+
+#game.ml-game-screen #boardNodes .board-node-description {
+  color: #a6b5ce !important;
+}
+
+#game.ml-game-screen #boardNodes .board-node-media {
+  border-color: #647c9e !important;
+  background: #0a101c !important;
+}
+
+#game.ml-game-screen #boardNodes .board-node:hover {
+  border-color: var(--ml-cyan) !important;
+  box-shadow:
+    0 0 0 1px #71d8ff25,
+    0 12px 28px #0009 !important;
+}
+
+#game.ml-game-screen #boardNodes .board-node.is-selected {
+  border: 1px solid var(--ml-pink) !important;
+  box-shadow:
+    0 0 0 2px #f174b72b,
+    0 12px 28px #000a !important;
+}
+
+#game.ml-game-screen #boardNodes .board-node.is-linked {
+  border-color: #71d8ff9c !important;
+}
+
+/* Соединения: голубой основной цвет, розовый акцент */
+
+#game.ml-game-screen .board-line {
+  stroke: var(--ml-cyan) !important;
+  stroke-width: 1.8 !important;
+  stroke-dasharray: none !important;
+  opacity: .86 !important;
+  filter: drop-shadow(0 0 3px #71d8ff35) !important;
+}
+
+/* Материалы, подозреваемые, теории и ход дела */
+
+#game.ml-game-screen .clue,
+#game.ml-game-screen .suspect,
+#game.ml-game-screen .hypothesis-card,
+#game.ml-game-screen .choice {
+  color: #eaf1ff;
+  background: linear-gradient(145deg, #182338, #111a2b);
+  border-color: #30425f;
+  border-radius: 7px;
+}
+
+#game.ml-game-screen .clue:hover,
+#game.ml-game-screen .suspect:hover,
+#game.ml-game-screen .hypothesis-card:hover,
+#game.ml-game-screen .choice:hover {
+  border-color: #71d8ff85;
+}
+
+#game.ml-game-screen .clue.found {
+  background: #102735;
+  border-color: #55bfe4;
+}
+
+#game.ml-game-screen .deduction-good {
+  border-left-color: var(--ml-cyan);
+}
+
+#game.ml-game-screen .deduction-bad {
+  border-left-color: var(--ml-pink);
+}
+
+#game.ml-game-screen .deduction-neutral {
+  border-left-color: var(--ml-violet);
+}
+
+/* Досье и окно допроса */
+
+.suspect-viewer-backdrop {
+  background: #050916ed !important;
+  backdrop-filter: blur(18px);
+}
+
+.suspect-viewer-card {
+  color: #edf3ff !important;
+  background:
+    radial-gradient(ellipse at 0% 0%, #4774b523, transparent 42%),
+    radial-gradient(ellipse at 100% 100%, #a45d9b12, transparent 38%),
+    #101827 !important;
+  border: 1px solid #53698c !important;
+  border-radius: 12px !important;
+  box-shadow:
+    0 30px 100px #0009,
+    inset 0 1px #ffffff0a !important;
+}
+
+.suspect-viewer-card .interrogation-header {
+  border-color: #344663;
+}
+
+.suspect-viewer-card .interrogation-dossier,
+.suspect-viewer-card .interrogation-result-card {
+  background: linear-gradient(145deg, #172338, #101827);
+  border-color: #344763;
+  border-radius: 7px;
+}
+
+.suspect-viewer-card .interrogation-dossier-label {
+  color: var(--ml-cyan);
+}
+
+.suspect-viewer-card .interrogation-tab {
+  color: #9eafcb;
+  border-color: #34445e;
+  background: #101827;
+}
+
+.suspect-viewer-card .interrogation-tab.active {
+  color: #eaf5ff;
+  border-color: var(--ml-cyan);
+  background: #71d8ff12;
+  box-shadow: inset 0 -2px var(--ml-cyan);
+}
+
+.suspect-viewer-card .interrogation-question {
+  background: #151f32;
+  border-color: #344763;
+}
+
+.suspect-viewer-card .interrogation-question:not(:disabled):hover {
+  border-color: var(--ml-cyan);
+  background: #1a2b42;
+}
+
+.suspect-viewer-card .interrogation-question.cross-examination-question:not(.question-asked) {
+  border-color: #e58ebc88;
+  box-shadow: inset 3px 0 var(--ml-pink);
+  background: linear-gradient(115deg, #f174b713, #151f32);
+}
+
+.suspect-viewer-card .interrogation-status {
+  border-color: #71d8ff55;
+  background: #71d8ff0b;
+}
+
+/* Мобильная версия */
+
+@media (max-width: 650px) {
+  .hero {
+    min-height: 280px;
+    border-radius: 12px;
+  }
+
+  .case-card {
+    border-radius: 10px;
+  }
+
+  .suspect-viewer-card {
+    border-radius: 9px !important;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .case-card,
+  .btn,
+  .small-btn {
+    transition: none !important;
+  }
+}
+
 </style>
 </head>
 <body>
