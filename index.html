@@ -5555,6 +5555,112 @@ body.ml-page-scroll > main {
   }
 }
 
+
+/* MIND LAB — COMPACT EVIDENCE BOARD */
+
+#game #visualBoard {
+  position: relative !important;
+  overflow: auto !important;
+  isolation: isolate;
+  min-width: 0;
+}
+
+#game #boardNodes {
+  position: absolute !important;
+  inset: 0 !important;
+  display: block !important;
+  padding: 0 !important;
+  min-width: 0 !important;
+  gap: 0 !important;
+}
+
+#game #boardNodes .board-node {
+  box-sizing: border-box !important;
+  width: 138px !important;
+  min-width: 0 !important;
+  max-width: 138px !important;
+  height: auto !important;
+  min-height: 0 !important;
+  padding: 8px !important;
+  margin: 0 !important;
+  border-radius: 2px !important;
+  overflow: hidden;
+  overflow-wrap: anywhere;
+  transform: none !important;
+  box-shadow:
+    0 2px 5px #0007,
+    0 6px 12px #0004 !important;
+}
+
+#game #boardNodes .board-node:hover {
+  z-index: 5 !important;
+  transform: translateY(-2px) !important;
+}
+
+#game #boardNodes .board-node-media {
+  display: block;
+  width: 100%;
+  height: 72px;
+  margin: 0 0 7px;
+  overflow: hidden;
+  background: #1b1a17;
+}
+
+#game #boardNodes .board-node-image {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+#game #boardNodes .board-node-title {
+  font-size: 11px;
+  line-height: 1.35;
+  overflow-wrap: anywhere;
+}
+
+#game #boardNodes .board-node-description {
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+  overflow: hidden;
+  margin-top: 5px;
+  font-size: 9px;
+  line-height: 1.4;
+}
+
+#game #boardNodes .board-node-number,
+#game #boardNodes .board-node-status {
+  font-size: 9px;
+}
+
+#game #boardConnections {
+  pointer-events: none !important;
+  overflow: hidden !important;
+}
+
+#game .board-line {
+  stroke-width: 1.4px !important;
+  opacity: 0.8 !important;
+  filter: none !important;
+}
+
+@media (max-width: 620px) {
+  #game #boardNodes .board-node {
+    width: 116px !important;
+    max-width: 116px !important;
+    padding: 7px !important;
+  }
+
+  #game #boardNodes .board-node-media {
+    height: 60px;
+  }
+
+  #game #boardNodes .board-node-title {
+    font-size: 10px;
+  }
+}
+
 </style>
 </head>
 <body>
@@ -10960,175 +11066,158 @@ function renderVisualBoard() {
       : "Связь проверена. Нажми, чтобы открыть досье.";
   });
 
-  // -------------------------------------------------------
-  // Автоматическая раскладка: дерево в центре, материалы
-  // без связей — по краям.
-  // -------------------------------------------------------
+  // Компактная раскладка на рабочей поверхности.
+  // Карточки имеют фиксированную ширину и не растягиваются вместе с экраном.
+  const boardWidth = Math.max(board.clientWidth, 320);
+  const compact = boardWidth < 620;
+  const cardWidth = compact ? 138 : 166;
+  const sidePadding = compact ? 14 : 24;
+  const cardGap = compact ? 12 : 22;
+  const rowStep = compact ? 224 : 246;
+  const topPadding = compact ? 22 : 28;
 
-    const compact = board.clientWidth < 760;
-  const columnCount = compact ? 3 : 5;
-  const outerColumns = compact ? [1, 3] : [1, 5];
-  const centralColumns = compact ? [2] : [2, 3, 4];
+  const columns = Math.max(
+    1,
+    Math.floor(
+      (boardWidth - sidePadding * 2 + cardGap) /
+      (cardWidth + cardGap)
+    )
+  );
 
-  nodes.style.setProperty(
-    "grid-template-columns",
-    `repeat(${columnCount}, minmax(0, 1fr))`,
-    "important"
-  );
-  nodes.style.setProperty(
-    "grid-auto-rows",
-    "minmax(118px, auto)",
-    "important"
-  );
-  nodes.style.setProperty("grid-auto-flow", "row", "important");
-  nodes.style.setProperty("align-items", "start", "important");
-  nodes.style.setProperty("align-content", "start", "important");
-  nodes.style.setProperty(
-    "gap",
-    compact ? "12px 9px" : "17px 14px",
-    "important"
-  );
-  nodes.style.setProperty(
-    "padding",
-    compact ? "10px 4px 18px" : "12px 10px 22px",
-    "important"
-  );
+  nodes.style.setProperty("position", "absolute", "important");
+  nodes.style.setProperty("inset", "0", "important");
+  nodes.style.setProperty("display", "block", "important");
+  nodes.style.setProperty("width", "100%", "important");
+  nodes.style.setProperty("padding", "0", "important");
+  nodes.style.setProperty("min-height", "0", "important");
 
   const positions = new Map();
-  const occupied = new Set();
-  const slotKey = (row, col) => `${row}:${col}`;
+  const graph = new Map();
 
-  function placeNode(id, requestedRow, allowedColumns) {
-    let row = Math.max(1, requestedRow);
-    let col;
+  visibleEvidence.forEach(e => graph.set(e[0], new Set()));
 
-    while (true) {
-      col = allowedColumns.find(
-        candidate => !occupied.has(slotKey(row, candidate))
-      );
-
-      if (col !== undefined) break;
-      row++;
-    }
-
-    occupied.add(slotKey(row, col));
-    positions.set(id, { row, col });
-
-    return row;
-  }
-
-  // Собираем граф подтверждённых связей.
-  const levels = new Map();
-  const linkedIds = visibleEvidence
-    .map(e => e[0])
-    .filter(id => linkedEvidenceIds.has(id));
-
-  const degree = id =>
-    (adjacency.get(id)?.size || 0) +
-    suspectLinkEntries.filter(item => item.evidenceId === id).length;
-
-  // Главная улика — материал с наибольшим числом связей.
-  // Остальные связанные материалы образуют ветви вокруг неё.
-  const roots = [...linkedIds].sort(
-    (a, b) => degree(b) - degree(a)
-  );
-
-  let componentLevel = 0;
-
-  roots.forEach(root => {
-    if (levels.has(root)) return;
-
-    const queue = [{ id: root, level: componentLevel }];
-    levels.set(root, componentLevel);
-
-    while (queue.length) {
-      const current = queue.shift();
-
-      const neighbours = [...(adjacency.get(current.id) || [])]
-        .sort((a, b) => degree(b) - degree(a));
-
-      neighbours.forEach(next => {
-        if (levels.has(next)) return;
-
-        levels.set(next, current.level + 1);
-        queue.push({
-          id: next,
-          level: current.level + 1
-        });
-      });
-    }
-
-    componentLevel =
-      Math.max(
-        componentLevel + 1,
-        ...[...levels.values()].map(level => level + 1)
-      );
+  // Улики соединяются только подтверждёнными связями.
+  knownLinks.forEach(key => {
+    const [a, b] = key.split("|");
+    if (!graph.has(a) || !graph.has(b)) return;
+    graph.get(a).add(b);
+    graph.get(b).add(a);
   });
 
-  // Связанные улики — в центре, начиная с первой строки.
-  let deepestRow = 1;
+  // Подозреваемые — полноценные узлы графа.
+  linkedSuspectIds.forEach(id => graph.set(`suspect:${id}`, new Set()));
 
-  [...linkedIds]
-    .sort(
-      (a, b) =>
-        (levels.get(a) || 0) - (levels.get(b) || 0) ||
-        degree(b) - degree(a)
-    )
-    .forEach(id => {
-      const level = levels.get(id) || 0;
-      const row = placeNode(
-        id,
-        1 + level,
-        centralColumns
-      );
+  suspectLinkEntries.forEach(item => {
+    const evidenceNode = item.evidenceId;
+    const suspectNode = `suspect:${item.suspectId}`;
 
-      deepestRow = Math.max(deepestRow, row);
+    if (!graph.has(evidenceNode) || !graph.has(suspectNode)) return;
+
+    graph.get(evidenceNode).add(suspectNode);
+    graph.get(suspectNode).add(evidenceNode);
+  });
+
+  const graphNodes = [
+    ...linkedEvidenceIds,
+    ...linkedSuspectIds.map(id => `suspect:${id}`)
+  ].filter(id => graph.has(id));
+
+  const levels = new Map();
+  const degree = id => graph.get(id)?.size || 0;
+
+  // Для каждой связанной группы строим уровни, не создавая
+  // искусственных пустых рядов между отдельными группами.
+  graphNodes
+    .sort((a, b) => degree(b) - degree(a))
+    .forEach(root => {
+      if (levels.has(root)) return;
+
+      levels.set(root, 0);
+      const queue = [root];
+
+      while (queue.length) {
+        const current = queue.shift();
+
+        [...(graph.get(current) || [])]
+          .sort((a, b) => degree(b) - degree(a))
+          .forEach(next => {
+            if (levels.has(next)) return;
+
+            levels.set(next, levels.get(current) + 1);
+            queue.push(next);
+          });
+      }
     });
 
-  // Несвязанные материалы располагаются у боковых краёв.
-  const unlinkedIds = visibleEvidence
+  let currentRow = 0;
+
+  function placeRow(ids, rowIndex) {
+    const chunks = [];
+
+    for (let i = 0; i < ids.length; i += columns) {
+      chunks.push(ids.slice(i, i + columns));
+    }
+
+    chunks.forEach((chunk, chunkIndex) => {
+      const totalWidth =
+        chunk.length * cardWidth +
+        Math.max(0, chunk.length - 1) * cardGap;
+
+      const startX = Math.max(
+        sidePadding,
+        (boardWidth - totalWidth) / 2
+      );
+
+      chunk.forEach((id, index) => {
+        positions.set(id, {
+          x: Math.round(startX + index * (cardWidth + cardGap)),
+          y: topPadding + (rowIndex + chunkIndex) * rowStep
+        });
+      });
+    });
+
+    return rowIndex + chunks.length;
+  }
+
+  const maxLevel = Math.max(0, ...levels.values());
+
+  // Связанные материалы и подозреваемые располагаются по уровням графа.
+  for (let level = 0; level <= maxLevel; level++) {
+    const rowIds = graphNodes
+      .filter(id => levels.get(id) === level)
+      .sort((a, b) => degree(b) - degree(a));
+
+    if (rowIds.length) {
+      currentRow = placeRow(rowIds, currentRow);
+    }
+  }
+
+  // Улики, которые ещё не вошли в связи, остаются отдельными
+  // компактными материалами в нижней части доски.
+  const looseEvidence = visibleEvidence
     .map(e => e[0])
     .filter(id => !linkedEvidenceIds.has(id));
 
-  unlinkedIds.forEach((id, index) => {
-    const side = outerColumns[index % outerColumns.length];
-    const row = 1 + Math.floor(index / outerColumns.length);
+  if (looseEvidence.length) {
+    currentRow += 1;
+    currentRow = placeRow(looseEvidence, currentRow);
+  }
 
-    placeNode(id, row, [side]);
-  });
+  const contentHeight =
+    topPadding + Math.max(1, currentRow) * rowStep + 24;
 
-  // Подозреваемые появляются рядом с нижними ветвями дерева.
-  // Если место занято, карточка аккуратно переносится ниже.
-  linkedSuspectIds.forEach((id, index) => {
-    const relatedEvidence = suspectLinkEntries.find(
-      item => item.suspectId === id
-    )?.evidenceId;
+  nodes.style.setProperty(
+    "height",
+    `${contentHeight}px`,
+    "important"
+  );
 
-    const relatedPosition = relatedEvidence
-      ? positions.get(relatedEvidence)
-      : null;
+  board.style.setProperty(
+    "min-height",
+    `${Math.max(440, contentHeight + 24)}px`,
+    "important"
+  );
 
-    const preferredColumn = relatedPosition
-      ? relatedPosition.col
-      : centralColumns[index % centralColumns.length];
-
-    const orderedColumns = [
-      preferredColumn,
-      ...centralColumns.filter(col => col !== preferredColumn)
-    ];
-
-    const row = placeNode(
-      `suspect:${id}`,
-      relatedPosition
-        ? relatedPosition.row + 1
-        : deepestRow + 1,
-      orderedColumns
-    );
-
-    deepestRow = Math.max(deepestRow, row);
-  });
-
-  // Применяем позиции к карточкам.
   nodes.querySelectorAll(".board-node").forEach(button => {
     const id = button.dataset.boardEvidence
       ? button.dataset.boardEvidence
@@ -11137,19 +11226,13 @@ function renderVisualBoard() {
     const position = positions.get(id);
     if (!position) return;
 
-    button.style.setProperty(
-      "grid-column-start",
-      String(position.col),
-      "important"
-    );
-    button.style.setProperty(
-      "grid-row-start",
-      String(position.row),
-      "important"
-    );
-    button.style.setProperty("margin", "0", "important");
-    button.style.setProperty("width", "100%", "important");
+    button.style.setProperty("position", "absolute", "important");
+    button.style.setProperty("left", `${position.x}px`, "important");
+    button.style.setProperty("top", `${position.y}px`, "important");
+    button.style.setProperty("width", `${cardWidth}px`, "important");
+    button.style.setProperty("max-width", `${cardWidth}px`, "important");
     button.style.setProperty("min-width", "0", "important");
+    button.style.setProperty("margin", "0", "important");
     button.style.setProperty("transform", "none", "important");
   });
 
@@ -11256,15 +11339,49 @@ function renderVisualBoard() {
       const x2 = r2.left + r2.width / 2 - boardRect.left + scrollX;
       const y2 = r2.top + r2.height / 2 - boardRect.top + scrollY;
 
-      const midY = y1 + (y2 - y1) * 0.5;
-      const path = document.createElementNS(
-        "http://www.w3.org/2000/svg",
-        "path"
+            const dx = x2 - x1;
+      const dy = y2 - y1;
+
+      // Находим точку выхода линии на границе карточки,
+      // а не в центре текста или изображения.
+      function edgePoint(cx, cy, width, height, vx, vy) {
+        const tx = Math.abs(vx) < 0.001
+          ? Infinity
+          : width / 2 / Math.abs(vx);
+
+        const ty = Math.abs(vy) < 0.001
+          ? Infinity
+          : height / 2 / Math.abs(vy);
+
+        const scale = Math.min(tx, ty);
+
+        return {
+          x: cx + vx * scale,
+          y: cy + vy * scale
+        };
+      }
+
+      const start = edgePoint(
+        x1, y1, r1.width, r1.height, dx, dy
       );
+
+      const end = edgePoint(
+        x2, y2, r2.width, r2.height, -dx, -dy
+      );
+
+      const bend = Math.min(
+        70,
+        Math.max(22, Math.abs(end.x - start.x) * 0.22)
+      );
+
+      const direction = end.x >= start.x ? 1 : -1;
 
       path.setAttribute(
         "d",
-        `M ${x1} ${y1} C ${x1} ${midY}, ${x2} ${midY}, ${x2} ${y2}`
+        `M ${start.x} ${start.y}
+         C ${start.x + bend * direction} ${start.y},
+           ${end.x - bend * direction} ${end.y},
+           ${end.x} ${end.y}`
       );
 
       path.setAttribute("class", "board-line");
