@@ -5555,14 +5555,23 @@ body.ml-page-scroll > main {
   }
 }
 
-
-/* MIND LAB — COMPACT EVIDENCE BOARD */
+/* MIND LAB — компактная доска материалов */
 
 #game #visualBoard {
   position: relative !important;
   overflow: auto !important;
   isolation: isolate;
   min-width: 0;
+  background-color: #28231e !important;
+  background-image:
+    radial-gradient(ellipse at 50% 0%, #9b795020, transparent 65%),
+    repeating-linear-gradient(
+      4deg,
+      transparent 0,
+      #ffffff03 2px,
+      transparent 5px,
+      #00000008 8px
+    ) !important;
 }
 
 #game #boardNodes {
@@ -5571,37 +5580,36 @@ body.ml-page-scroll > main {
   display: block !important;
   padding: 0 !important;
   min-width: 0 !important;
+  align-content: initial !important;
+  grid-template-columns: none !important;
   gap: 0 !important;
 }
 
 #game #boardNodes .board-node {
   box-sizing: border-box !important;
-  width: 138px !important;
   min-width: 0 !important;
-  max-width: 138px !important;
-  height: auto !important;
+  max-width: 166px;
   min-height: 0 !important;
-  padding: 8px !important;
-  margin: 0 !important;
+  height: auto !important;
+  padding: 10px !important;
   border-radius: 2px !important;
-  overflow: hidden;
-  overflow-wrap: anywhere;
   transform: none !important;
+  overflow-wrap: anywhere;
   box-shadow:
-    0 2px 5px #0007,
-    0 6px 12px #0004 !important;
+    0 3px 6px #0006,
+    0 8px 15px #0004 !important;
 }
 
 #game #boardNodes .board-node:hover {
-  z-index: 5 !important;
-  transform: translateY(-2px) !important;
+  transform: translateY(-2px) rotate(-0.4deg) !important;
+  z-index: 5;
 }
 
 #game #boardNodes .board-node-media {
   display: block;
   width: 100%;
-  height: 72px;
-  margin: 0 0 7px;
+  height: 82px;
+  margin: 0 0 9px;
   overflow: hidden;
   background: #1b1a17;
 }
@@ -5613,8 +5621,21 @@ body.ml-page-scroll > main {
   object-fit: cover;
 }
 
+#game #boardNodes .board-node-placeholder {
+  display: flex;
+  width: 100%;
+  height: 100%;
+  align-items: center;
+  justify-content: center;
+  padding: 8px;
+  text-align: center;
+  font-size: 9px;
+  letter-spacing: 0.08em;
+  line-height: 1.5;
+}
+
 #game #boardNodes .board-node-title {
-  font-size: 11px;
+  font-size: 12px;
   line-height: 1.35;
   overflow-wrap: anywhere;
 }
@@ -5622,42 +5643,58 @@ body.ml-page-scroll > main {
 #game #boardNodes .board-node-description {
   display: -webkit-box;
   -webkit-box-orient: vertical;
-  -webkit-line-clamp: 2;
+  -webkit-line-clamp: 3;
   overflow: hidden;
-  margin-top: 5px;
+  margin-top: 6px;
+  font-size: 10px;
+  line-height: 1.45;
+}
+
+#game #boardNodes .board-node-number {
+  margin-bottom: 7px;
+  font-size: 9px;
+}
+
+#game #boardNodes .board-node-status {
+  margin-top: 8px;
   font-size: 9px;
   line-height: 1.4;
 }
 
-#game #boardNodes .board-node-number,
-#game #boardNodes .board-node-status {
-  font-size: 9px;
-}
-
 #game #boardConnections {
+  position: absolute !important;
+  inset: 0 auto auto 0 !important;
+  z-index: 1 !important;
   pointer-events: none !important;
   overflow: hidden !important;
 }
 
+#game #boardNodes {
+  z-index: 2 !important;
+}
+
 #game .board-line {
-  stroke-width: 1.4px !important;
-  opacity: 0.8 !important;
+  stroke-width: 1.6px !important;
+  stroke-dasharray: none !important;
+  opacity: 0.72 !important;
   filter: none !important;
 }
 
 @media (max-width: 620px) {
   #game #boardNodes .board-node {
-    width: 116px !important;
-    max-width: 116px !important;
-    padding: 7px !important;
+    padding: 8px !important;
   }
 
   #game #boardNodes .board-node-media {
-    height: 60px;
+    height: 68px;
   }
 
   #game #boardNodes .board-node-title {
-    font-size: 10px;
+    font-size: 11px;
+  }
+
+  #game #boardNodes .board-node-description {
+    font-size: 9px;
   }
 }
 
