@@ -5316,6 +5316,245 @@ body.ml-page-scroll > main {
   border-color: var(--link-color);
 }
 
+
+/* MIND LAB — keep evidence connections inside the board */
+#game #visualBoard {
+  position: relative;
+  isolation: isolate;
+  overflow: hidden;
+}
+
+#game #visualBoard svg {
+  overflow: hidden;
+}
+
+#game #visualBoard .board-connections,
+#game #visualBoard .connection-lines,
+#game #visualBoard .evidence-connections {
+  pointer-events: none;
+  z-index: 0;
+}
+
+#game #visualBoard #boardNodes {
+  position: relative;
+  z-index: 1;
+}
+
+
+/* =========================================================
+   MIND LAB — HYBRID INVESTIGATION TREE
+   Новая раскладка карточек и портреты подозреваемых.
+   Сохраняем существующую доску и стиль материалов.
+   ========================================================= */
+
+#game.ml-game-screen #visualBoard {
+  position: relative;
+  isolation: isolate;
+}
+
+#game.ml-game-screen #boardConnections {
+  position: absolute;
+  top: 0;
+  left: 0;
+  z-index: 1;
+  pointer-events: none;
+  overflow: visible;
+}
+
+#game.ml-game-screen #boardNodes {
+  position: relative;
+  z-index: 2;
+  display: grid;
+  align-items: start;
+  align-content: start;
+  grid-auto-flow: row;
+  min-width: 0;
+}
+
+/* Все карточки сохраняют вид архивных материалов */
+#game.ml-game-screen #boardNodes .board-node {
+  position: relative;
+  box-sizing: border-box;
+  align-self: start;
+  justify-self: stretch;
+  min-width: 0;
+  max-width: 100%;
+  height: auto;
+  min-height: 0;
+  margin: 0;
+  transform: none;
+  overflow: visible;
+  transition:
+    border-color .25s ease,
+    box-shadow .25s ease,
+    filter .25s ease;
+}
+
+/* Центральная ветвь — карточки с установленными связями */
+#game.ml-game-screen #boardNodes .board-evidence-node.is-linked {
+  border-color: #b5a06b !important;
+  box-shadow:
+    0 5px 12px #0005,
+    0 0 0 1px #c7a75c25;
+}
+
+/* Неизученные материалы остаются видимыми по краям */
+#game.ml-game-screen #boardNodes .board-evidence-node.is-undiscovered {
+  opacity: .82;
+  border-style: dashed;
+  filter: saturate(.65);
+}
+
+#game.ml-game-screen #boardNodes .board-evidence-node.is-undiscovered:hover {
+  opacity: 1;
+  filter: saturate(.9);
+}
+
+/* Выбор улики */
+#game.ml-game-screen #boardNodes .board-evidence-node.is-selected {
+  z-index: 5;
+  border: 2px solid #e0bd72 !important;
+  box-shadow:
+    0 0 0 3px #e0bd722b,
+    0 12px 26px #0009 !important;
+  filter: brightness(1.08);
+}
+
+/* Карточка подозреваемого — отдельный тип узла */
+#game.ml-game-screen #boardNodes .board-suspect-node {
+  background:
+    linear-gradient(145deg, #292821, #1c1b19) !important;
+  border: 1px solid #b9a26a80 !important;
+  box-shadow:
+    0 7px 18px #0007,
+    inset 0 1px 0 #ffffff08;
+}
+
+#game.ml-game-screen #boardNodes .board-suspect-node::before {
+  background: radial-gradient(circle at 35% 30%, #e7d6a9, #987647 75%);
+  box-shadow: 0 2px 7px #000b;
+}
+
+#game.ml-game-screen #boardNodes .board-suspect-node .board-node-number {
+  color: #d0b777;
+  letter-spacing: .14em;
+}
+
+#game.ml-game-screen #boardNodes .board-suspect-node .board-node-title {
+  color: #f0e5ce;
+  font-family: Georgia, "Times New Roman", serif;
+  font-size: 14px;
+  line-height: 1.4;
+}
+
+#game.ml-game-screen #boardNodes .board-suspect-node .board-node-description {
+  color: #b8ad99;
+  font-size: 10px;
+  line-height: 1.5;
+}
+
+#game.ml-game-screen #boardNodes .board-suspect-node .board-node-status {
+  color: #d4b875;
+  border-top-color: #c5a05a35;
+}
+
+#game.ml-game-screen #boardNodes .board-suspect-node.is-linked {
+  border-color: #70c5a3 !important;
+  box-shadow:
+    0 0 0 1px #70c5a322,
+    0 8px 20px #0008;
+}
+
+#game.ml-game-screen #boardNodes .board-suspect-node.is-linked .board-node-status {
+  color: #83d9b6;
+}
+
+/* Будущий иллюстрированный портрет */
+#game.ml-game-screen #boardNodes .board-suspect-portrait {
+  position: relative;
+  display: flex;
+  min-height: 0;
+  height: 125px;
+  margin: 8px 0 10px;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  overflow: hidden;
+  background:
+    radial-gradient(ellipse at 50% 35%, #a38c632b, transparent 58%),
+    linear-gradient(145deg, #25231f, #121416);
+  border: 3px solid #d5c5a5 !important;
+  box-shadow: 0 3px 8px #0006;
+}
+
+#game.ml-game-screen #boardNodes .suspect-portrait-placeholder {
+  display: grid;
+  place-items: center;
+  width: 58px;
+  height: 58px;
+  color: #d4c3a1;
+  background: #0d1118;
+  border: 1px solid #bba57475;
+  border-radius: 50%;
+  font-size: 31px;
+  line-height: 1;
+  box-shadow: 0 0 22px #b99b5420;
+}
+
+#game.ml-game-screen #boardNodes .suspect-portrait-caption {
+  color: #b8a780;
+  font: 8px/1.4 ui-monospace, monospace;
+  letter-spacing: .12em;
+  text-align: center;
+}
+
+/* Линии проходят под карточками, но не за пределами доски */
+#game.ml-game-screen #boardConnections .board-line {
+  fill: none;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  filter: drop-shadow(0 1px 2px #000a);
+}
+
+/* На телефонах карточки компактнее */
+@media (max-width: 760px) {
+  #game.ml-game-screen #boardNodes .board-node {
+    padding: 9px 8px 11px !important;
+  }
+
+  #game.ml-game-screen #boardNodes .board-node-media {
+    height: 82px !important;
+    min-height: 82px;
+    margin: 6px 0 8px !important;
+  }
+
+  #game.ml-game-screen #boardNodes .board-suspect-portrait {
+    height: 88px !important;
+    min-height: 88px;
+  }
+
+  #game.ml-game-screen #boardNodes .suspect-portrait-placeholder {
+    width: 40px;
+    height: 40px;
+    font-size: 23px;
+  }
+
+  #game.ml-game-screen #boardNodes .suspect-portrait-caption {
+    font-size: 6px;
+  }
+
+  #game.ml-game-screen #boardNodes .board-node-title {
+    font-size: 11px;
+    line-height: 1.4;
+  }
+
+  #game.ml-game-screen #boardNodes .board-node-description {
+    font-size: 9px;
+    overflow-wrap: anywhere;
+  }
+}
+
 </style>
 </head>
 <body>
@@ -10445,6 +10684,7 @@ renderCatalog();
 
 
 
+
 function renderVisualBoard() {
   const board = document.getElementById("visualBoard");
   const nodes = document.getElementById("boardNodes");
@@ -10460,6 +10700,7 @@ function renderVisualBoard() {
   if (!c) return;
 
   const s = caseState(activeId);
+
   const visibleEvidence = c.evidence.filter(e =>
     Array.isArray(e) &&
     e.length >= 3 &&
@@ -10471,9 +10712,70 @@ function renderVisualBoard() {
   );
 
   const foundIds = Array.isArray(s.found) ? s.found : [];
-  const knownLinks = (Array.isArray(s.links) ? s.links : []).filter(
-    key => DEDUCTIONS[activeId]?.[key]?.good === true
+
+  // Только подтверждённые связи между уликами
+  const knownLinks = (Array.isArray(s.links) ? s.links : [])
+    .filter(key => DEDUCTIONS[activeId]?.[key]?.good === true);
+
+  const evidenceIds = new Set(visibleEvidence.map(e => e[0]));
+  const suspectIds = new Set(c.suspects.map(p => p.id));
+
+  // Связи улик с подозреваемыми.
+  // Старые сохранения с обратным порядком ключа тоже поддерживаются.
+  const suspectLinkEntries = (Array.isArray(s.suspectLinks)
+    ? s.suspectLinks
+    : [])
+    .map(key => {
+      const parts = String(key).split("|");
+      const evidenceId = parts.find(id => evidenceIds.has(id));
+      const suspectId = parts.find(id => suspectIds.has(id));
+
+      if (!evidenceId || !suspectId) return null;
+
+      const normalKey = `${evidenceId}|${suspectId}`;
+      const legacyKey = [evidenceId, suspectId].sort().join("|");
+
+      const known =
+        SUSPECT_DEDUCTIONS[activeId]?.[normalKey] ||
+        SUSPECT_DEDUCTIONS[activeId]?.[legacyKey];
+
+      if (!known) return null;
+
+      return {
+        key: normalKey,
+        evidenceId,
+        suspectId,
+        good: known.good === true
+      };
+    })
+    .filter(Boolean);
+
+  // Подозреваемый появляется на доске после проверки связи с уликой.
+  const linkedSuspectIds = [
+    ...new Set(suspectLinkEntries.map(item => item.suspectId))
+  ];
+
+  const linkedEvidenceIds = new Set();
+
+  // Граф связей между уликами
+  const adjacency = new Map(
+    visibleEvidence.map(e => [e[0], new Set()])
   );
+
+  knownLinks.forEach(key => {
+    const [a, b] = key.split("|");
+    if (!evidenceIds.has(a) || !evidenceIds.has(b)) return;
+
+    linkedEvidenceIds.add(a);
+    linkedEvidenceIds.add(b);
+    adjacency.get(a)?.add(b);
+    adjacency.get(b)?.add(a);
+  });
+
+  // Улика, сопоставленная с подозреваемым, тоже входит в дерево.
+  suspectLinkEntries.forEach(item => {
+    linkedEvidenceIds.add(item.evidenceId);
+  });
 
   const imageById = {
     clock: "https://images.unsplash.com/photo-1523275335684-37898b6baf30?auto=format&fit=crop&w=640&q=80",
@@ -10495,14 +10797,17 @@ function renderVisualBoard() {
     server: "https://images.unsplash.com/photo-1558494949-ef010cbdcc31?auto=format&fit=crop&w=640&q=80"
   };
 
-  const evidenceSignature = visibleEvidence.map(e => e[0]).join("|");
+  // Перестраиваем DOM только когда меняется состав доски.
+  const boardSignature = [
+    visibleEvidence.map(e => e[0]).join(","),
+    linkedSuspectIds.join(",")
+  ].join("::");
 
-  // Перестраиваем карточки только при изменении набора материалов.
-  if (nodes.dataset.evidenceSignature !== evidenceSignature) {
-    nodes.innerHTML = visibleEvidence.map((e, i) => `
+  if (nodes.dataset.boardSignature !== boardSignature) {
+    const evidenceMarkup = visibleEvidence.map((e, i) => `
       <button
         type="button"
-        class="board-node"
+        class="board-node board-evidence-node"
         data-board-evidence="${esc(e[0])}"
         aria-pressed="false"
       >
@@ -10528,32 +10833,74 @@ function renderVisualBoard() {
       </button>
     `).join("");
 
-    nodes.dataset.evidenceSignature = evidenceSignature;
+    const suspectMarkup = linkedSuspectIds.map(id => {
+      const p = c.suspects.find(person => person.id === id);
+      if (!p) return "";
+
+      return `
+        <button
+          type="button"
+          class="board-node board-suspect-node"
+          data-board-suspect="${esc(p.id)}"
+          aria-label="Открыть досье: ${esc(p.name)}"
+        >
+          <span class="board-node-number">PERSON / DOSSIER</span>
+
+          <span class="board-node-media board-suspect-portrait">
+            <span class="suspect-portrait-placeholder" aria-hidden="true">◉</span>
+            <span class="suspect-portrait-caption">ПОРТРЕТ ДОПРОСА</span>
+          </span>
+
+          <span class="board-node-title">${esc(p.name)}</span>
+          <span class="board-node-description">${esc(p.role)}</span>
+          <span class="board-node-status">ОТКРЫТЬ ДОСЬЕ ↗</span>
+        </button>
+      `;
+    }).join("");
+
+    nodes.innerHTML = evidenceMarkup + suspectMarkup;
+    nodes.dataset.boardSignature = boardSignature;
   }
 
-  // Один обработчик на контейнер: не плодим обработчики при обновлении.
+  // Один делегированный обработчик для улик и портретов.
   if (nodes.dataset.boardClickBound !== "true") {
     nodes.addEventListener("click", event => {
-      const button = event.target.closest("[data-board-evidence]");
-      if (!button || !nodes.contains(button)) return;
+      const evidenceButton = event.target.closest("[data-board-evidence]");
+      const suspectButton = event.target.closest("[data-board-suspect]");
 
-      const id = button.dataset.boardEvidence;
-      const currentCase = CASES.find(item => item.id === activeId);
-      const currentState = caseState(activeId);
-      const isFound = Array.isArray(currentState.found) &&
-        currentState.found.includes(id);
+      if (evidenceButton && nodes.contains(evidenceButton)) {
+        const id = evidenceButton.dataset.boardEvidence;
+        const currentState = caseState(activeId);
+        const isFound = Array.isArray(currentState.found) &&
+          currentState.found.includes(id);
 
-      if (!isFound) {
-        inspectClue(id);
-      } else {
-        pickDeductionEvidence(id);
+        if (!isFound) {
+          inspectClue(id);
+        } else {
+          pickDeductionEvidence(id);
+        }
+        return;
+      }
+
+      if (suspectButton && nodes.contains(suspectButton)) {
+        const suspectId = suspectButton.dataset.boardSuspect;
+
+        // Выбрана одна улика — проверяем её связь с человеком.
+        if (selectedEvidence.length === 1) {
+          analyzeSuspectDeduction(selectedEvidence[0], suspectId);
+          selectedEvidence = [];
+          selectedSuspect = null;
+          renderSidebar();
+        } else {
+          inspectSuspect(suspectId);
+        }
       }
     });
 
     nodes.dataset.boardClickBound = "true";
   }
 
-  // Меняем только содержимое и классы — сами карточки остаются на месте.
+  // Состояние карточек и их изображения.
   nodes.querySelectorAll("[data-board-evidence]").forEach(button => {
     const id = button.dataset.boardEvidence;
     const evidence = visibleEvidence.find(e => e[0] === id);
@@ -10561,7 +10908,7 @@ function renderVisualBoard() {
 
     const found = foundIds.includes(id);
     const selected = selectedEvidence.includes(id);
-    const linked = knownLinks.some(key => key.split("|").includes(id));
+    const linked = linkedEvidenceIds.has(id);
 
     button.classList.toggle("is-undiscovered", !found);
     button.classList.toggle("is-selected", selected);
@@ -10597,61 +10944,279 @@ function renderVisualBoard() {
         ? "◇ ИЗУЧИТЬ МАТЕРИАЛ"
         : linked
           ? "● ЕСТЬ СВЯЗЬ"
-          : "◇ ВЫБРАТЬ ДЛЯ ДЕДУКЦИИ";
+          : "◇ МАТЕРИАЛ ДЕЛА";
   });
 
-  const foundCount = visibleEvidence.filter(e => foundIds.includes(e[0])).length;
-  counter.textContent = `УЛИКИ: ${foundCount} / ${visibleEvidence.length}`;
-  progress.textContent = `${knownLinks.length} ${
-    knownLinks.length === 1 ? "связь установлена" : "связей установлено"
-  }`;
+  // Подозреваемые также получают статус связи.
+  nodes.querySelectorAll("[data-board-suspect]").forEach(button => {
+    const id = button.dataset.boardSuspect;
+    const hasGoodLink = suspectLinkEntries.some(
+      item => item.suspectId === id && item.good
+    );
 
-  if (empty) empty.style.display = visibleEvidence.length ? "none" : "flex";
+    button.classList.toggle("is-linked", hasGoodLink);
+    button.title = hasGoodLink
+      ? "Есть подтверждённая связь. Нажми, чтобы открыть досье."
+      : "Связь проверена. Нажми, чтобы открыть досье.";
+  });
+
+  // -------------------------------------------------------
+  // Автоматическая раскладка: дерево в центре, материалы
+  // без связей — по краям.
+  // -------------------------------------------------------
+
+  const compact = board.clientWidth < 760;
+  const columnCount = compact ? 3 : 5;
+  const outerColumns = compact ? [1, 3] : [1, 5];
+  const centralColumns = compact ? [2] : [2, 3, 4];
+
+  nodes.style.setProperty(
+    "grid-template-columns",
+    `repeat(${columnCount}, minmax(0, 1fr))`,
+    "important"
+  );
+  nodes.style.setProperty("grid-auto-rows", "minmax(150px, auto)", "important");
+  nodes.style.setProperty("grid-auto-flow", "row", "important");
+  nodes.style.setProperty("align-items", "start", "important");
+  nodes.style.setProperty("align-content", "start", "important");
+  nodes.style.setProperty("gap", compact ? "15px 10px" : "24px 18px", "important");
+  nodes.style.setProperty("padding", compact ? "18px 8px 28px" : "26px 22px 34px", "important");
+
+  const positions = new Map();
+  const occupied = new Set();
+  const slotKey = (row, col) => `${row}:${col}`;
+
+  function placeNode(id, row, columns) {
+    let targetRow = Math.max(2, row);
+    let targetCol = columns[0];
+
+    // Не допускаем наложения карточек в одной ячейке.
+    while (true) {
+      const freeColumn = columns.find(col => !occupied.has(slotKey(targetRow, col)));
+
+      if (freeColumn !== undefined) {
+        targetCol = freeColumn;
+        break;
+      }
+
+      targetRow++;
+    }
+
+    occupied.add(slotKey(targetRow, targetCol));
+    positions.set(id, { row: targetRow, col: targetCol });
+    return targetRow;
+  }
+
+  // Строим уровни центрального дерева обходом графа.
+  const levels = new Map();
+  const linkedIds = visibleEvidence
+    .map(e => e[0])
+    .filter(id => linkedEvidenceIds.has(id));
+
+  const degree = id => (adjacency.get(id)?.size || 0) +
+    suspectLinkEntries.filter(item => item.evidenceId === id).length;
+
+  const roots = [...linkedIds].sort((a, b) => degree(b) - degree(a));
+  let componentLevel = 0;
+
+  roots.forEach(root => {
+    if (levels.has(root)) return;
+
+    const queue = [{ id: root, level: componentLevel }];
+    levels.set(root, componentLevel);
+
+    while (queue.length) {
+      const current = queue.shift();
+
+      (adjacency.get(current.id) || new Set()).forEach(next => {
+        if (levels.has(next)) return;
+        levels.set(next, current.level + 1);
+        queue.push({ id: next, level: current.level + 1 });
+      });
+    }
+
+    componentLevel = Math.max(
+      componentLevel + 1,
+      ...[...levels.values()].map(level => level + 1)
+    );
+  });
+
+  // Связанные улики занимают центральные ветви.
+  let deepestRow = 2;
+
+  [...linkedIds]
+    .sort((a, b) =>
+      (levels.get(a) || 0) - (levels.get(b) || 0) ||
+      degree(b) - degree(a)
+    )
+    .forEach(id => {
+      const row = placeNode(id, 2 + (levels.get(id) || 0), centralColumns);
+      deepestRow = Math.max(deepestRow, row);
+    });
+
+  // Улики без связей остаются на периферии.
+  const unlinkedIds = visibleEvidence
+    .map(e => e[0])
+    .filter(id => !linkedEvidenceIds.has(id));
+
+  unlinkedIds.forEach((id, index) => {
+    const side = outerColumns[index % outerColumns.length];
+    const row = 2 + Math.floor(index / outerColumns.length);
+
+    placeNode(id, row, [side]);
+  });
+
+  // Подозреваемые располагаются ниже дерева, в его ветвях.
+  linkedSuspectIds.forEach((id, index) => {
+    const row = deepestRow + 1 + Math.floor(index / centralColumns.length);
+    const col = centralColumns[index % centralColumns.length];
+
+    let targetRow = row;
+    while (occupied.has(slotKey(targetRow, col))) targetRow++;
+
+    occupied.add(slotKey(targetRow, col));
+    positions.set(`suspect:${id}`, { row: targetRow, col });
+    deepestRow = Math.max(deepestRow, targetRow);
+  });
+
+  // Применяем координаты. Наклоны карточек отключаем,
+  // чтобы ветви дерева оставались читаемыми.
+  nodes.querySelectorAll(".board-node").forEach(button => {
+    const id = button.dataset.boardEvidence
+      ? button.dataset.boardEvidence
+      : `suspect:${button.dataset.boardSuspect}`;
+
+    const position = positions.get(id);
+    if (!position) return;
+
+    button.style.setProperty("grid-column-start", String(position.col), "important");
+    button.style.setProperty("grid-row-start", String(position.row), "important");
+    button.style.setProperty("margin", "0", "important");
+    button.style.setProperty("width", "100%", "important");
+    button.style.setProperty("min-width", "0", "important");
+    button.style.setProperty("transform", "none", "important");
+  });
+
+  // Счётчики и подсказка под доской.
+  const foundCount = visibleEvidence.filter(e => foundIds.includes(e[0])).length;
+
+  if (counter) {
+    counter.textContent =
+      `УЛИКИ: ${foundCount} / ${visibleEvidence.length}` +
+      (linkedSuspectIds.length ? ` · ДОСЬЕ: ${linkedSuspectIds.length}` : "");
+  }
+
+  if (progress) {
+    progress.textContent =
+      `${knownLinks.length} связей между уликами · ` +
+      `${suspectLinkEntries.length} связей с подозреваемыми`;
+  }
+
+  if (empty) {
+    empty.style.display = visibleEvidence.length ? "none" : "flex";
+  }
 
   if (insight) {
     if (selectedEvidence.length === 1) {
       insight.textContent =
-        "Первая улика выбрана. Нажми на вторую изученную улику, чтобы проверить связь, или выбери подозреваемого справа.";
-    } else if (foundCount === 0) {
-      insight.textContent = "Нажми на карточку, чтобы изучить первый материал дела.";
-    } else if (foundCount < visibleEvidence.length) {
+        "Выбрана улика. Нажми на вторую улику или на карточку подозреваемого, чтобы проверить связь.";
+    } else if (!foundCount) {
       insight.textContent =
-        "Изучай новые материалы и выбирай две улики, которые могут быть связаны.";
+        "Начни расследование: нажми на карточку материала, чтобы изучить улику.";
+    } else if (!knownLinks.length && !suspectLinkEntries.length) {
+      insight.textContent =
+        "Изучай материалы. Подтверждённые связи постепенно соберутся в центральное дерево.";
     } else {
       insight.textContent =
-        "Сопоставляй улики и проверяй выводы по показаниям подозреваемых.";
+        "Дерево расследования обновляется по мере проверки связей. Материалы без связей остаются по краям доски.";
     }
   }
 
-  // Рисуем линии подтверждённых связей между карточками.
+  // -------------------------------------------------------
+  // Линии между уликами и подозреваемыми.
+  // Подтверждённые линии сплошные, неполные/неподтверждённые
+  // проверки связи с подозреваемым — пунктирные.
+  // -------------------------------------------------------
+
+  const palette = [
+    "#65d6a0",
+    "#69adff",
+    "#f17e8c",
+    "#c19aff",
+    "#e7bd68",
+    "#65dbe0"
+  ];
+
+  const linePairs = [];
+
+  knownLinks.forEach(key => {
+    const [a, b] = key.split("|");
+    if (evidenceIds.has(a) && evidenceIds.has(b)) {
+      linePairs.push({ a, b, good: true });
+    }
+  });
+
+  suspectLinkEntries.forEach(item => {
+    linePairs.push({
+      a: item.evidenceId,
+      b: `suspect:${item.suspectId}`,
+      good: item.good
+    });
+  });
+
   requestAnimationFrame(() => {
     if (!board.isConnected || !svg.isConnected) return;
 
-    const boardRect = board.getBoundingClientRect();
-    svg.setAttribute("viewBox", `0 0 ${board.clientWidth} ${board.clientHeight}`);
+    const boardWidth = Math.max(board.scrollWidth, board.clientWidth);
+    const boardHeight = Math.max(board.scrollHeight, board.clientHeight);
+
+    svg.setAttribute("viewBox", `0 0 ${boardWidth} ${boardHeight}`);
+    svg.setAttribute("width", boardWidth);
+    svg.setAttribute("height", boardHeight);
+    svg.style.width = `${boardWidth}px`;
+    svg.style.height = `${boardHeight}px`;
     svg.innerHTML = "";
 
-    knownLinks.forEach(key => {
-      const [a, b] = key.split("|");
-      const first = nodes.querySelector(`[data-board-evidence="${a}"]`);
-      const second = nodes.querySelector(`[data-board-evidence="${b}"]`);
+    const boardRect = board.getBoundingClientRect();
+    const scrollX = board.scrollLeft || 0;
+    const scrollY = board.scrollTop || 0;
+
+    linePairs.forEach((link, index) => {
+      const first = link.a.startsWith("suspect:")
+        ? nodes.querySelector(`[data-board-suspect="${link.a.slice(8)}"]`)
+        : nodes.querySelector(`[data-board-evidence="${link.a}"]`);
+
+      const second = link.b.startsWith("suspect:")
+        ? nodes.querySelector(`[data-board-suspect="${link.b.slice(8)}"]`)
+        : nodes.querySelector(`[data-board-evidence="${link.b}"]`);
+
       if (!first || !second) return;
 
       const r1 = first.getBoundingClientRect();
       const r2 = second.getBoundingClientRect();
 
-      const x1 = r1.left + r1.width / 2 - boardRect.left;
-      const y1 = r1.top + r1.height / 2 - boardRect.top;
-      const x2 = r2.left + r2.width / 2 - boardRect.left;
-      const y2 = r2.top + r2.height / 2 - boardRect.top;
-      const curve = Math.max(24, Math.abs(x2 - x1) * 0.12);
+      const x1 = r1.left + r1.width / 2 - boardRect.left + scrollX;
+      const y1 = r1.top + r1.height / 2 - boardRect.top + scrollY;
+      const x2 = r2.left + r2.width / 2 - boardRect.left + scrollX;
+      const y2 = r2.top + r2.height / 2 - boardRect.top + scrollY;
 
-      const path = document.createElementNS("http://www.w3.org/2000/svg", "path");
+      const midY = y1 + (y2 - y1) * 0.5;
+      const path = document.createElementNS(
+        "http://www.w3.org/2000/svg",
+        "path"
+      );
+
       path.setAttribute(
         "d",
-        `M ${x1} ${y1} C ${x1 + curve} ${y1}, ${x2 - curve} ${y2}, ${x2} ${y2}`
+        `M ${x1} ${y1} C ${x1} ${midY}, ${x2} ${midY}, ${x2} ${y2}`
       );
+
       path.setAttribute("class", "board-line");
+      path.style.stroke = palette[index % palette.length];
+      path.style.strokeWidth = link.good ? "2.4px" : "1.8px";
+      path.style.strokeDasharray = link.good ? "none" : "5 5";
+      path.style.opacity = link.good ? "0.9" : "0.65";
+
       svg.appendChild(path);
     });
   });
