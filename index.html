@@ -2793,6 +2793,277 @@ body {
   }
 }
 
+
+/* =========================================================
+   MIND LAB — PHASE 02
+   Постоянные панели расследования на широком экране
+   Существующие HTML и JavaScript остаются без изменений
+   ========================================================= */
+
+/* Основная сетка: досье / доска / анализ */
+@media (min-width: 1101px) {
+  #game.ml-game-screen .game-layout.investigation-layout {
+    display: grid !important;
+    grid-template-columns:
+      minmax(205px, 0.76fr)
+      minmax(0, 1.9fr)
+      minmax(250px, 0.92fr);
+    align-items: stretch;
+    gap: 12px;
+    inset: 78px 12px 172px;
+    overflow: hidden;
+  }
+
+  /* Делаем содержимое main непосредственными участниками grid */
+  #game.ml-game-screen .investigation-main {
+    display: contents !important;
+  }
+
+  /* Левая колонка: информация о деле */
+  #game.ml-game-screen #storyPanel {
+    display: block !important;
+    grid-column: 1;
+    grid-row: 1;
+    width: 100%;
+    min-width: 0;
+    min-height: 0;
+    height: 100%;
+    margin: 0;
+    padding: 17px 15px;
+    overflow-x: hidden;
+    overflow-y: auto;
+    overscroll-behavior: contain;
+
+    color: #e8dfcb;
+    background:
+      radial-gradient(ellipse at top left, #c5a05a0c, transparent 65%),
+      #17191d;
+    border: 1px solid #76624760;
+    border-radius: 6px;
+    box-shadow: inset 0 1px #ffffff06;
+  }
+
+  #game.ml-game-screen #storyPanel > .eyebrow {
+    color: #d5ad66;
+    font-size: 9px;
+    letter-spacing: .14em;
+  }
+
+  #game.ml-game-screen #storyPanel h2 {
+    margin: 9px 0 14px;
+    color: #f0e5d2;
+    font-size: clamp(18px, 1.4vw, 23px);
+    line-height: 1.3;
+    overflow-wrap: anywhere;
+  }
+
+  #game.ml-game-screen #storyPanel .story-text {
+    color: #c2bbaf;
+    font-size: 12px;
+    line-height: 1.8;
+    overflow-wrap: anywhere;
+  }
+
+  #game.ml-game-screen #storyPanel .divider {
+    margin: 16px 0;
+    border-color: #ffffff18;
+  }
+
+  #game.ml-game-screen #storyPanel img {
+    max-width: 100%;
+    height: auto;
+  }
+
+  /* Центральная колонка: доска остаётся главным элементом */
+  #game.ml-game-screen #visualBoardPanel {
+    grid-column: 2;
+    grid-row: 1;
+    display: flex !important;
+    flex-direction: column;
+    width: 100%;
+    height: 100%;
+    min-width: 0;
+    min-height: 0;
+    margin: 0;
+    padding: 15px;
+    overflow: hidden;
+  }
+
+  #game.ml-game-screen #visualBoard {
+    flex: 1 1 auto;
+    min-width: 0;
+    min-height: 0;
+    overflow: auto;
+    overscroll-behavior: contain;
+  }
+
+  #game.ml-game-screen #boardNodes {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 17px;
+    padding: 20px;
+  }
+
+  #game.ml-game-screen #boardNodes .board-node-media {
+    min-height: 0;
+    height: 100px;
+  }
+
+  #game.ml-game-screen #boardNodes .board-node-image {
+    height: 100%;
+    min-height: 0;
+  }
+
+  #game.ml-game-screen .deduction-history {
+    flex: 0 0 auto;
+    max-height: 115px;
+    margin-top: 10px;
+    overflow-y: auto;
+  }
+
+  /* Правая колонка: материалы, подозреваемые, теории, прогресс */
+  #game.ml-game-screen .investigation-sidebar {
+    display: flex !important;
+    grid-column: 3;
+    grid-row: 1;
+    flex-direction: column;
+    gap: 10px;
+    width: 100%;
+    min-width: 0;
+    min-height: 0;
+    height: 100%;
+    margin: 0;
+    padding: 0 3px 10px 0;
+    overflow-x: hidden;
+    overflow-y: auto;
+    overscroll-behavior: contain;
+    scrollbar-width: thin;
+    scrollbar-color: #66543a #17191d;
+  }
+
+  #game.ml-game-screen .investigation-sidebar > .sidebar-section {
+    flex: 0 0 auto;
+    width: 100%;
+    min-width: 0;
+    margin: 0;
+    padding: 14px;
+    overflow-wrap: anywhere;
+
+    background: #17191d;
+    border: 1px solid #ffffff16;
+    border-radius: 5px;
+  }
+
+  #game.ml-game-screen .investigation-sidebar .eyebrow {
+    color: #c5a05a;
+    font-size: 9px;
+    letter-spacing: .12em;
+  }
+
+  #game.ml-game-screen .investigation-sidebar h3 {
+    margin: 7px 0 10px;
+    color: #e8dfcb;
+    font-size: 15px;
+    line-height: 1.4;
+  }
+
+  #game.ml-game-screen .investigation-sidebar .muted {
+    font-size: 11px;
+    line-height: 1.6;
+  }
+
+  #game.ml-game-screen .investigation-sidebar .clue-list,
+  #game.ml-game-screen .investigation-sidebar .suspect-list,
+  #game.ml-game-screen .investigation-sidebar .hypothesis-list {
+    min-width: 0;
+    width: 100%;
+    gap: 8px;
+  }
+
+  #game.ml-game-screen .investigation-sidebar .clue,
+  #game.ml-game-screen .investigation-sidebar .suspect {
+    min-width: 0;
+    width: 100%;
+    overflow-wrap: anywhere;
+  }
+
+  #game.ml-game-screen .investigation-sidebar .hypothesis-list {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  #game.ml-game-screen .investigation-sidebar .progress {
+    overflow: hidden;
+  }
+
+  /* Скрываем затемнение, когда панели постоянно на экране */
+  #game.ml-game-screen #mlScrim {
+    display: none;
+  }
+}
+
+/* Чуть больше пространства на широких мониторах */
+@media (min-width: 1500px) {
+  #game.ml-game-screen .game-layout.investigation-layout {
+    grid-template-columns:
+      minmax(235px, 0.78fr)
+      minmax(0, 2fr)
+      minmax(280px, 0.95fr);
+    gap: 15px;
+    inset-inline: 18px;
+  }
+
+  #game.ml-game-screen #boardNodes {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 20px;
+    padding: 24px;
+  }
+
+  #game.ml-game-screen #boardNodes .board-node-media {
+    height: 112px;
+  }
+}
+
+/* Средние экраны и телефоны: используем существующие выдвижные панели */
+@media (max-width: 1100px) {
+  #game.ml-game-screen .game-layout.investigation-layout {
+    display: block;
+  }
+
+  #game.ml-game-screen .investigation-main {
+    display: flex;
+  }
+
+  #game.ml-game-screen .investigation-sidebar {
+    display: none !important;
+  }
+
+  #game.ml-game-screen #storyPanel {
+    display: none !important;
+  }
+
+  #game.ml-game-screen #visualBoardPanel {
+    display: flex !important;
+    width: 100%;
+    min-width: 0;
+  }
+}
+
+/* Узкие телефоны */
+@media (max-width: 650px) {
+  #game.ml-game-screen .game-layout.investigation-layout {
+    inset: 112px 7px 7px;
+  }
+
+  #game.ml-game-screen #boardNodes {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 10px;
+    padding: 10px;
+  }
+
+  #game.ml-game-screen #boardNodes .board-node-media {
+    height: 88px;
+  }
+}
+
 </style>
 </head>
 <body>
