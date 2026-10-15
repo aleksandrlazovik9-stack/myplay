@@ -4384,6 +4384,76 @@ body.ml-page-scroll > main {
   }
 }
 
+
+/* =========================================================
+   MIND LAB — FIX: BOARD MODE B
+   Исправление наложения текста на карточки
+   ========================================================= */
+
+#game.ml-scroll-board #visualBoard {
+  position: relative !important;
+  overflow: auto !important;
+  min-height: 0 !important;
+}
+
+/* В режиме B карточки не должны выходить за свои ячейки */
+#game.ml-scroll-board #boardNodes {
+  position: relative !important;
+  align-items: start !important;
+  align-content: start !important;
+  grid-auto-rows: minmax(126px, auto) !important;
+  gap: 14px !important;
+  padding: 14px !important;
+  box-sizing: border-box !important;
+}
+
+/* Снимаем влияние декоративных наклонов на расположение карточек */
+#game.ml-scroll-board .board-node,
+#game.ml-scroll-board .board-node:nth-child(n) {
+  position: relative !important;
+  box-sizing: border-box !important;
+  width: 100% !important;
+  min-width: 0 !important;
+  min-height: 126px !important;
+  height: auto !important;
+  margin: 0 !important;
+  padding: 17px 12px 12px !important;
+  transform: none !important;
+}
+
+/* Текст внутри карточки переносится и не выходит наружу */
+#game.ml-scroll-board .board-node * {
+  box-sizing: border-box;
+  max-width: 100%;
+  overflow-wrap: anywhere;
+}
+
+#game.ml-scroll-board .board-node-title {
+  display: block !important;
+  white-space: normal !important;
+  overflow: visible !important;
+  line-height: 1.45 !important;
+}
+
+#game.ml-scroll-board .board-node-number,
+#game.ml-scroll-board .board-node-status {
+  display: block;
+  white-space: normal !important;
+  overflow-wrap: anywhere;
+}
+
+/* Небольшой отступ для красной кнопки сверху */
+#game.ml-scroll-board .board-node::before {
+  top: -4px !important;
+}
+
+/* На узких досках не допускаем слишком тесные карточки */
+@media (min-width: 1101px) {
+  #game.ml-scroll-board #boardNodes {
+    grid-template-columns: repeat(3, minmax(0, 1fr)) !important;
+  }
+}
+
 </style>
 </head>
 <body>
