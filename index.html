@@ -3581,6 +3581,232 @@ body {
   }
 }
 
+
+/* =====================================================
+   MIND LAB — PHASE 05
+   Кинематографичная стена улик
+   ===================================================== */
+
+/* Вместо технической сетки — тёмная пробковая поверхность */
+#game.ml-game-screen #visualBoard {
+  background-color: #211d1a !important;
+  background-image:
+    radial-gradient(ellipse at 15% 20%, #8d5b3820, transparent 38%),
+    radial-gradient(ellipse at 80% 70%, #9c6c3b18, transparent 42%),
+    repeating-linear-gradient(
+      7deg,
+      transparent 0 5px,
+      #d0a77b06 5px 6px
+    ),
+    repeating-linear-gradient(
+      93deg,
+      #00000008 0 2px,
+      transparent 2px 7px
+    ) !important;
+  border: 8px solid #30251e !important;
+  border-radius: 3px !important;
+  box-shadow:
+    inset 0 0 35px #0009,
+    0 8px 25px #0005;
+}
+
+/* Карточки раскладываем свободнее */
+#game.ml-game-screen #boardNodes {
+  grid-template-columns: repeat(3, minmax(0, 1fr)) !important;
+  align-items: start !important;
+  gap: 27px 21px !important;
+  padding: 25px 20px 35px !important;
+}
+
+/* Более выраженный эффект бумажных фотографий */
+#game.ml-game-screen #boardNodes .board-node {
+  position: relative !important;
+  align-self: start;
+  overflow: visible !important;
+  padding: 10px 10px 13px !important;
+  background: linear-gradient(145deg, #f7f0df, #d9cbb1) !important;
+  border: 1px solid #fff4dc !important;
+  border-radius: 1px !important;
+  box-shadow:
+    0 2px 3px #0008,
+    2px 8px 0 -3px #b6a58a,
+    0 12px 18px #0009 !important;
+  transform: rotate(var(--evidence-tilt, -1deg)) !important;
+  transition:
+    transform .22s ease,
+    box-shadow .22s ease,
+    filter .22s ease !important;
+}
+
+/* Красные канцелярские кнопки */
+#game.ml-game-screen #boardNodes .board-node::before {
+  content: "";
+  position: absolute;
+  z-index: 5;
+  top: -7px;
+  left: 50%;
+  width: 13px;
+  height: 13px;
+  border-radius: 50%;
+  transform: translateX(-50%);
+  background: radial-gradient(
+    circle at 35% 28%,
+    #ffb2a2 0 9%,
+    #d04b3e 30%,
+    #76251f 78%
+  );
+  border: 1px solid #6e2a22;
+  box-shadow: 0 2px 3px #0008;
+}
+
+/* Небольшая полоска архивной ленты на фотографии */
+#game.ml-game-screen #boardNodes .board-node::after {
+  content: "";
+  position: absolute;
+  z-index: 4;
+  top: 7px;
+  right: 15px;
+  width: 37px;
+  height: 10px;
+  background: #d8c69a9c;
+  border-left: 1px solid #fff7;
+  border-right: 1px solid #0001;
+  transform: rotate(5deg);
+  pointer-events: none;
+}
+
+/* Разные наклоны — не идеальная компьютерная сетка */
+#game.ml-game-screen #boardNodes .board-node:nth-child(6n + 1) {
+  --evidence-tilt: -2deg;
+  margin-top: 7px;
+}
+
+#game.ml-game-screen #boardNodes .board-node:nth-child(6n + 2) {
+  --evidence-tilt: 1.6deg;
+  margin-top: 23px;
+}
+
+#game.ml-game-screen #boardNodes .board-node:nth-child(6n + 3) {
+  --evidence-tilt: -1deg;
+  margin-top: 2px;
+}
+
+#game.ml-game-screen #boardNodes .board-node:nth-child(6n + 4) {
+  --evidence-tilt: 1.8deg;
+  margin-top: 18px;
+}
+
+#game.ml-game-screen #boardNodes .board-node:nth-child(6n + 5) {
+  --evidence-tilt: -1.5deg;
+  margin-top: 5px;
+}
+
+#game.ml-game-screen #boardNodes .board-node:nth-child(6n) {
+  --evidence-tilt: 1deg;
+  margin-top: 25px;
+}
+
+/* Фотографии — контрастнее, как снимки из дела */
+#game.ml-game-screen #boardNodes .board-node-media {
+  position: relative;
+  height: 125px !important;
+  margin: 8px 0 10px !important;
+  border: 3px solid #f4ead6 !important;
+  background: #29241e !important;
+  box-shadow: 0 2px 5px #0004;
+}
+
+#game.ml-game-screen #boardNodes .board-node-image {
+  filter: sepia(.2) saturate(.78) contrast(1.12) !important;
+}
+
+/* Тонкая красная отметка у найденных связей */
+#game.ml-game-screen #boardNodes .board-node.is-linked {
+  border-bottom: 4px solid #9c302a !important;
+}
+
+/* Связи — выразительные красные нити за карточками */
+#game.ml-game-screen #boardConnections {
+  z-index: 1 !important;
+  pointer-events: none;
+}
+
+#game.ml-game-screen #boardNodes {
+  position: relative;
+  z-index: 2 !important;
+}
+
+#game.ml-game-screen .board-line {
+  stroke: #b83d35 !important;
+  stroke-width: 2.4 !important;
+  stroke-dasharray: none !important;
+  opacity: .9 !important;
+  filter: drop-shadow(0 1px 2px #000b) !important;
+}
+
+/* Наведение — карточка приподнимается над доской */
+#game.ml-game-screen #boardNodes .board-node:hover {
+  z-index: 10 !important;
+  transform: rotate(0deg) translateY(-6px) scale(1.035) !important;
+  box-shadow:
+    0 5px 8px #0007,
+    0 18px 28px #000b !important;
+  filter: brightness(1.04);
+}
+
+/* Выбранная улика остаётся заметной */
+#game.ml-game-screen #boardNodes .board-node.is-selected {
+  z-index: 11 !important;
+  transform: rotate(0deg) scale(1.035) !important;
+  border: 2px solid #d5ad66 !important;
+  box-shadow:
+    0 0 0 3px #d5ad6633,
+    0 12px 28px #000b !important;
+}
+
+/* Большие мониторы */
+@media (min-width: 1500px) {
+  #game.ml-game-screen #boardNodes {
+    grid-template-columns: repeat(4, minmax(0, 1fr)) !important;
+    gap: 30px 25px !important;
+    padding: 30px !important;
+  }
+
+  #game.ml-game-screen #boardNodes .board-node-media {
+    height: 145px !important;
+  }
+}
+
+/* Планшеты */
+@media (max-width: 1100px) {
+  #game.ml-game-screen #boardNodes {
+    grid-template-columns: repeat(3, minmax(0, 1fr)) !important;
+    gap: 20px 14px !important;
+    padding: 18px 12px !important;
+  }
+}
+
+/* Телефоны */
+@media (max-width: 650px) {
+  #game.ml-game-screen #boardNodes {
+    grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+    gap: 15px 10px !important;
+    padding: 15px 8px !important;
+  }
+
+  #game.ml-game-screen #boardNodes .board-node {
+    padding: 8px 7px 10px !important;
+  }
+
+  #game.ml-game-screen #boardNodes .board-node-media {
+    height: 90px !important;
+  }
+
+  #game.ml-game-screen #boardNodes .board-node:nth-child(even) {
+    margin-top: 13px;
+  }
+}
+
 </style>
 </head>
 <body>
