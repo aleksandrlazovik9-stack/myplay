@@ -4454,6 +4454,312 @@ body.ml-page-scroll > main {
   }
 }
 
+
+/* =========================================================
+   MIND LAB — VISUAL PASS 02
+   Более дорогая, сдержанная эстетика доски расследования
+   ========================================================= */
+
+#game.ml-game-screen #visualBoard {
+  background-color: #211e1b !important;
+  background-image:
+    radial-gradient(
+      ellipse at 48% 8%,
+      #70604b26 0%,
+      transparent 58%
+    ),
+    radial-gradient(
+      ellipse at 50% 100%,
+      #00000048 0%,
+      transparent 62%
+    ),
+    repeating-linear-gradient(
+      92deg,
+      transparent 0 9px,
+      #ffffff03 9px 10px,
+      transparent 10px 19px
+    ) !important;
+
+  border: 1px solid #71604a66 !important;
+  border-radius: 3px !important;
+  box-shadow:
+    inset 0 1px #ffffff07,
+    inset 0 0 55px #00000035,
+    0 14px 32px #00000030 !important;
+}
+
+/* Больше воздуха между материалами */
+#game.ml-game-screen #boardNodes {
+  gap: 25px 21px !important;
+  padding: 25px 22px 34px !important;
+}
+
+/* Бумага — не ярко-жёлтая, а приглушённая архивная */
+#game.ml-game-screen #boardNodes .board-node {
+  padding: 11px 11px 13px !important;
+
+  background:
+    linear-gradient(
+      145deg,
+      #e9e2d3 0%,
+      #d8cebb 100%
+    ) !important;
+
+  border: 1px solid #f4eddf !important;
+  border-radius: 2px !important;
+
+  box-shadow:
+    0 1px 1px #0007,
+    0 5px 9px #0005,
+    0 12px 19px #0003,
+    inset 0 0 0 1px #8b795322 !important;
+
+  transition:
+    transform .2s ease,
+    box-shadow .2s ease,
+    filter .2s ease !important;
+}
+
+/* Скотч — больше не на каждой карточке */
+#game.ml-game-screen #boardNodes .board-node::after {
+  display: none !important;
+}
+
+/* Иногда оставляем небольшой кусочек архивной ленты */
+#game.ml-game-screen #boardNodes
+.board-node:nth-child(4n + 1)::after {
+  display: block !important;
+  top: 5px !important;
+  right: 13px !important;
+  width: 31px !important;
+  height: 8px !important;
+  background: #d7c8a2a0 !important;
+  border: 0 !important;
+  box-shadow: 0 1px 1px #0002;
+  transform: rotate(7deg) !important;
+}
+
+/* Более сдержанные кнопки крепления */
+#game.ml-game-screen #boardNodes .board-node::before {
+  width: 10px !important;
+  height: 10px !important;
+  top: -5px !important;
+
+  background:
+    radial-gradient(
+      circle at 34% 28%,
+      #f1a59a 0%,
+      #a9433a 38%,
+      #632722 100%
+    ) !important;
+
+  border: 1px solid #59231e !important;
+  box-shadow:
+    0 1px 2px #0009,
+    0 0 0 1px #cfc3ae !important;
+}
+
+/* Фото — аккуратная рамка и меньше искусственной желтизны */
+#game.ml-game-screen #boardNodes .board-node-media {
+  height: 119px !important;
+  margin: 9px 0 10px !important;
+  padding: 3px !important;
+
+  background: #f0e8d9 !important;
+  border: 1px solid #b9aa8f !important;
+  box-shadow: 0 2px 5px #0003 !important;
+}
+
+/* Изображение занимает рамку целиком */
+#game.ml-game-screen #boardNodes .board-node-image {
+  width: 100% !important;
+  height: 100% !important;
+  object-fit: cover !important;
+
+  filter: saturate(.88) contrast(1.07) brightness(.96) !important;
+  transition: filter .2s ease !important;
+}
+
+#game.ml-game-screen #boardNodes .board-node:hover
+.board-node-image {
+  filter: saturate(1) contrast(1.08) brightness(1) !important;
+}
+
+/* Типографика: заголовок — главный, служебный текст — тише */
+#game.ml-game-screen #boardNodes .board-node-number {
+  color: #786b57 !important;
+  font-size: 8px !important;
+  letter-spacing: .14em !important;
+}
+
+#game.ml-game-screen #boardNodes .board-node-title {
+  color: #292720 !important;
+  font-family: Georgia, "Times New Roman", serif !important;
+  font-size: 13px !important;
+  font-weight: 700 !important;
+  line-height: 1.4 !important;
+}
+
+#game.ml-game-screen #boardNodes .board-node-description {
+  color: #686154 !important;
+  font-size: 10px !important;
+  line-height: 1.5 !important;
+}
+
+#game.ml-game-screen #boardNodes .board-node-status {
+  color: #795c3e !important;
+  border-top-color: #b9ad98 !important;
+  font-size: 8px !important;
+  letter-spacing: .045em !important;
+}
+
+/* Неизученная улика — отдельный, тёмный материал */
+#game.ml-game-screen #boardNodes .board-node.is-undiscovered {
+  background:
+    linear-gradient(145deg, #34332f, #262624) !important;
+  border: 1px dashed #777064 !important;
+  box-shadow:
+    0 5px 12px #0005,
+    inset 0 1px #ffffff08 !important;
+}
+
+#game.ml-game-screen #boardNodes
+.board-node.is-undiscovered .board-node-title {
+  color: #e0d7c7 !important;
+}
+
+#game.ml-game-screen #boardNodes
+.board-node.is-undiscovered .board-node-description {
+  color: #aaa091 !important;
+}
+
+#game.ml-game-screen #boardNodes
+.board-node.is-undiscovered .board-node-status {
+  color: #b99b6b !important;
+  border-top-color: #ffffff18 !important;
+}
+
+/* Связи: тоньше, темнее, без эффекта неоновой подсветки */
+#game.ml-game-screen #boardConnections {
+  z-index: 1 !important;
+  pointer-events: none !important;
+}
+
+#game.ml-game-screen .board-line {
+  stroke: #a94a42 !important;
+  stroke-width: 1.65 !important;
+  stroke-linecap: round !important;
+  opacity: .82 !important;
+  filter: drop-shadow(0 1px 1px #0009) !important;
+}
+
+/* Наведение — аккуратное приподнимание */
+#game.ml-game-screen #boardNodes .board-node:hover {
+  z-index: 10 !important;
+  transform: rotate(0deg) translateY(-3px) scale(1.015) !important;
+  box-shadow:
+    0 5px 8px #0007,
+    0 13px 20px #0007 !important;
+}
+
+/* Выбранная улика */
+#game.ml-game-screen #boardNodes .board-node.is-selected {
+  z-index: 11 !important;
+  border: 2px solid #c9a363 !important;
+  box-shadow:
+    0 0 0 2px #c9a36326,
+    0 8px 20px #0008 !important;
+  filter: brightness(1.035);
+}
+
+/* Более дорогие кнопки интерфейса */
+#game.ml-game-screen .btn,
+#game.ml-game-screen .small-btn,
+#game.ml-game-screen .clue,
+#game.ml-game-screen .suspect,
+#game.ml-game-screen .choice,
+#game.ml-game-screen .hypothesis-card {
+  border-radius: 4px !important;
+  transition:
+    background .18s ease,
+    border-color .18s ease,
+    box-shadow .18s ease,
+    transform .18s ease !important;
+}
+
+#game.ml-game-screen .btn,
+#game.ml-game-screen .small-btn {
+  border-color: #45423a !important;
+  background: linear-gradient(180deg, #252521, #191a19) !important;
+  color: #e4dfd3 !important;
+}
+
+#game.ml-game-screen .btn:hover,
+#game.ml-game-screen .small-btn:hover {
+  border-color: #a58a5c !important;
+  color: #f1dfb8 !important;
+  box-shadow: 0 3px 12px #0003 !important;
+}
+
+#game.ml-game-screen .btn-primary {
+  background: linear-gradient(135deg, #8e3435, #642629) !important;
+  border-color: #a9504b !important;
+  color: #fff2e8 !important;
+}
+
+#game.ml-game-screen .btn-primary:hover {
+  background: linear-gradient(135deg, #a54141, #793033) !important;
+  border-color: #c36b61 !important;
+}
+
+/* Переключатель A / B / C — единый стиль */
+#game.ml-game-screen .ml-layout-switch button {
+  border-radius: 3px !important;
+  border-color: #464139 !important;
+  background: #191a19 !important;
+  color: #bdb5a7 !important;
+  letter-spacing: .02em;
+}
+
+#game.ml-game-screen .ml-layout-switch button[aria-pressed="true"] {
+  border-color: #b99a63 !important;
+  background: #30291e !important;
+  color: #f0d6a0 !important;
+  box-shadow: inset 0 -2px #b99a63;
+}
+
+/* Режим B: сохраняем прокрутку и исправленную геометрию */
+#game.ml-scroll-board #visualBoard {
+  overflow: auto !important;
+}
+
+#game.ml-scroll-board #boardNodes {
+  align-items: start !important;
+}
+
+#game.ml-scroll-board #boardNodes .board-node {
+  box-sizing: border-box !important;
+  height: auto !important;
+  margin-bottom: 0 !important;
+}
+
+/* Телефон: меньше наклона, достаточно места для текста */
+@media (max-width: 650px) {
+  #game.ml-game-screen #boardNodes {
+    gap: 17px 12px !important;
+    padding: 16px 10px 24px !important;
+  }
+
+  #game.ml-game-screen #boardNodes .board-node {
+    transform: none !important;
+    padding: 8px 8px 10px !important;
+  }
+
+  #game.ml-game-screen #boardNodes .board-node-media {
+    height: 88px !important;
+  }
+}
+
 </style>
 </head>
 <body>
