@@ -3807,6 +3807,203 @@ body {
   }
 }
 
+
+/* =========================================================
+   MIND LAB — A/B TEST: TWO SCROLL MODES
+   ========================================================= */
+
+/* Переключатель режимов */
+#game.ml-game-screen .ml-layout-switch {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  flex: 0 0 auto;
+}
+
+#game.ml-game-screen .ml-layout-switch button {
+  padding: 7px 10px;
+  border: 1px solid #76624770;
+  border-radius: 5px;
+  background: #17191d;
+  color: #c8bdab;
+  font-size: 10px;
+  white-space: nowrap;
+  cursor: pointer;
+  transition: background .2s, border-color .2s, color .2s;
+}
+
+#game.ml-game-screen .ml-layout-switch button:hover {
+  border-color: #d5ad66;
+  color: #f0e5d2;
+}
+
+#game.ml-game-screen .ml-layout-switch button[aria-pressed="true"] {
+  background: #352b1d;
+  border-color: #d5ad66;
+  color: #f5d79c;
+}
+
+/* A — прокручивается вся страница */
+body.ml-page-scroll > .topbar {
+  display: none !important;
+}
+
+body.ml-page-scroll > main {
+  width: 100% !important;
+  max-width: none !important;
+  margin: 0 !important;
+  padding: 0 !important;
+}
+
+#game.ml-game-screen.ml-scroll-page:not(.hidden) {
+  position: relative !important;
+  inset: auto !important;
+  z-index: 1 !important;
+  width: 100% !important;
+  height: auto !important;
+  min-height: 100vh;
+  margin: 0 !important;
+  padding: 0 0 40px !important;
+  overflow: visible !important;
+}
+
+#game.ml-game-screen.ml-scroll-page .ml-topbar {
+  position: sticky !important;
+  top: 0 !important;
+  z-index: 20 !important;
+  display: flex !important;
+  flex-wrap: wrap;
+  height: auto !important;
+  min-height: 68px;
+  padding: 10px 16px !important;
+  background: #111318f5;
+  border-bottom: 1px solid #d5ad6630;
+  backdrop-filter: blur(14px);
+}
+
+#game.ml-game-screen.ml-scroll-page .ml-progress-slot {
+  margin-left: auto;
+}
+
+/* Маршрут находится в потоке страницы, под верхней панелью */
+#game.ml-game-screen.ml-scroll-page .investigation-route-dock {
+  position: sticky !important;
+  top: 68px !important;
+  left: auto !important;
+  right: auto !important;
+  bottom: auto !important;
+  z-index: 15 !important;
+  width: auto !important;
+  max-width: none !important;
+  margin: 0 12px 12px !important;
+  padding: 9px 12px !important;
+  transform: none !important;
+  background: #151619f5 !important;
+  border: 1px solid #d5ad6630 !important;
+  border-radius: 5px !important;
+  box-shadow: 0 5px 18px #0004 !important;
+  backdrop-filter: blur(12px);
+}
+
+/* Все три колонки растут по содержимому */
+#game.ml-game-screen.ml-scroll-page .game-layout.investigation-layout {
+  position: relative !important;
+  inset: auto !important;
+  display: grid !important;
+  grid-template-columns:
+    minmax(205px, .78fr)
+    minmax(0, 2fr)
+    minmax(260px, .95fr) !important;
+  grid-template-rows: auto !important;
+  align-items: start !important;
+  gap: 14px !important;
+  width: auto !important;
+  height: auto !important;
+  min-height: 0 !important;
+  margin: 0 14px !important;
+  padding: 0 !important;
+  overflow: visible !important;
+}
+
+#game.ml-game-screen.ml-scroll-page #storyPanel {
+  grid-column: 1 !important;
+  grid-row: 1 !important;
+  height: auto !important;
+  max-height: none !important;
+  overflow: visible !important;
+}
+
+#game.ml-game-screen.ml-scroll-page #visualBoardPanel {
+  grid-column: 2 !important;
+  grid-row: 1 !important;
+  display: flex !important;
+  flex-direction: column;
+  height: auto !important;
+  min-height: 0 !important;
+  overflow: visible !important;
+}
+
+#game.ml-game-screen.ml-scroll-page #visualBoard {
+  flex: none !important;
+  height: auto !important;
+  min-height: 500px !important;
+  overflow: visible !important;
+}
+
+#game.ml-game-screen.ml-scroll-page #boardNodes {
+  height: auto !important;
+  min-height: 0 !important;
+  align-content: start !important;
+  grid-template-columns: repeat(3, minmax(0, 1fr)) !important;
+}
+
+#game.ml-game-screen.ml-scroll-page .investigation-sidebar {
+  grid-column: 3 !important;
+  grid-row: 1 !important;
+  display: flex !important;
+  flex-direction: column;
+  align-self: start;
+  height: auto !important;
+  min-height: 0 !important;
+  overflow: visible !important;
+}
+
+#game.ml-game-screen.ml-scroll-page .investigation-sidebar > .sidebar-section {
+  flex: 0 0 auto;
+}
+
+#game.ml-game-screen.ml-scroll-page .investigation-board {
+  overflow: visible !important;
+}
+
+/* B — сохраняем существующий полноэкранный режим.
+   В нём прокручивается центральная доска, а панели
+   остаются на месте. */
+
+/* Переключатель нужен для теста на компьютере */
+@media (max-width: 1100px) {
+  #game.ml-game-screen .ml-layout-switch {
+    display: none !important;
+  }
+}
+
+/* Узкие окна: не допускаем сжатия верхней панели */
+@media (min-width: 1101px) and (max-width: 1250px) {
+  #game.ml-game-screen .ml-layout-switch button {
+    padding: 6px 7px;
+    font-size: 9px;
+  }
+
+  #game.ml-game-screen.ml-scroll-page .game-layout.investigation-layout {
+    grid-template-columns:
+      minmax(180px, .75fr)
+      minmax(0, 1.7fr)
+      minmax(230px, .9fr) !important;
+    gap: 10px !important;
+    margin-inline: 10px !important;
+  }
+}
+
 </style>
 </head>
 <body>
@@ -3856,6 +4053,16 @@ body {
   </div>
 
   <div class="ml-progress-slot" id="mlProgressSlot"></div>
+
+  
+    <div class="ml-layout-switch" role="group" aria-label="Режим прокрутки">
+    <button type="button" data-layout-mode="page" aria-pressed="false">
+        A · Вся страница
+    </button>
+    <button type="button" data-layout-mode="board" aria-pressed="true">
+        B · Только доска
+    </button>
+    </div>
 
   <nav class="ml-tools" aria-label="Инструменты расследования">
     <button type="button" data-ml-tool="story">Досье</button>
@@ -9144,5 +9351,55 @@ document.addEventListener("keydown", event => {
 });
 
 </script>
+
+
+<script>
+(() => {
+  const game = document.getElementById("game");
+  const layout = game?.querySelector(".game-layout.investigation-layout");
+  const routeDock = game?.querySelector(".investigation-route-dock");
+  const buttons = game?.querySelectorAll("[data-layout-mode]");
+
+  if (!game || !layout || !routeDock || !buttons?.length) return;
+
+  function setLayoutMode(mode) {
+    const pageMode = mode === "page";
+
+    game.classList.toggle("ml-scroll-page", pageMode);
+    game.classList.toggle("ml-scroll-board", !pageMode);
+    document.body.classList.toggle("ml-page-scroll", pageMode);
+
+    /* В режиме A маршрут идёт перед доской в потоке страницы.
+       В режиме B возвращаем его на исходное место. */
+    if (pageMode) {
+      layout.parentNode.insertBefore(routeDock, layout);
+    } else {
+      layout.after(routeDock);
+    }
+
+    buttons.forEach(button => {
+      button.setAttribute(
+        "aria-pressed",
+        String(button.dataset.layoutMode === mode)
+      );
+    });
+
+    window.scrollTo(0, 0);
+
+    const board = document.getElementById("visualBoard");
+    if (board) board.scrollTop = 0;
+  }
+
+  buttons.forEach(button => {
+    button.addEventListener("click", () => {
+      setLayoutMode(button.dataset.layoutMode);
+    });
+  });
+
+  /* При открытии дела сохраняем привычный режим B */
+  setLayoutMode("board");
+})();
+</script>
+
 </body>
 </html>
