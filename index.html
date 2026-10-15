@@ -5699,38 +5699,45 @@ body.ml-page-scroll > main {
 }
 
 
-/* =====================================================
-   MIND LAB — BLUE HOUR
-   Unified visual identity: archive, investigation, dossier
-   ===================================================== */
+
+/* =========================================================
+   MIND LAB — NEON NOIR
+   Unified visual system: archive, investigation, dossiers
+   ========================================================= */
 
 :root {
-  --bg: #080b14;
-  --panel: #101625;
-  --panel2: #151e30;
-  --line: #283650;
-  --text: #edf3ff;
-  --muted: #8d9db8;
+  color-scheme: dark;
 
-  --red: #f174a8;
-  --cyan: #71d8ff;
-  --gold: #a9baff;
+  --bg: #090d1b;
+  --panel: #11182a;
+  --panel2: #17223b;
+  --line: #2a3857;
+  --text: #edf2ff;
+  --muted: #98a7c5;
 
-  --ml-blue: #79a8ff;
-  --ml-cyan: #71d8ff;
-  --ml-pink: #f174b7;
-  --ml-violet: #a994ff;
-  --ml-surface: #0e1422;
-  --ml-surface-raised: #151e30;
-  --ml-border: #34435f;
+  --red: #ff5eaa;
+  --cyan: #52ddf5;
+  --gold: #a98bff;
+
+  --ml-blue: #789cff;
+  --ml-cyan: #52ddf5;
+  --ml-pink: #ff5eaa;
+  --ml-violet: #a98bff;
+  --ml-surface: #0c1324;
+  --ml-surface-raised: #17223b;
+  --ml-border: #304263;
+
+  --ml-glow-cyan: 0 0 22px #52ddf51b;
+  --ml-glow-pink: 0 0 22px #ff5eaa1a;
 }
 
 body {
   color: var(--text);
   background:
-    radial-gradient(ellipse at 12% 0%, #233d702e, transparent 36%),
-    radial-gradient(ellipse at 88% 12%, #843d7420, transparent 34%),
-    #080b14;
+    radial-gradient(ellipse at 8% 0%, #3156a52c, transparent 35%),
+    radial-gradient(ellipse at 92% 8%, #a43d8c1b, transparent 31%),
+    radial-gradient(ellipse at 50% 100%, #183b7020, transparent 45%),
+    var(--bg);
 }
 
 button:focus-visible {
@@ -5738,10 +5745,18 @@ button:focus-visible {
   outline-offset: 3px;
 }
 
+::selection {
+  color: #07111d;
+  background: var(--ml-cyan);
+}
+
+/* Общая верхняя панель */
+
 .topbar,
 #game.ml-game-screen .ml-topbar {
-  background: #090e19eF !important;
-  border-color: #34445f !important;
+  color: var(--text);
+  background: #090e1bf0 !important;
+  border-color: #2b3b5b !important;
   backdrop-filter: blur(18px);
 }
 
@@ -5749,33 +5764,90 @@ button:focus-visible {
   color: var(--ml-pink);
 }
 
-.eyebrow {
+.eyebrow,
+.badge {
   color: var(--ml-cyan);
-  letter-spacing: .17em;
 }
 
 .chapter-label {
   color: var(--ml-violet);
 }
 
-/* Главный экран — вход в ту же систему расследования */
+/* Кнопки */
+
+.btn,
+.small-btn,
+#game.ml-game-screen .ml-layout-switch button,
+#game.ml-game-screen .ml-tools button {
+  color: #eaf1ff;
+  background: linear-gradient(145deg, #192640, #111a2c);
+  border: 1px solid #344766;
+  border-radius: 8px;
+  transition:
+    background .2s ease,
+    border-color .2s ease,
+    box-shadow .2s ease,
+    transform .2s ease;
+}
+
+.btn:hover,
+.small-btn:hover,
+#game.ml-game-screen .ml-layout-switch button:hover,
+#game.ml-game-screen .ml-tools button:hover {
+  border-color: var(--ml-cyan);
+  background: #1d2c49;
+  box-shadow: var(--ml-glow-cyan);
+}
+
+.btn-primary {
+  color: #08111e;
+  background: linear-gradient(110deg, var(--ml-cyan), #a5baff);
+  border-color: transparent;
+  font-weight: 800;
+  box-shadow: 0 5px 25px #52ddf525;
+}
+
+.btn-primary:hover {
+  color: #08111e;
+  background: linear-gradient(110deg, #a5f0ff, #d0baff);
+  border-color: transparent;
+  transform: translateY(-2px);
+}
+
+.btn-cyan {
+  color: var(--ml-cyan);
+  border-color: #52ddf555;
+  background: #52ddf50c;
+}
+
+#game.ml-game-screen .ml-layout-switch button[aria-pressed="true"],
+#game.ml-game-screen .ml-tools button.active,
+#game.ml-game-screen .ml-tools button[aria-pressed="true"] {
+  color: #f4f7ff;
+  border-color: var(--ml-cyan);
+  background: linear-gradient(135deg, #52ddf51c, #a98bff19);
+  box-shadow: inset 0 -2px var(--ml-cyan), var(--ml-glow-cyan);
+}
+
+/* Главное меню */
 
 .hero {
   position: relative;
-  border: 1px solid #516b943d;
+  overflow: hidden;
+  border: 1px solid #526a9a70;
   border-radius: 18px;
   background:
     linear-gradient(
       100deg,
-      #090e1af7 0%,
+      #090e1bf7 0%,
       #0b1120e8 46%,
-      #10182c70 100%
+      #10182c72 100%
     ),
     url("https://images.unsplash.com/photo-1519608487953-e999c86e7455?auto=format&fit=crop&w=1600&q=85")
     center / cover;
   box-shadow:
-    inset 0 1px #ffffff0b,
-    0 22px 65px #0003;
+    inset 0 1px #ffffff0c,
+    0 22px 65px #0004;
 }
 
 .hero::after {
@@ -5791,59 +5863,30 @@ button:focus-visible {
     var(--ml-pink),
     transparent
   );
-  opacity: .8;
+  opacity: .9;
+  pointer-events: none;
+}
+
+.hero-copy {
+  z-index: 1;
 }
 
 .hero h1 {
-  max-width: 660px;
-  text-shadow: 0 4px 30px #0009;
+  text-shadow: 0 4px 30px #000b;
 }
 
-.btn,
-.small-btn {
-  border: 1px solid #344661;
-  border-radius: 7px;
-  background: linear-gradient(145deg, #18243a, #111a2a);
-  color: #eaf2ff;
-  transition:
-    border-color .2s ease,
-    background .2s ease,
-    transform .2s ease;
-}
-
-.btn:hover,
-.small-btn:hover {
-  border-color: var(--ml-cyan);
-  background: #1b2b43;
-}
-
-.btn-primary {
-  color: #08111e;
-  background: linear-gradient(110deg, #8cddff, #a9baff);
-  border-color: transparent;
-  box-shadow: 0 5px 24px #71d8ff20;
-}
-
-.btn-primary:hover {
-  color: #08111e;
-  background: linear-gradient(110deg, #b2eaff, #d1c7ff);
-  border-color: transparent;
-  transform: translateY(-1px);
-}
-
-.btn-cyan {
-  color: var(--ml-cyan);
-  border-color: #71d8ff55;
-  background: #71d8ff0c;
+.section-head h2 {
+  letter-spacing: -.035em;
 }
 
 /* Архив дел */
 
 .case-card {
-  background: linear-gradient(160deg, #151e30, #0e1421);
-  border: 1px solid #2e3d57;
-  border-radius: 12px;
-  box-shadow: 0 12px 35px #0002;
+  overflow: hidden;
+  background: linear-gradient(155deg, #17223b, #0d1424);
+  border: 1px solid #304263;
+  border-radius: 13px;
+  box-shadow: 0 12px 35px #0003;
   transition:
     transform .22s ease,
     border-color .22s ease,
@@ -5852,38 +5895,38 @@ button:focus-visible {
 
 .case-card:hover {
   transform: translateY(-4px);
-  border-color: #71d8ff85;
-  box-shadow: 0 18px 40px #0005;
+  border-color: #52ddf5a0;
+  box-shadow: 0 18px 42px #0006, var(--ml-glow-cyan);
 }
 
 .cover {
-  border-bottom: 1px solid #8ba9dc20;
+  border-bottom: 1px solid #526a9a50;
 }
 
 .cover:after {
   background:
-    linear-gradient(180deg, transparent 10%, #0b1020ef 100%),
-    linear-gradient(100deg, #71d8ff14, #f174b71c);
+    linear-gradient(180deg, transparent 5%, #0b1020f2 100%),
+    linear-gradient(110deg, #52ddf51b, #ff5eaa1b);
 }
 
 .cover-label {
-  color: #c2eaff;
+  color: #d5f5ff;
 }
 
 .card-body {
   background:
-    radial-gradient(ellipse at top right, #7d8fff0b, transparent 65%);
+    radial-gradient(ellipse at top right, #a98bff10, transparent 65%);
 }
 
 .tag {
-  border-color: #34445f;
-  border-radius: 5px;
-  background: #8aa8ff08;
-  color: #aabbd8;
+  color: #b9c8e5;
+  border-color: #344766;
+  background: #8aa8ff0a;
+  border-radius: 6px;
 }
 
 .progress {
-  background: #263149;
+  background: #26334e;
 }
 
 .progress > div {
@@ -5893,16 +5936,18 @@ button:focus-visible {
     var(--ml-cyan),
     var(--ml-violet)
   );
-  box-shadow: 0 0 12px #71d8ff40;
+  box-shadow: 0 0 12px #52ddf545;
 }
 
 .stat {
-  background: linear-gradient(145deg, #141e30, #0d1320);
-  border-color: #2b3b56;
+  color: var(--text);
+  background: linear-gradient(145deg, #17223b, #0e1525);
+  border-color: #304263;
+  border-radius: 12px;
 }
 
 .stat strong {
-  color: #d5eaff;
+  color: #d9f5ff;
 }
 
 /* Рабочая область расследования */
@@ -5915,42 +5960,71 @@ button:focus-visible {
 #game.ml-game-screen .sidebar-section,
 #game.ml-game-screen .story-panel,
 #game.ml-game-screen .investigation-board {
-  background:
-    linear-gradient(145deg, #141d2eeb, #0d1320f5) !important;
-  border: 1px solid #30415e !important;
-  border-radius: 10px !important;
+  color: var(--text);
+  background: linear-gradient(145deg, #141f35f5, #0d1424f8) !important;
+  border: 1px solid #304263 !important;
+  border-radius: 12px !important;
   box-shadow:
-    inset 0 1px #ffffff06,
-    0 12px 28px #0002;
+    inset 0 1px #ffffff08,
+    0 12px 30px #0003;
 }
 
 #game.ml-game-screen .investigation-board {
   background:
-    radial-gradient(ellipse at 50% 0%, #4774b51a, transparent 62%),
-    #0d1320 !important;
+    radial-gradient(ellipse at 50% 0%, #3156a528, transparent 65%),
+    #0c1323 !important;
 }
 
+#game.ml-game-screen .story-text {
+  color: #e4ebff;
+}
+
+#game.ml-game-screen .notice,
+#game.ml-game-screen .verdict-checklist,
+#game.ml-game-screen .twist-scene,
+#game.ml-game-screen .twist-outcome,
+#game.ml-game-screen .hypothesis-feedback {
+  color: var(--text);
+  background: linear-gradient(145deg, #18243b, #10192b);
+  border-color: #465579;
+  border-radius: 9px;
+}
+
+#game.ml-game-screen .verdict-checklist li.done {
+  color: #baf7ff;
+  background: #52ddf510;
+  border-color: #52ddf56b;
+}
+
+#game.ml-game-screen .verdict-checklist li.missing {
+  color: #ffd0e7;
+  background: #ff5eaa0c;
+  border-color: #ff5eaa55;
+}
+
+/* Доска расследования */
+
 #game.ml-game-screen #visualBoard {
-  border-color: #334563 !important;
-  border-radius: 8px !important;
-  background-color: #0b1120 !important;
+  border: 1px solid #30466a !important;
+  border-radius: 10px !important;
+  background-color: #0b1222 !important;
   background-image:
-    linear-gradient(#8ab8ff0b 1px, transparent 1px),
-    linear-gradient(90deg, #8ab8ff0b 1px, transparent 1px),
-    radial-gradient(ellipse at 50% 20%, #344c791a, transparent 70%) !important;
+    linear-gradient(#91b8ff0b 1px, transparent 1px),
+    linear-gradient(90deg, #91b8ff0b 1px, transparent 1px),
+    radial-gradient(ellipse at 50% 20%, #344c7920, transparent 72%) !important;
   background-size: 24px 24px, 24px 24px, auto !important;
 }
 
-/* Карточки улик */
+/* Компактные карточки улик — геометрию задаёт существующий JS */
 
 #game.ml-game-screen #boardNodes .board-node {
   color: #edf4ff !important;
-  background: linear-gradient(145deg, #202b40, #111a2b) !important;
-  border: 1px solid #506383 !important;
-  border-radius: 5px !important;
+  background: linear-gradient(145deg, #1b2942, #111a2c) !important;
+  border: 1px solid #455b7e !important;
+  border-radius: 7px !important;
   box-shadow:
-    0 5px 12px #0006,
-    inset 0 1px #ffffff0b !important;
+    0 5px 14px #0007,
+    inset 0 1px #ffffff0a !important;
 }
 
 #game.ml-game-screen #boardNodes .board-node-title {
@@ -5958,68 +6032,85 @@ button:focus-visible {
 }
 
 #game.ml-game-screen #boardNodes .board-node-number {
-  color: #93a8ce !important;
+  color: #9db6e2 !important;
 }
 
 #game.ml-game-screen #boardNodes .board-node-description {
-  color: #a6b5ce !important;
+  color: #afbdd7 !important;
 }
 
 #game.ml-game-screen #boardNodes .board-node-media {
-  border-color: #647c9e !important;
-  background: #0a101c !important;
+  border-color: #405577 !important;
+  background: #0b1220 !important;
+}
+
+#game.ml-game-screen #boardNodes .board-node-image {
+  filter: saturate(.88) contrast(1.04);
 }
 
 #game.ml-game-screen #boardNodes .board-node:hover {
   border-color: var(--ml-cyan) !important;
   box-shadow:
-    0 0 0 1px #71d8ff25,
-    0 12px 28px #0009 !important;
+    0 0 0 1px #52ddf533,
+    0 10px 28px #000a !important;
 }
 
 #game.ml-game-screen #boardNodes .board-node.is-selected {
-  border: 1px solid var(--ml-pink) !important;
+  border-color: var(--ml-pink) !important;
+  background: linear-gradient(145deg, #34213f, #171b31) !important;
   box-shadow:
-    0 0 0 2px #f174b72b,
+    0 0 0 2px #ff5eaa30,
     0 12px 28px #000a !important;
 }
 
 #game.ml-game-screen #boardNodes .board-node.is-linked {
-  border-color: #71d8ff9c !important;
+  border-color: #52ddf5a0 !important;
 }
 
-/* Соединения: голубой основной цвет, розовый акцент */
+/* Связи: холодный свет вместо золотисто-коричневых линий */
 
 #game.ml-game-screen .board-line {
   stroke: var(--ml-cyan) !important;
   stroke-width: 1.8 !important;
   stroke-dasharray: none !important;
-  opacity: .86 !important;
-  filter: drop-shadow(0 0 3px #71d8ff35) !important;
+  opacity: .82 !important;
+  filter: drop-shadow(0 0 3px #52ddf53d) !important;
 }
 
-/* Материалы, подозреваемые, теории и ход дела */
+/* Материалы, подозреваемые, гипотезы и варианты выбора */
 
 #game.ml-game-screen .clue,
 #game.ml-game-screen .suspect,
 #game.ml-game-screen .hypothesis-card,
-#game.ml-game-screen .choice {
+#game.ml-game-screen .choice,
+#game.ml-game-screen .twist-choices button {
   color: #eaf1ff;
-  background: linear-gradient(145deg, #182338, #111a2b);
-  border-color: #30425f;
-  border-radius: 7px;
+  background: linear-gradient(145deg, #192640, #111a2c);
+  border-color: #304263;
+  border-radius: 9px;
 }
 
 #game.ml-game-screen .clue:hover,
 #game.ml-game-screen .suspect:hover,
 #game.ml-game-screen .hypothesis-card:hover,
-#game.ml-game-screen .choice:hover {
-  border-color: #71d8ff85;
+#game.ml-game-screen .choice:hover,
+#game.ml-game-screen .twist-choices button:hover {
+  border-color: var(--ml-cyan);
+  box-shadow: var(--ml-glow-cyan);
 }
 
 #game.ml-game-screen .clue.found {
-  background: #102735;
-  border-color: #55bfe4;
+  color: #d9faff;
+  background: #102638;
+  border-color: #52bfe7;
+}
+
+#game.ml-game-screen .clue.pickable.selected,
+#game.ml-game-screen .hypothesis-card.selected {
+  color: #fff0fa;
+  background: #30213b;
+  border-color: var(--ml-pink);
+  box-shadow: 0 0 0 1px #ff5eaa25;
 }
 
 #game.ml-game-screen .deduction-good {
@@ -6034,6 +6125,57 @@ button:focus-visible {
   border-left-color: var(--ml-violet);
 }
 
+#game.ml-game-screen .hypothesis-feedback {
+  border-left-color: var(--ml-violet);
+}
+
+#game.ml-game-screen .hypothesis-feedback.feedback-good {
+  border-left-color: var(--ml-cyan);
+}
+
+#game.ml-game-screen .hypothesis-feedback.feedback-bad {
+  border-left-color: var(--ml-pink);
+}
+
+/* Выдвижные панели инструментов */
+
+#game.ml-game-screen .ml-drawer {
+  color: var(--text);
+  background:
+    radial-gradient(ellipse at 100% 0%, #3156a51c, transparent 45%),
+    #0e1628;
+  border-color: #344766;
+  box-shadow: -20px 0 70px #0008;
+}
+
+#game.ml-game-screen .ml-drawer-head {
+  border-color: #304263;
+}
+
+#game.ml-game-screen .ml-drawer-content {
+  color: var(--text);
+}
+
+#game.ml-game-screen .ml-tool-panel {
+  color: var(--text);
+}
+
+#game.ml-game-screen .ml-close {
+  color: #edf4ff;
+  background: #17223b;
+  border-color: #344766;
+}
+
+#game.ml-game-screen .ml-close:hover {
+  border-color: var(--ml-pink);
+  box-shadow: var(--ml-glow-pink);
+}
+
+#game.ml-game-screen .ml-scrim {
+  background: #030715bd;
+  backdrop-filter: blur(5px);
+}
+
 /* Досье и окно допроса */
 
 .suspect-viewer-backdrop {
@@ -6045,13 +6187,19 @@ button:focus-visible {
   color: #edf3ff !important;
   background:
     radial-gradient(ellipse at 0% 0%, #4774b523, transparent 42%),
-    radial-gradient(ellipse at 100% 100%, #a45d9b12, transparent 38%),
+    radial-gradient(ellipse at 100% 100%, #a45d9b19, transparent 38%),
     #101827 !important;
-  border: 1px solid #53698c !important;
-  border-radius: 12px !important;
+  border: 1px solid #465a80 !important;
+  border-radius: 14px !important;
   box-shadow:
-    0 30px 100px #0009,
+    0 30px 100px #000a,
     inset 0 1px #ffffff0a !important;
+}
+
+.suspect-viewer-close {
+  color: #edf3ff;
+  background: #111a2c;
+  border-color: #344766;
 }
 
 .suspect-viewer-card .interrogation-header {
@@ -6060,9 +6208,10 @@ button:focus-visible {
 
 .suspect-viewer-card .interrogation-dossier,
 .suspect-viewer-card .interrogation-result-card {
-  background: linear-gradient(145deg, #172338, #101827);
+  color: var(--text);
+  background: linear-gradient(145deg, #192640, #101827);
   border-color: #344763;
-  border-radius: 7px;
+  border-radius: 9px;
 }
 
 .suspect-viewer-card .interrogation-dossier-label {
@@ -6070,19 +6219,20 @@ button:focus-visible {
 }
 
 .suspect-viewer-card .interrogation-tab {
-  color: #9eafcb;
+  color: #aebedb;
   border-color: #34445e;
   background: #101827;
 }
 
 .suspect-viewer-card .interrogation-tab.active {
-  color: #eaf5ff;
+  color: #f0f6ff;
   border-color: var(--ml-cyan);
-  background: #71d8ff12;
+  background: #52ddf513;
   box-shadow: inset 0 -2px var(--ml-cyan);
 }
 
 .suspect-viewer-card .interrogation-question {
+  color: #edf3ff;
   background: #151f32;
   border-color: #344763;
 }
@@ -6093,38 +6243,559 @@ button:focus-visible {
 }
 
 .suspect-viewer-card .interrogation-question.cross-examination-question:not(.question-asked) {
-  border-color: #e58ebc88;
+  border-color: #ff5eaa88;
   box-shadow: inset 3px 0 var(--ml-pink);
-  background: linear-gradient(115deg, #f174b713, #151f32);
+  background: linear-gradient(115deg, #ff5eaa13, #151f32);
 }
 
 .suspect-viewer-card .interrogation-status {
-  border-color: #71d8ff55;
-  background: #71d8ff0b;
+  color: #dff8ff;
+  border-color: #52ddf555;
+  background: #52ddf50c;
 }
 
-/* Мобильная версия */
+.suspect-viewer-card #interrogationAnswer {
+  color: #e8efff;
+  background: #0b1220a8;
+  border-color: #344763;
+}
+
+/* Дополнительные поверхности: никакого старого бежевого тона */
+
+#game.ml-game-screen .route-step.completed {
+  color: #dffbff;
+  border-color: #52ddf56b;
+  background: #52ddf50d;
+}
+
+#game.ml-game-screen .route-step.completed .route-step-title,
+#game.ml-game-screen .route-step.completed .route-step-marker {
+  color: var(--ml-cyan);
+}
+
+#game.ml-game-screen .route-step.active {
+  border-color: #a98bff88;
+  background: #a98bff0d;
+}
+
+#game.ml-game-screen .route-step.active .route-step-title,
+#game.ml-game-screen .route-step.active .route-step-marker {
+  color: var(--ml-violet);
+}
+
+#game.ml-game-screen .ending-mark {
+  color: var(--ml-violet);
+}
+
+#game.ml-game-screen .ending p {
+  color: #c5d1e8;
+}
+
+/* Адаптивность: сохраняем текущую структуру интерфейса */
+
+@media (max-width: 800px) {
+  .hero {
+    border-radius: 14px;
+  }
+}
 
 @media (max-width: 650px) {
   .hero {
-    min-height: 280px;
+    min-height: 260px;
     border-radius: 12px;
   }
 
   .case-card {
-    border-radius: 10px;
+    border-radius: 11px;
   }
 
   .suspect-viewer-card {
-    border-radius: 9px !important;
+    border-radius: 10px !important;
   }
 }
 
 @media (prefers-reduced-motion: reduce) {
   .case-card,
   .btn,
-  .small-btn {
+  .small-btn,
+  #game.ml-game-screen .ml-tools button {
     transition: none !important;
+  }
+}
+
+
+/* =========================================================
+   MIND LAB — NEON NOIR HOTFIX
+   Убираем бумажные цвета, сепию и старые акценты
+   ========================================================= */
+
+#game.ml-game-screen {
+  --bg: #090d1b;
+  --panel: #11182a;
+  --panel2: #17223b;
+  --line: #304263;
+  --text: #edf2ff;
+  --muted: #98a7c5;
+  --red: #ff5eaa;
+  --cyan: #52ddf5;
+  --gold: #a98bff;
+}
+
+/* Все поверхности расследования */
+
+#game.ml-game-screen .panel,
+#game.ml-game-screen .sidebar-section,
+#game.ml-game-screen .story-panel,
+#game.ml-game-screen .investigation-board,
+#game.ml-game-screen #visualBoardPanel {
+  color: #edf2ff !important;
+  background: #10182b !important;
+  border-color: #304263 !important;
+}
+
+#game.ml-game-screen .chapter-label,
+#game.ml-game-screen .board-counter,
+#game.ml-game-screen .board-empty-icon,
+#game.ml-game-screen .board-progress {
+  color: #52ddf5 !important;
+}
+
+/* Фон доски */
+
+#game.ml-game-screen #visualBoard {
+  background-color: #0a1121 !important;
+  background-image:
+    linear-gradient(#7da5ff0b 1px, transparent 1px),
+    linear-gradient(90deg, #7da5ff0b 1px, transparent 1px),
+    radial-gradient(ellipse at 50% 20%, #3657a51c, transparent 70%) !important;
+  background-size: 24px 24px, 24px 24px, auto !important;
+  border: 1px solid #304263 !important;
+}
+
+/* Карточки улик — тёмные игровые панели, не бумага */
+
+#game.ml-game-screen #boardNodes .board-node {
+  color: #edf2ff !important;
+  background: linear-gradient(145deg, #1b2943, #10192b) !important;
+  border: 1px solid #435779 !important;
+  border-radius: 9px !important;
+  box-shadow: 0 7px 18px #0007 !important;
+  transform: none !important;
+  margin: 0 !important;
+  overflow: hidden !important;
+}
+
+#game.ml-game-screen #boardNodes .board-node::before,
+#game.ml-game-screen #boardNodes .board-node::after {
+  content: none !important;
+  display: none !important;
+}
+
+#game.ml-game-screen #boardNodes .board-node-title,
+#game.ml-game-screen #boardNodes .board-node.is-undiscovered .board-node-title {
+  color: #edf2ff !important;
+  font-family: system-ui, sans-serif !important;
+  font-size: 12px !important;
+  font-weight: 700 !important;
+  line-height: 1.4 !important;
+}
+
+#game.ml-game-screen #boardNodes .board-node-description,
+#game.ml-game-screen #boardNodes .board-node.is-undiscovered .board-node-description {
+  color: #aab9d5 !important;
+  font-family: system-ui, sans-serif !important;
+  font-size: 10px !important;
+  line-height: 1.5 !important;
+}
+
+#game.ml-game-screen #boardNodes .board-node-number {
+  color: #8fa9e0 !important;
+}
+
+#game.ml-game-screen #boardNodes .board-node-status {
+  color: #52ddf5 !important;
+  border-top-color: #52ddf533 !important;
+}
+
+#game.ml-game-screen #boardNodes .board-node-media {
+  height: 96px !important;
+  min-height: 0 !important;
+  margin: 7px 0 8px !important;
+  padding: 0 !important;
+  background: #0b1220 !important;
+  border: 1px solid #3b5073 !important;
+  border-radius: 6px !important;
+  box-shadow: none !important;
+  overflow: hidden !important;
+}
+
+#game.ml-game-screen #boardNodes .board-node-image {
+  display: block !important;
+  width: 100% !important;
+  height: 100% !important;
+  object-fit: cover !important;
+  border-radius: 5px !important;
+  filter: saturate(.9) contrast(1.04) !important;
+}
+
+#game.ml-game-screen #boardNodes .board-node-placeholder {
+  color: #8fa9e0 !important;
+  background: #111b30 !important;
+  border: 0 !important;
+}
+
+#game.ml-game-screen #boardNodes .board-node.is-selected {
+  color: #fff !important;
+  background: linear-gradient(145deg, #292347, #171c35) !important;
+  border: 2px solid #ff5eaa !important;
+  box-shadow: 0 0 0 2px #ff5eaa20, 0 8px 22px #0008 !important;
+}
+
+#game.ml-game-screen #boardNodes .board-node.is-linked {
+  border-color: #52ddf5 !important;
+  border-bottom: 1px solid #52ddf5 !important;
+}
+
+#game.ml-game-screen #boardNodes .board-node:hover {
+  border-color: #52ddf5 !important;
+  box-shadow: 0 0 18px #52ddf51c, 0 8px 22px #0008 !important;
+}
+
+/* Линии связей */
+
+#game.ml-game-screen #boardConnections {
+  z-index: 1 !important;
+  pointer-events: none !important;
+}
+
+#game.ml-game-screen .board-line {
+  stroke: #52ddf5 !important;
+  stroke-width: 1.8 !important;
+  filter: drop-shadow(0 0 3px #52ddf533) !important;
+}
+
+/* Гипотезы и найденные материалы */
+
+#game.ml-game-screen .hypothesis-card,
+#game.ml-game-screen .clue,
+#game.ml-game-screen .suspect,
+#game.ml-game-screen .choice,
+#game.ml-game-screen .twist-choices button {
+  color: #edf2ff !important;
+  background: linear-gradient(145deg, #192640, #111a2c) !important;
+  border-color: #304263 !important;
+}
+
+#game.ml-game-screen .hypothesis-card.selected,
+#game.ml-game-screen .clue.pickable.selected {
+  background: #29213e !important;
+  border-color: #ff5eaa !important;
+}
+
+#game.ml-game-screen .clue.found {
+  background: #102638 !important;
+  border-color: #52ddf5 !important;
+}
+
+#game.ml-game-screen .verdict-checklist li.missing {
+  color: #ffd5e9 !important;
+  background: #29172a !important;
+  border-color: #ff5eaa66 !important;
+}
+
+#game.ml-game-screen .notice,
+#game.ml-game-screen .twist-scene,
+#game.ml-game-screen .twist-outcome,
+#game.ml-game-screen .hypothesis-feedback {
+  color: #edf2ff !important;
+  background: #151f34 !important;
+  border-color: #435779 !important;
+}
+
+/* Панели, кнопки и навигация */
+
+#game.ml-game-screen .ml-drawer,
+#game.ml-game-screen .ml-tool-panel {
+  color: #edf2ff !important;
+  background: #0e1628 !important;
+  border-color: #304263 !important;
+}
+
+#game.ml-game-screen .ml-layout-switch button,
+#game.ml-game-screen .ml-tools button,
+#game.ml-game-screen .ml-close {
+  color: #edf2ff !important;
+  background: #17223b !important;
+  border-color: #344766 !important;
+}
+
+#game.ml-game-screen .ml-layout-switch button[aria-pressed="true"],
+#game.ml-game-screen .ml-tools button.active,
+#game.ml-game-screen .ml-tools button[aria-pressed="true"] {
+  border-color: #52ddf5 !important;
+  box-shadow: inset 0 -2px #52ddf5 !important;
+}
+
+/* Досье и допрос */
+
+.suspect-viewer-card {
+  color: #edf2ff !important;
+  background: linear-gradient(145deg, #17223b, #0c1324) !important;
+  border-color: #435779 !important;
+}
+
+.suspect-viewer-card .interrogation-dossier,
+.suspect-viewer-card .interrogation-result-card,
+.suspect-viewer-card .interrogation-question,
+.suspect-viewer-card .interrogation-tab {
+  color: #edf2ff !important;
+  background: #151f34 !important;
+  border-color: #344766 !important;
+}
+
+.suspect-viewer-card .interrogation-tab.active {
+  border-color: #52ddf5 !important;
+  box-shadow: inset 0 -2px #52ddf5 !important;
+}
+
+.suspect-viewer-card .interrogation-dossier-label {
+  color: #52ddf5 !important;
+}
+
+/* Главное меню */
+
+.case-card,
+.stat {
+  color: #edf2ff;
+  background: linear-gradient(145deg, #17223b, #0d1424) !important;
+  border-color: #304263 !important;
+}
+
+.tag {
+  color: #b9c8e5 !important;
+  background: #8aa8ff0a !important;
+  border-color: #344766 !important;
+}
+
+#catalog .cover-two {
+  background-image:
+    linear-gradient(120deg, #a98bff20, #090d1bdc),
+    url("https://images.unsplash.com/photo-1511818966892-d7d671e672a2?auto=format&fit=crop&w=900&q=80") !important;
+}
+
+/* MIND LAB — unified neon evidence map */
+
+#game.ml-game-screen #visualBoard {
+  position: relative !important;
+  isolation: isolate;
+  overflow: auto !important;
+  background-color: #090f20 !important;
+  background-image:
+    radial-gradient(ellipse at 50% 0%, #294a8528, transparent 68%),
+    linear-gradient(#8db9ff0a 1px, transparent 1px),
+    linear-gradient(90deg, #8db9ff0a 1px, transparent 1px) !important;
+  background-size: auto, 24px 24px, 24px 24px !important;
+  border: 1px solid #304263 !important;
+  border-radius: 12px !important;
+}
+
+#game.ml-game-screen #boardConnections {
+  position: absolute !important;
+  inset: 0 auto auto 0 !important;
+  z-index: 1 !important;
+  pointer-events: none !important;
+  overflow: visible !important;
+}
+
+#game.ml-game-screen #boardNodes {
+  position: absolute !important;
+  inset: 0 !important;
+  z-index: 2 !important;
+}
+
+#game.ml-game-screen #boardNodes .board-node {
+  box-sizing: border-box !important;
+  min-height: 0 !important;
+  padding: 9px !important;
+  overflow: hidden !important;
+  border: 1px solid #344968 !important;
+  border-radius: 8px !important;
+  color: #edf2ff !important;
+  background: linear-gradient(145deg, #192640, #0e1729) !important;
+  box-shadow: 0 8px 20px #0006 !important;
+}
+
+#game.ml-game-screen #boardNodes .board-node.is-undiscovered {
+  border-style: dashed !important;
+  border-color: #506184 !important;
+  background: #121b2d !important;
+}
+
+#game.ml-game-screen #boardNodes .board-node-title {
+  color: #edf2ff !important;
+}
+
+#game.ml-game-screen #boardNodes .board-node-description {
+  color: #aab9d5 !important;
+}
+
+#game.ml-game-screen #boardNodes .board-node-number {
+  color: #8fa9e0 !important;
+}
+
+#game.ml-game-screen #boardNodes .board-node-status {
+  color: #52ddf5 !important;
+  border-color: #304263 !important;
+}
+
+#game.ml-game-screen #boardNodes .board-node-media {
+  height: 88px !important;
+  min-height: 0 !important;
+  overflow: hidden !important;
+  border: 1px solid #344968 !important;
+  border-radius: 5px !important;
+  background: #0a1120 !important;
+}
+
+#game.ml-game-screen #boardNodes .board-node-image {
+  width: 100% !important;
+  height: 100% !important;
+  object-fit: cover !important;
+}
+
+#game.ml-game-screen #boardNodes .board-node-placeholder {
+  color: #8fa9e0 !important;
+  background: #111b30 !important;
+  border: 0 !important;
+}
+
+#game.ml-game-screen #boardNodes .board-node.is-selected {
+  border: 2px solid #ff5eaa !important;
+  background: linear-gradient(145deg, #30213f, #171b31) !important;
+  box-shadow: 0 0 20px #ff5eaa20 !important;
+}
+
+#game.ml-game-screen #boardNodes .board-node.is-linked {
+  border-color: #52ddf5 !important;
+}
+
+#game.ml-game-screen .board-line {
+  fill: none !important;
+  stroke-width: 2 !important;
+  stroke-linecap: round !important;
+  stroke-linejoin: round !important;
+  opacity: .9 !important;
+  filter: drop-shadow(0 0 3px #52ddf533) !important;
+}
+
+@media (max-width: 620px) {
+  #game.ml-game-screen #boardNodes .board-node-media {
+    height: 68px !important;
+  }
+}
+
+
+/* MIND LAB — карточки одинаковой высоты */
+
+#game.ml-game-screen #boardNodes .board-node {
+  display: flex !important;
+  flex-direction: column !important;
+  align-items: stretch !important;
+  justify-content: flex-start !important;
+  gap: 0 !important;
+  padding: 9px !important;
+  overflow: hidden !important;
+}
+
+#game.ml-game-screen #boardNodes .board-node-number {
+  flex: 0 0 auto !important;
+  margin: 0 0 6px !important;
+  font-size: 9px !important;
+  line-height: 1.3 !important;
+}
+
+#game.ml-game-screen #boardNodes .board-node-media {
+  flex: 0 0 auto !important;
+  height: 68px !important;
+  min-height: 0 !important;
+  margin: 0 0 7px !important;
+}
+
+#game.ml-game-screen #boardNodes .board-node-title {
+  flex: 0 0 auto !important;
+  display: -webkit-box !important;
+  -webkit-box-orient: vertical !important;
+  -webkit-line-clamp: 2 !important;
+  overflow: hidden !important;
+  overflow-wrap: anywhere !important;
+  line-height: 1.35 !important;
+  max-height: 2.7em !important;
+  margin: 0 0 5px !important;
+}
+
+#game.ml-game-screen #boardNodes .board-node-description {
+  flex: 1 1 auto !important;
+  min-height: 0 !important;
+  display: -webkit-box !important;
+  -webkit-box-orient: vertical !important;
+  -webkit-line-clamp: 3 !important;
+  overflow: hidden !important;
+  overflow-wrap: anywhere !important;
+  line-height: 1.4 !important;
+}
+
+#game.ml-game-screen #boardNodes .board-node-status {
+  flex: 0 0 auto !important;
+  margin-top: auto !important;
+  padding-top: 5px !important;
+  font-size: 9px !important;
+  line-height: 1.25 !important;
+  white-space: normal !important;
+  overflow-wrap: anywhere !important;
+}
+
+#game.ml-game-screen .investigation-board {
+  height: auto !important;
+  min-height: 0 !important;
+  max-height: none !important;
+  overflow: visible !important;
+}
+
+#game.ml-game-screen .investigation-board .visual-board {
+  flex: 0 0 auto !important;
+  min-height: 440px;
+  max-height: none !important;
+  overflow: auto !important;
+}
+
+#game.ml-game-screen .investigation-board .board-footer {
+  position: relative !important;
+  display: flex !important;
+  flex: 0 0 auto !important;
+  visibility: visible !important;
+  height: auto !important;
+  min-height: 48px;
+  overflow: visible !important;
+  padding-bottom: 12px !important;
+  z-index: 3 !important;
+}
+
+#game.ml-game-screen #boardInsight {
+  display: block !important;
+  visibility: visible !important;
+  height: auto !important;
+  overflow-wrap: anywhere !important;
+}
+
+@media (min-width: 621px) {
+  #game.ml-game-screen #boardNodes .board-node-media {
+    height: 82px !important;
+  }
+}
+
+@media (max-width: 620px) {
+  #game.ml-game-screen #boardNodes .board-node-media {
+    height: 62px !important;
   }
 }
 
@@ -11533,14 +12204,18 @@ function renderVisualBoard() {
       : "Связь проверена. Нажми, чтобы открыть досье.";
   });
 
-  // Компактная раскладка на рабочей поверхности.
-  // Карточки имеют фиксированную ширину и не растягиваются вместе с экраном.
+
+  // MIND LAB — единая карта связей без дерева.
+  // Компактные карточки с гарантированным расстоянием между рядами.
+
   const boardWidth = Math.max(board.clientWidth, 320);
   const compact = boardWidth < 620;
+
   const cardWidth = compact ? 138 : 166;
+  const cardHeight = compact ? 250 : 280;
   const sidePadding = compact ? 14 : 24;
   const cardGap = compact ? 12 : 22;
-  const rowStep = compact ? 224 : 246;
+  const rowStep = cardHeight + (compact ? 22 : 26);
   const topPadding = compact ? 22 : 28;
 
   const columns = Math.max(
@@ -11551,139 +12226,52 @@ function renderVisualBoard() {
     )
   );
 
+  const allBoardIds = [
+    ...visibleEvidence.map(e => e[0]),
+    ...linkedSuspectIds.map(id => `suspect:${id}`)
+  ];
+
+  const positions = new Map();
+
+  allBoardIds.forEach((id, index) => {
+    const row = Math.floor(index / columns);
+    const column = index % columns;
+
+    const itemsInRow = Math.min(
+      columns,
+      allBoardIds.length - row * columns
+    );
+
+    const rowWidth =
+      itemsInRow * cardWidth +
+      Math.max(0, itemsInRow - 1) * cardGap;
+
+    const startX = Math.max(
+      sidePadding,
+      (boardWidth - rowWidth) / 2
+    );
+
+    positions.set(id, {
+      x: Math.round(startX + column * (cardWidth + cardGap)),
+      y: topPadding + row * rowStep
+    });
+  });
+
+  const rowCount = Math.max(
+    1,
+    Math.ceil(allBoardIds.length / columns)
+  );
+
+  const contentHeight =
+    topPadding + rowCount * rowStep + 18;
+
   nodes.style.setProperty("position", "absolute", "important");
   nodes.style.setProperty("inset", "0", "important");
   nodes.style.setProperty("display", "block", "important");
   nodes.style.setProperty("width", "100%", "important");
   nodes.style.setProperty("padding", "0", "important");
   nodes.style.setProperty("min-height", "0", "important");
-
-  const positions = new Map();
-  const graph = new Map();
-
-  visibleEvidence.forEach(e => graph.set(e[0], new Set()));
-
-  // Улики соединяются только подтверждёнными связями.
-  knownLinks.forEach(key => {
-    const [a, b] = key.split("|");
-    if (!graph.has(a) || !graph.has(b)) return;
-    graph.get(a).add(b);
-    graph.get(b).add(a);
-  });
-
-  // Подозреваемые — полноценные узлы графа.
-  linkedSuspectIds.forEach(id => graph.set(`suspect:${id}`, new Set()));
-
-  suspectLinkEntries.forEach(item => {
-    const evidenceNode = item.evidenceId;
-    const suspectNode = `suspect:${item.suspectId}`;
-
-    if (!graph.has(evidenceNode) || !graph.has(suspectNode)) return;
-
-    graph.get(evidenceNode).add(suspectNode);
-    graph.get(suspectNode).add(evidenceNode);
-  });
-
-  const graphNodes = [
-    ...linkedEvidenceIds,
-    ...linkedSuspectIds.map(id => `suspect:${id}`)
-  ].filter(id => graph.has(id));
-
-  const levels = new Map();
-  const degree = id => graph.get(id)?.size || 0;
-
-  // Для каждой связанной группы строим уровни, не создавая
-  // искусственных пустых рядов между отдельными группами.
-  graphNodes
-    .sort((a, b) => degree(b) - degree(a))
-    .forEach(root => {
-      if (levels.has(root)) return;
-
-      levels.set(root, 0);
-      const queue = [root];
-
-      while (queue.length) {
-        const current = queue.shift();
-
-        [...(graph.get(current) || [])]
-          .sort((a, b) => degree(b) - degree(a))
-          .forEach(next => {
-            if (levels.has(next)) return;
-
-            levels.set(next, levels.get(current) + 1);
-            queue.push(next);
-          });
-      }
-    });
-
-  let currentRow = 0;
-
-  function placeRow(ids, rowIndex) {
-    const chunks = [];
-
-    for (let i = 0; i < ids.length; i += columns) {
-      chunks.push(ids.slice(i, i + columns));
-    }
-
-    chunks.forEach((chunk, chunkIndex) => {
-      const totalWidth =
-        chunk.length * cardWidth +
-        Math.max(0, chunk.length - 1) * cardGap;
-
-      const startX = Math.max(
-        sidePadding,
-        (boardWidth - totalWidth) / 2
-      );
-
-      chunk.forEach((id, index) => {
-        positions.set(id, {
-          x: Math.round(startX + index * (cardWidth + cardGap)),
-          y: topPadding + (rowIndex + chunkIndex) * rowStep
-        });
-      });
-    });
-
-    return rowIndex + chunks.length;
-  }
-
-  const maxLevel = Math.max(0, ...levels.values());
-
-  // Связанные материалы и подозреваемые располагаются по уровням графа.
-  for (let level = 0; level <= maxLevel; level++) {
-    const rowIds = graphNodes
-      .filter(id => levels.get(id) === level)
-      .sort((a, b) => degree(b) - degree(a));
-
-    if (rowIds.length) {
-      currentRow = placeRow(rowIds, currentRow);
-    }
-  }
-
-  // Улики, которые ещё не вошли в связи, остаются отдельными
-  // компактными материалами в нижней части доски.
-  const looseEvidence = visibleEvidence
-    .map(e => e[0])
-    .filter(id => !linkedEvidenceIds.has(id));
-
-  if (looseEvidence.length) {
-    currentRow += 1;
-    currentRow = placeRow(looseEvidence, currentRow);
-  }
-
-  const contentHeight =
-    topPadding + Math.max(1, currentRow) * rowStep + 24;
-
-  nodes.style.setProperty(
-    "height",
-    `${contentHeight}px`,
-    "important"
-  );
-
-  board.style.setProperty(
-    "min-height",
-    `${Math.max(440, contentHeight + 24)}px`,
-    "important"
-  );
+  nodes.style.setProperty("height", `${contentHeight}px`, "important");
 
   nodes.querySelectorAll(".board-node").forEach(button => {
     const id = button.dataset.boardEvidence
@@ -11697,11 +12285,36 @@ function renderVisualBoard() {
     button.style.setProperty("left", `${position.x}px`, "important");
     button.style.setProperty("top", `${position.y}px`, "important");
     button.style.setProperty("width", `${cardWidth}px`, "important");
+    button.style.setProperty("height", `${cardHeight}px`, "important");
+    button.style.setProperty("min-height", "0", "important");
+    button.style.setProperty("max-height", `${cardHeight}px`, "important");
     button.style.setProperty("max-width", `${cardWidth}px`, "important");
     button.style.setProperty("min-width", "0", "important");
     button.style.setProperty("margin", "0", "important");
     button.style.setProperty("transform", "none", "important");
+    button.style.setProperty("box-sizing", "border-box", "important");
   });
+
+  // Доска растёт вместе с количеством карточек.
+  const fullBoardHeight = Math.max(440, contentHeight + 24);
+
+  board.style.setProperty(
+    "height",
+    `${fullBoardHeight}px`,
+    "important"
+  );
+
+  board.style.setProperty(
+    "min-height",
+    `${fullBoardHeight}px`,
+    "important"
+  );
+
+  board.style.setProperty(
+    "max-height",
+    "none",
+    "important"
+  );
 
   // Счётчики и подсказка под доской.
   const foundCount = visibleEvidence.filter(e => foundIds.includes(e[0])).length;
@@ -11842,6 +12455,10 @@ function renderVisualBoard() {
       );
 
       const direction = end.x >= start.x ? 1 : -1;
+            const path = document.createElementNS(
+        "http://www.w3.org/2000/svg",
+        "path"
+      );
 
       path.setAttribute(
         "d",
@@ -11852,7 +12469,9 @@ function renderVisualBoard() {
       );
 
       path.setAttribute("class", "board-line");
-      path.style.stroke = palette[index % palette.length];
+            path.style.stroke = link.b.startsWith("suspect:")
+        ? "#ff5eaa"
+        : "#52ddf5";
       path.style.strokeWidth = link.good ? "2.4px" : "1.8px";
       path.style.strokeDasharray = link.good ? "none" : "5 5";
       path.style.opacity = link.good ? "0.9" : "0.65";
