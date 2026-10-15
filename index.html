@@ -4760,6 +4760,425 @@ body.ml-page-scroll > main {
   }
 }
 
+
+/* =========================================================
+   MIND LAB — RIGHT SIDEBAR / VISUAL PASS 03
+   Обновляем только материалы дела, проверку связей и досье.
+   Доску, левую панель и теории не меняем.
+   ========================================================= */
+
+/* Общая поверхность трёх обновляемых разделов */
+#game.ml-game-screen #materialsSidebarSection,
+#game.ml-game-screen #deductionSidebarSection,
+#game.ml-game-screen .investigation-sidebar > .sidebar-section:has(#suspectList) {
+  position: relative;
+  overflow: hidden;
+  background:
+    linear-gradient(145deg, #1b2028 0%, #141820 70%, #12161d 100%) !important;
+  border: 1px solid #a9b5c51c !important;
+  border-radius: 7px !important;
+  box-shadow:
+    0 9px 24px #00000016,
+    inset 0 1px 0 #ffffff05;
+}
+
+/* Тонкая архивная линия сверху */
+#game.ml-game-screen #materialsSidebarSection::before,
+#game.ml-game-screen #deductionSidebarSection::before,
+#game.ml-game-screen .investigation-sidebar > .sidebar-section:has(#suspectList)::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 2px;
+  background: linear-gradient(
+    90deg,
+    #aeb8c533,
+    #aeb8c508 65%,
+    transparent
+  );
+  pointer-events: none;
+}
+
+/* Типографика разделов */
+#game.ml-game-screen #materialsSidebarSection h3,
+#game.ml-game-screen #deductionSidebarSection h3,
+#game.ml-game-screen .investigation-sidebar > .sidebar-section:has(#suspectList) h3 {
+  margin: 7px 0 9px !important;
+  color: #e9edf3;
+  font-size: 17px;
+  line-height: 1.35;
+  letter-spacing: -0.025em;
+}
+
+#game.ml-game-screen #materialsSidebarSection > p,
+#game.ml-game-screen #deductionSidebarSection > p {
+  margin: 0 0 14px !important;
+  color: #929cad;
+  font-size: 12px;
+  line-height: 1.65;
+}
+
+/* ---------------------------------------------------------
+   1. МАТЕРИАЛЫ ДЕЛА — архивные карточки
+   --------------------------------------------------------- */
+
+#game.ml-game-screen #materialsSidebarSection .clue-list {
+  display: grid !important;
+  grid-template-columns: minmax(0, 1fr);
+  gap: 7px !important;
+}
+
+#game.ml-game-screen #materialsSidebarSection .clue {
+  position: relative;
+  display: block;
+  width: 100%;
+  min-width: 0;
+  min-height: 49px;
+  padding: 11px 12px 10px 38px !important;
+  overflow: hidden;
+  text-align: left;
+  color: #dce2ea;
+  background:
+    linear-gradient(110deg, #ffffff04, transparent 75%),
+    #171c24 !important;
+  border: 1px solid #9daabd1c !important;
+  border-left: 2px solid #707c8b66 !important;
+  border-radius: 4px !important;
+  box-shadow: inset 0 1px 0 #ffffff03;
+  transition:
+    background .18s ease,
+    border-color .18s ease,
+    transform .18s ease;
+}
+
+/* Значок документа */
+#game.ml-game-screen #materialsSidebarSection .clue::before {
+  content: "▤";
+  position: absolute;
+  top: 11px;
+  left: 12px;
+  width: 17px;
+  color: #8995a6;
+  font-size: 16px;
+  line-height: 1.2;
+  text-align: center;
+}
+
+#game.ml-game-screen #materialsSidebarSection .clue > span {
+  display: block;
+  min-width: 0;
+  color: #dfe4ec;
+  font-size: 12px;
+  font-weight: 650;
+  line-height: 1.45;
+  overflow-wrap: anywhere;
+}
+
+#game.ml-game-screen #materialsSidebarSection .clue small {
+  display: none;
+  margin-top: 6px;
+  color: #909daf;
+  font-size: 11px;
+  line-height: 1.55;
+  font-weight: 400;
+}
+
+#game.ml-game-screen #materialsSidebarSection .clue.found {
+  background:
+    linear-gradient(100deg, #6ac9bd0b, transparent 75%),
+    #171f23 !important;
+  border-color: #6ac9bd26 !important;
+  border-left-color: #70bdb2 !important;
+}
+
+#game.ml-game-screen #materialsSidebarSection .clue.found::before {
+  content: "✓";
+  color: #82c9bc;
+  font-size: 13px;
+  font-weight: 800;
+}
+
+#game.ml-game-screen #materialsSidebarSection .clue.found small {
+  display: block;
+}
+
+#game.ml-game-screen #materialsSidebarSection .clue:hover {
+  transform: translateX(2px);
+  background-color: #202733 !important;
+  border-color: #9eacbf40 !important;
+  border-left-color: #c1cbd8 !important;
+}
+
+#game.ml-game-screen #materialsSidebarSection .clue.found:hover {
+  border-left-color: #91ddd0 !important;
+}
+
+/* ---------------------------------------------------------
+   2. ПРОВЕРКА СВЯЗЕЙ — рабочее место аналитика
+   --------------------------------------------------------- */
+
+#game.ml-game-screen #deductionSidebarSection {
+  background:
+    radial-gradient(ellipse at 100% 0%, #72c8bc0a, transparent 55%),
+    linear-gradient(145deg, #191f28, #12171e) !important;
+}
+
+#game.ml-game-screen #deductionSidebarSection .clue-list {
+  display: grid !important;
+  gap: 7px !important;
+  counter-reset: evidence-pick;
+}
+
+/* Каждая улика — отдельный элемент для сопоставления */
+#game.ml-game-screen #deductionSidebarSection .clue.pickable {
+  counter-increment: evidence-pick;
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  min-width: 0;
+  min-height: 48px;
+  width: 100%;
+  padding: 10px 11px 10px 43px !important;
+  color: #cbd3df;
+  text-align: left;
+  background: #111720 !important;
+  border: 1px solid #9caec01c !important;
+  border-radius: 4px !important;
+  font-size: 12px;
+  font-weight: 600;
+  line-height: 1.45;
+  overflow-wrap: anywhere;
+  transition:
+    background .18s ease,
+    border-color .18s ease,
+    box-shadow .18s ease;
+}
+
+/* Номер материала */
+#game.ml-game-screen #deductionSidebarSection .clue.pickable::before {
+  content: counter(evidence-pick, decimal-leading-zero);
+  position: absolute;
+  left: 11px;
+  top: 50%;
+  transform: translateY(-50%);
+  display: grid;
+  place-items: center;
+  width: 23px;
+  height: 23px;
+  color: #8793a5;
+  background: #252d39;
+  border: 1px solid #a4b1c016;
+  border-radius: 3px;
+  font: 10px/1 ui-monospace, SFMono-Regular, Consolas, monospace;
+}
+
+#game.ml-game-screen #deductionSidebarSection .clue.pickable:hover {
+  background: #1b2430 !important;
+  border-color: #80b9b44a !important;
+}
+
+#game.ml-game-screen #deductionSidebarSection .clue.pickable.selected {
+  color: #f1dfb2 !important;
+  background:
+    linear-gradient(100deg, #e4bb6412, transparent 85%),
+    #211f1a !important;
+  border-color: #d4b56c88 !important;
+  box-shadow: inset 2px 0 0 #d4b56c;
+}
+
+#game.ml-game-screen #deductionSidebarSection .clue.pickable.selected::before {
+  content: "✓";
+  color: #f0d28e;
+  background: #493b22;
+  border-color: #d4b56c55;
+  font-size: 12px;
+  font-weight: 800;
+}
+
+/* ---------------------------------------------------------
+   3. ПОДОЗРЕВАЕМЫЕ — сдержанные карточки досье
+   --------------------------------------------------------- */
+
+#game.ml-game-screen #suspectList {
+  display: grid !important;
+  gap: 8px !important;
+}
+
+#game.ml-game-screen #suspectList .suspect {
+  position: relative;
+  display: block;
+  width: 100%;
+  min-width: 0;
+  min-height: 67px;
+  padding: 12px 12px 11px 48px !important;
+  overflow: hidden;
+  text-align: left;
+  color: #e3e7ee;
+  background:
+    linear-gradient(110deg, #ffffff04, transparent 75%),
+    #171c24 !important;
+  border: 1px solid #9daabd20 !important;
+  border-radius: 4px !important;
+  box-shadow: inset 0 1px 0 #ffffff03;
+  transition:
+    background .18s ease,
+    border-color .18s ease,
+    transform .18s ease;
+}
+
+/* Графический знак досье вместо случайных эмодзи */
+#game.ml-game-screen #suspectList .suspect::before {
+  content: "◉";
+  position: absolute;
+  left: 13px;
+  top: 14px;
+  display: grid;
+  place-items: center;
+  width: 25px;
+  height: 25px;
+  color: #a8b3c3;
+  background: #252c37;
+  border: 1px solid #aab6c01b;
+  border-radius: 50%;
+  font-size: 13px;
+}
+
+#game.ml-game-screen #suspectList .suspect strong {
+  display: block;
+  margin: 0 0 4px;
+  color: #e8ecf3;
+  font-size: 13px;
+  font-weight: 700;
+  line-height: 1.4;
+  overflow-wrap: anywhere;
+}
+
+#game.ml-game-screen #suspectList .suspect small {
+  display: block;
+  margin: 0;
+  color: #929daf;
+  font-size: 11px;
+  line-height: 1.5;
+  font-weight: 400;
+  overflow-wrap: anywhere;
+}
+
+#game.ml-game-screen #suspectList .suspect:hover {
+  transform: translateX(2px);
+  background-color: #202631 !important;
+  border-color: #a7b5c83d !important;
+}
+
+#game.ml-game-screen #suspectList .suspect:hover::before {
+  color: #d2dbe7;
+  border-color: #aab6c044;
+}
+
+/* ---------------------------------------------------------
+   История выводов — единый визуальный язык с аналитикой
+   --------------------------------------------------------- */
+
+#game.ml-game-screen .deduction-history {
+  margin-top: 18px;
+}
+
+#game.ml-game-screen .deduction-history-item {
+  position: relative;
+  margin-top: 8px;
+  padding: 12px 13px;
+  background: #111720;
+  border: 1px solid #9caec01c;
+  border-left: 2px solid #7e8999;
+  border-radius: 4px;
+}
+
+#game.ml-game-screen .deduction-history-type {
+  display: block;
+  margin-bottom: 5px;
+  color: #8e9bad;
+  font-size: 9px;
+  font-weight: 800;
+  letter-spacing: .12em;
+  text-transform: uppercase;
+}
+
+#game.ml-game-screen .deduction-history-item strong {
+  display: block;
+  color: #e1e7ef;
+  font-size: 12px;
+  line-height: 1.5;
+}
+
+#game.ml-game-screen .deduction-history-item p {
+  margin: 7px 0;
+  color: #a6b0bf;
+  font-size: 11px;
+  line-height: 1.65;
+}
+
+#game.ml-game-screen .deduction-history-status {
+  display: inline-block;
+  margin-top: 2px;
+  color: #93c9bd;
+  font-size: 10px;
+  font-weight: 650;
+}
+
+#game.ml-game-screen .deduction-history-item:has(.deduction-history-status) {
+  border-left-color: #70bdb2;
+}
+
+/* Результат анализа — ясное отличие от обычного текста */
+#game.ml-game-screen #deductionResult,
+#game.ml-game-screen #deductionHint {
+  border-radius: 4px;
+  font-size: 12px;
+  line-height: 1.7;
+}
+
+#game.ml-game-screen #deductionHint {
+  background: #1b2028;
+  border-left-color: #bda46b;
+}
+
+#game.ml-game-screen #deductionResult.deduction-good {
+  background: #142321;
+  border-left-color: #77c8b8;
+}
+
+#game.ml-game-screen #deductionResult.deduction-bad {
+  background: #281a20;
+  border-left-color: #c96d7c;
+}
+
+#game.ml-game-screen #deductionResult.deduction-neutral {
+  background: #242119;
+  border-left-color: #c6aa6d;
+}
+
+/* ---------------------------------------------------------
+   Узкие экраны
+   --------------------------------------------------------- */
+
+@media (max-width: 600px) {
+  #game.ml-game-screen #materialsSidebarSection .clue {
+    min-height: 46px;
+    padding-top: 10px !important;
+    padding-bottom: 10px !important;
+  }
+
+  #game.ml-game-screen #suspectList .suspect {
+    min-height: 63px;
+  }
+
+  #game.ml-game-screen #deductionSidebarSection .clue.pickable {
+    min-height: 45px;
+  }
+}
+
 </style>
 </head>
 <body>
