@@ -3402,6 +3402,185 @@ body {
   }
 }
 
+
+/* =========================================================
+   MIND LAB — PHASE 04
+   Компактные фотокарточки и естественная раскладка доски
+   ========================================================= */
+
+/* Рабочая поверхность и слои */
+#game.ml-game-screen #visualBoard {
+  position: relative;
+  isolation: isolate;
+}
+
+#game.ml-game-screen #boardConnections {
+  position: absolute;
+  inset: 0;
+  z-index: 1 !important;
+  pointer-events: none;
+}
+
+#game.ml-game-screen #boardNodes {
+  position: relative;
+  z-index: 2 !important;
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 185px));
+  justify-content: space-evenly;
+  align-content: start;
+  align-items: start;
+  gap: 17px 14px;
+  padding: 20px 14px 30px;
+}
+
+/* Карточки — небольшие бумажные материалы */
+#game.ml-game-screen #boardNodes .board-node {
+  width: 100%;
+  min-width: 0;
+  padding: 8px 8px 10px;
+  border: 1px solid #e6dfcf;
+  border-radius: 2px;
+  background: linear-gradient(150deg, #f2efe6, #d8d0c0);
+  box-shadow:
+    0 2px 4px #0006,
+    0 7px 13px #0006,
+    inset 0 1px 0 #fff;
+  transform: rotate(var(--evidence-tilt, -0.8deg));
+  transform-origin: center 15%;
+}
+
+/* Лёгкое смещение по высоте — эффект живой доски */
+#game.ml-game-screen #boardNodes .board-node:nth-child(4n + 1) {
+  margin-top: 2px;
+}
+
+#game.ml-game-screen #boardNodes .board-node:nth-child(4n + 2) {
+  margin-top: 18px;
+}
+
+#game.ml-game-screen #boardNodes .board-node:nth-child(4n + 3) {
+  margin-top: 7px;
+}
+
+#game.ml-game-screen #boardNodes .board-node:nth-child(4n) {
+  margin-top: 24px;
+}
+
+/* Фото внутри бумажной рамки */
+#game.ml-game-screen #boardNodes .board-node-media {
+  height: 94px;
+  margin: 6px 0 8px;
+  border: 1px solid #c7bda9;
+  background: #292722;
+  overflow: hidden;
+}
+
+#game.ml-game-screen #boardNodes .board-node-image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+/* Чёткая подпись, как на архивном снимке */
+#game.ml-game-screen #boardNodes .board-node-title {
+  font-family: Georgia, "Times New Roman", serif;
+  font-size: 12px;
+  line-height: 1.35;
+}
+
+#game.ml-game-screen #boardNodes .board-node-description {
+  margin-top: 4px;
+  font-size: 9px;
+  line-height: 1.4;
+}
+
+#game.ml-game-screen #boardNodes .board-node-number,
+#game.ml-game-screen #boardNodes .board-node-status {
+  font-size: 8px;
+}
+
+/* Наведение: карточка приподнимается, не теряя бумажный вид */
+#game.ml-game-screen #boardNodes .board-node:hover {
+  z-index: 8;
+  transform: rotate(0deg) translateY(-4px) scale(1.025);
+  box-shadow:
+    0 4px 8px #0007,
+    0 14px 22px #0009;
+}
+
+/* Выбранная улика */
+#game.ml-game-screen #boardNodes .board-node.is-selected {
+  z-index: 9;
+  transform: rotate(0deg) scale(1.025);
+  border: 2px solid #d5ad66;
+  box-shadow:
+    0 0 0 3px #d5ad6628,
+    0 12px 24px #0009;
+}
+
+/* Большие экраны */
+@media (min-width: 1450px) {
+  #game.ml-game-screen #boardNodes {
+    grid-template-columns: repeat(5, minmax(0, 175px));
+    gap: 20px 16px;
+  }
+
+  #game.ml-game-screen #boardNodes .board-node-media {
+    height: 100px;
+  }
+}
+
+/* Планшеты */
+@media (max-width: 1050px) {
+  #game.ml-game-screen #boardNodes {
+    grid-template-columns: repeat(3, minmax(0, 185px));
+    justify-content: space-evenly;
+    gap: 16px 12px;
+    padding: 16px 10px 24px;
+  }
+}
+
+/* Телефоны */
+@media (max-width: 650px) {
+  #game.ml-game-screen #boardNodes {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 12px 10px;
+    padding: 12px 8px 20px;
+  }
+
+  #game.ml-game-screen #boardNodes .board-node {
+    padding: 7px 7px 9px;
+  }
+
+  #game.ml-game-screen #boardNodes .board-node:nth-child(4n + 2) {
+    margin-top: 10px;
+  }
+
+  #game.ml-game-screen #boardNodes .board-node:nth-child(4n) {
+    margin-top: 14px;
+  }
+
+  #game.ml-game-screen #boardNodes .board-node-media {
+    height: 82px;
+  }
+
+  #game.ml-game-screen #boardNodes .board-node-title {
+    font-size: 11px;
+  }
+}
+
+/* Очень узкие экраны */
+@media (max-width: 370px) {
+  #game.ml-game-screen #boardNodes {
+    gap: 10px 7px;
+    padding: 10px 5px 16px;
+  }
+
+  #game.ml-game-screen #boardNodes .board-node-media {
+    height: 70px;
+  }
+}
+
 </style>
 </head>
 <body>
