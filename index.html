@@ -5179,6 +5179,143 @@ body.ml-page-scroll > main {
   }
 }
 
+
+/* MIND LAB — persistent deduction link colors */
+
+#game.ml-game-screen #deductionSidebarSection
+.clue.pickable {
+  position: relative;
+  gap: 9px;
+}
+
+#game.ml-game-screen #deductionSidebarSection
+.deduction-link-markers {
+  display: flex;
+  align-items: center;
+  gap: 3px;
+  flex: 0 0 auto;
+}
+
+#game.ml-game-screen #deductionSidebarSection
+.deduction-link-dot {
+  display: inline-block;
+  width: 6px;
+  height: 19px;
+  border-radius: 3px;
+  background: #758195;
+}
+
+#game.ml-game-screen #deductionSidebarSection
+.deduction-evidence-label {
+  flex: 1 1 auto;
+  min-width: 0;
+  overflow-wrap: anywhere;
+}
+
+#game.ml-game-screen #deductionSidebarSection
+.deduction-link-meta {
+  flex: 0 0 auto;
+  color: var(--link-color, #9ca9b9);
+  font-size: 9px;
+  font-weight: 800;
+  letter-spacing: .04em;
+  white-space: nowrap;
+}
+
+#game.ml-game-screen #deductionSidebarSection
+.clue.pickable.has-confirmed-link {
+  --link-color: #65d6a0;
+  border-color: #65d6a052 !important;
+  border-left: 3px solid var(--link-color) !important;
+  background: linear-gradient(100deg, #65d6a015, transparent 90%),
+              #151d21 !important;
+  box-shadow: inset 0 1px 0 #ffffff04;
+}
+
+#game.ml-game-screen #deductionSidebarSection
+.clue.pickable.link-color-0 {
+  --link-color: #65d6a0;
+}
+
+#game.ml-game-screen #deductionSidebarSection
+.clue.pickable.link-color-1 {
+  --link-color: #69adff;
+}
+
+#game.ml-game-screen #deductionSidebarSection
+.clue.pickable.link-color-2 {
+  --link-color: #f17e8c;
+}
+
+#game.ml-game-screen #deductionSidebarSection
+.clue.pickable.link-color-3 {
+  --link-color: #c19aff;
+}
+
+#game.ml-game-screen #deductionSidebarSection
+.clue.pickable.link-color-4 {
+  --link-color: #e7bd68;
+}
+
+#game.ml-game-screen #deductionSidebarSection
+.clue.pickable.link-color-5 {
+  --link-color: #65dbe0;
+}
+
+/* Цвет самого маркера соответствует номеру связи */
+#game.ml-game-screen #deductionSidebarSection
+.deduction-link-dot.link-color-0 {
+  background: #65d6a0;
+  box-shadow: 0 0 7px #65d6a044;
+}
+
+#game.ml-game-screen #deductionSidebarSection
+.deduction-link-dot.link-color-1 {
+  background: #69adff;
+  box-shadow: 0 0 7px #69adff44;
+}
+
+#game.ml-game-screen #deductionSidebarSection
+.deduction-link-dot.link-color-2 {
+  background: #f17e8c;
+  box-shadow: 0 0 7px #f17e8c44;
+}
+
+#game.ml-game-screen #deductionSidebarSection
+.deduction-link-dot.link-color-3 {
+  background: #c19aff;
+  box-shadow: 0 0 7px #c19aff44;
+}
+
+#game.ml-game-screen #deductionSidebarSection
+.deduction-link-dot.link-color-4 {
+  background: #e7bd68;
+  box-shadow: 0 0 7px #e7bd6844;
+}
+
+#game.ml-game-screen #deductionSidebarSection
+.deduction-link-dot.link-color-5 {
+  background: #65dbe0;
+  box-shadow: 0 0 7px #65dbe044;
+}
+
+/* Выбранная улика сохраняет цвет связи,
+   но получает отдельный контур выбора */
+#game.ml-game-screen #deductionSidebarSection
+.clue.pickable.has-confirmed-link.selected {
+  border-color: var(--link-color) !important;
+  box-shadow:
+    inset 3px 0 0 var(--link-color),
+    0 0 0 1px var(--link-color);
+  filter: brightness(1.12);
+}
+
+#game.ml-game-screen #deductionSidebarSection
+.clue.pickable.has-confirmed-link.selected::before {
+  color: var(--link-color);
+  border-color: var(--link-color);
+}
+
 </style>
 </head>
 <body>
@@ -6783,21 +6920,60 @@ function renderSidebar(){
   const deductionResult = document.getElementById("deductionResult");
 
   if (deductionList) {
+    
+const confirmedLinks = (Array.isArray(s.links) ? s.links : [])
+  .filter(key => DEDUCTIONS[activeId]?.[key]?.good === true);
+
     deductionList.innerHTML = visibleEvidence
-      .filter(e => s.found.includes(e[0]))
-      .map(e => {
+    .filter(e => s.found.includes(e[0]))
+    .map(e => {
         const selected = selectedEvidence.includes(e[0]);
 
+        // Все подтверждённые связи, в которых участвует эта улика.
+        const relatedLinks = confirmedLinks
+        .map((key, index) => ({ key, index }))
+        .filter(link => link.key.split("|").includes(e[0]));
+
+        const primaryIndex = relatedLinks.length
+        ? relatedLinks[0].index
+        : -1;
+
+        const colorClass = primaryIndex >= 0
+        ? `link-color-${primaryIndex % 6}`
+        : "";
+
+        const markers = relatedLinks
+        .map(link =>
+            `<i class="deduction-link-dot link-color-${link.index % 6}"
+                aria-hidden="true"></i>`
+        )
+        .join("");
+
+        const linkLabel = relatedLinks.length
+        ? `<span class="deduction-link-meta">${
+            relatedLinks.length > 1
+                ? `${relatedLinks.length} связи`
+                : `Связь ${String(primaryIndex + 1).padStart(2, "0")}`
+            }</span>`
+        : "";
+
         return `
-          <button
-            class="clue pickable ${selected ? "selected" : ""}"
+        <button
+            class="clue pickable ${selected ? "selected" : ""}
+            ${relatedLinks.length ? "has-confirmed-link" : ""}
+            ${colorClass}"
             data-pick="${e[0]}"
             type="button"
-          >
+        >
+            <span class="deduction-link-markers">${markers}</span>
+            <span class="deduction-evidence-label">
             ${selected ? "◆" : "◇"} ${esc(e[1])}
-          </button>
+            </span>
+            ${linkLabel}
+        </button>
         `;
-      }).join("");
+    })
+    .join("");
 
     deductionList.querySelectorAll("[data-pick]").forEach(button => {
       button.addEventListener("click", () => {
