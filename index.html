@@ -2486,342 +2486,6 @@ body {
     animation: none !important;
   }
 }
-
-
-/* =========================================
-   MIND LAB — REALISTIC INVESTIGATION BOARD
-   ========================================= */
-
-#visualBoard {
-  position: relative;
-  isolation: isolate;
-  overflow: hidden;
-  min-height: 500px;
-  padding: 0;
-  border: 1px solid #8b7657;
-  border-radius: 8px;
-
-  background-color: #39352e;
-  background-image:
-    radial-gradient(ellipse at 20% 15%, #b69a6920, transparent 35%),
-    radial-gradient(ellipse at 80% 75%, #090a0b55, transparent 50%),
-    repeating-linear-gradient(
-      4deg,
-      transparent 0 5px,
-      #090b0c12 6px,
-      transparent 8px
-    ),
-    repeating-linear-gradient(
-      92deg,
-      #c7ad7810 0 1px,
-      transparent 1px 7px
-    );
-
-  box-shadow:
-    inset 0 0 55px #0005,
-    inset 0 0 0 5px #17181740;
-}
-
-#boardConnections {
-  position: absolute;
-  inset: 0;
-  z-index: 1;
-  width: 100%;
-  height: 100%;
-  overflow: visible;
-  pointer-events: none;
-}
-
-#boardNodes {
-  position: relative;
-  z-index: 2;
-
-  display: grid;
-  grid-template-columns: repeat(
-    auto-fit,
-    minmax(min(100%, 155px), 205px)
-  );
-  justify-content: center;
-  align-items: start;
-  gap: 32px 26px;
-
-  width: 100%;
-  min-height: 500px;
-  padding: 38px 28px 45px;
-  box-sizing: border-box;
-}
-
-/* Фотографии и документы на стене */
-#boardNodes .board-node {
-  position: relative;
-  z-index: 2;
-
-  display: flex;
-  flex-direction: column;
-  gap: 8px;
-
-  width: 100%;
-  min-width: 0;
-  min-height: 0;
-  padding: 10px;
-
-  overflow: visible;
-  text-align: left;
-  color: #eee5d5;
-
-  border: 1px solid #b7a17a55;
-  border-radius: 3px;
-  background:
-    linear-gradient(145deg, #34322e, #222321 85%);
-
-  box-shadow:
-    0 7px 13px #0006,
-    0 2px 3px #0005,
-    inset 0 1px #ffffff0c;
-
-  transform-origin: 50% 15%;
-  transition:
-    transform .2s ease,
-    border-color .2s ease,
-    box-shadow .2s ease,
-    filter .2s ease;
-
-  animation: evidenceCardIn .35s ease both;
-}
-
-/* У каждой карточки постоянный собственный наклон */
-#boardNodes .board-node:nth-child(8n + 1) {
-  transform: rotate(-3deg);
-}
-#boardNodes .board-node:nth-child(8n + 2) {
-  transform: rotate(2.2deg) translateY(7px);
-}
-#boardNodes .board-node:nth-child(8n + 3) {
-  transform: rotate(-1.5deg) translateY(3px);
-}
-#boardNodes .board-node:nth-child(8n + 4) {
-  transform: rotate(3.2deg) translateY(9px);
-}
-#boardNodes .board-node:nth-child(8n + 5) {
-  transform: rotate(1.2deg) translateY(-3px);
-}
-#boardNodes .board-node:nth-child(8n + 6) {
-  transform: rotate(-2.5deg) translateY(6px);
-}
-#boardNodes .board-node:nth-child(8n + 7) {
-  transform: rotate(2.8deg) translateY(2px);
-}
-#boardNodes .board-node:nth-child(8n + 8) {
-  transform: rotate(-1deg) translateY(8px);
-}
-
-/* Булавка */
-#boardNodes .board-node::before {
-  content: "";
-  position: absolute;
-  z-index: 5;
-  top: -7px;
-  left: 50%;
-
-  width: 11px;
-  height: 11px;
-  border: 1px solid #e8d8b3;
-  border-radius: 50%;
-
-  background:
-    radial-gradient(circle at 32% 28%, #fff0c9, #b18a4d 58%, #59442a);
-
-  box-shadow: 0 2px 4px #000a;
-  transform: translateX(-50%);
-}
-
-#boardNodes .board-node:nth-child(3n)::before {
-  left: 35%;
-}
-
-#boardNodes .board-node:hover {
-  z-index: 6;
-  border-color: #dfbd78;
-  box-shadow: 0 12px 24px #0009;
-  filter: brightness(1.08);
-}
-
-#boardNodes .board-node:nth-child(8n + 1):hover {
-  transform: rotate(-3deg) translateY(-5px);
-}
-#boardNodes .board-node:nth-child(8n + 2):hover {
-  transform: rotate(2.2deg) translateY(2px);
-}
-#boardNodes .board-node:nth-child(8n + 3):hover {
-  transform: rotate(-1.5deg) translateY(-2px);
-}
-#boardNodes .board-node:nth-child(8n + 4):hover {
-  transform: rotate(3.2deg) translateY(4px);
-}
-#boardNodes .board-node:nth-child(8n + 5):hover {
-  transform: rotate(1.2deg) translateY(-8px);
-}
-#boardNodes .board-node:nth-child(8n + 6):hover {
-  transform: rotate(-2.5deg) translateY(1px);
-}
-#boardNodes .board-node:nth-child(8n + 7):hover {
-  transform: rotate(2.8deg) translateY(-3px);
-}
-#boardNodes .board-node:nth-child(8n + 8):hover {
-  transform: rotate(-1deg) translateY(3px);
-}
-
-#boardNodes .board-node.is-selected {
-  z-index: 5;
-  border: 2px solid #e0bd72;
-  background: linear-gradient(145deg, #393023, #24211d);
-  box-shadow:
-    0 0 0 2px #e0bd7220,
-    0 0 20px #e0bd7225,
-    0 8px 18px #0007;
-  filter: brightness(1.08);
-}
-
-/* Настоящие изображения — компактнее, как фото на стене */
-#boardNodes .board-node-media {
-  position: relative;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  min-height: 96px;
-  overflow: hidden;
-
-  border: 1px solid #b99a6035;
-  border-radius: 2px;
-  background: #111318;
-}
-
-#boardNodes .board-node-image {
-  display: block;
-  width: 100%;
-  height: 112px;
-  object-fit: cover;
-  border-radius: 1px;
-  filter: saturate(.78) contrast(1.04);
-}
-
-#boardNodes .board-node-placeholder {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  width: 100%;
-  min-height: 96px;
-  padding: 9px;
-
-  color: #b7a17a;
-  background:
-    radial-gradient(ellipse at center, #b99a6018, transparent 70%),
-    #111318;
-
-  font: 9px/1.6 monospace;
-  letter-spacing: .08em;
-  text-align: center;
-}
-
-#boardNodes .board-node-number {
-  color: #c2a875;
-  font: 9px monospace;
-  letter-spacing: .12em;
-}
-
-#boardNodes .board-node-title {
-  color: #f1e9da;
-  font-size: 12px;
-  line-height: 1.4;
-  font-weight: 700;
-  overflow-wrap: anywhere;
-}
-
-#boardNodes .board-node-description {
-  color: #aaa69e;
-  font-size: 10px;
-  line-height: 1.5;
-  overflow-wrap: anywhere;
-}
-
-#boardNodes .board-node-status {
-  padding-top: 6px;
-  border-top: 1px solid #c5a05a30;
-  color: #d4b16c;
-  font: 9px/1.5 monospace;
-  letter-spacing: .03em;
-}
-
-#boardNodes .board-node.is-linked {
-  border-color: #8bbdb5;
-}
-
-#boardNodes .board-node.is-linked .board-node-status {
-  color: #a1d7ce;
-}
-
-/* Нити лежат позади карточек */
-#boardConnections .board-line {
-  fill: none;
-  stroke: #a83c37;
-  stroke-width: 2;
-  stroke-linecap: round;
-  opacity: .9;
-  filter: drop-shadow(0 1px 1px #0009);
-}
-
-/* Лёгкая фактура бумаги */
-@keyframes evidenceCardIn {
-  from {
-    opacity: 0;
-    translate: 0 7px;
-  }
-  to {
-    opacity: 1;
-    translate: 0 0;
-  }
-}
-
-@media (max-width: 600px) {
-  #visualBoard {
-    min-height: 400px;
-  }
-
-  #boardNodes {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-    gap: 24px 15px;
-    padding: 28px 13px 32px;
-  }
-
-  #boardNodes .board-node {
-    padding: 8px;
-  }
-
-  #boardNodes .board-node-image {
-    height: 94px;
-  }
-
-  #boardNodes .board-node-media,
-  #boardNodes .board-node-placeholder {
-    min-height: 82px;
-  }
-
-  #boardNodes .board-node-title {
-    font-size: 11px;
-  }
-
-  #boardNodes .board-node-description {
-    font-size: 10px;
-  }
-}
-
-@media (prefers-reduced-motion: reduce) {
-  #boardNodes .board-node {
-    animation: none;
-    transition: none;
-  }
-}
-
 </style>
 </head>
 <body>
@@ -7899,7 +7563,6 @@ renderCatalog();
 
 
 
-
 function renderVisualBoard() {
   const board = document.getElementById("visualBoard");
   const nodes = document.getElementById("boardNodes");
@@ -7915,17 +7578,13 @@ function renderVisualBoard() {
   if (!c) return;
 
   const s = caseState(activeId);
-
   const visibleEvidence = c.evidence.filter(e =>
     Array.isArray(e) &&
     e.length >= 3 &&
     (
       activeId !== "session" ||
       !["protocol", "metadata"].includes(e[0]) ||
-      (
-        Array.isArray(s.branchClues) &&
-        s.branchClues.includes(e[0])
-      )
+      (Array.isArray(s.branchClues) && s.branchClues.includes(e[0]))
     )
   );
 
@@ -7934,7 +7593,6 @@ function renderVisualBoard() {
     key => DEDUCTIONS[activeId]?.[key]?.good === true
   );
 
-  // Сохраняем прежние изображения и ключи материалов.
   const imageById = {
     clock: "https://images.unsplash.com/photo-1523275335684-37898b6baf30?auto=format&fit=crop&w=640&q=80",
     cup: "https://images.unsplash.com/photo-1514228742587-6b1558fcca3d?auto=format&fit=crop&w=640&q=80",
@@ -7957,7 +7615,7 @@ function renderVisualBoard() {
 
   const evidenceSignature = visibleEvidence.map(e => e[0]).join("|");
 
-  // Пересоздаём карточки только при смене набора материалов.
+  // Перестраиваем карточки только при изменении набора материалов.
   if (nodes.dataset.evidenceSignature !== evidenceSignature) {
     nodes.innerHTML = visibleEvidence.map((e, i) => `
       <button
@@ -7991,15 +7649,15 @@ function renderVisualBoard() {
     nodes.dataset.evidenceSignature = evidenceSignature;
   }
 
-  // Делегированный обработчик остаётся один на всю доску.
+  // Один обработчик на контейнер: не плодим обработчики при обновлении.
   if (nodes.dataset.boardClickBound !== "true") {
     nodes.addEventListener("click", event => {
       const button = event.target.closest("[data-board-evidence]");
       if (!button || !nodes.contains(button)) return;
 
       const id = button.dataset.boardEvidence;
+      const currentCase = CASES.find(item => item.id === activeId);
       const currentState = caseState(activeId);
-
       const isFound = Array.isArray(currentState.found) &&
         currentState.found.includes(id);
 
@@ -8013,7 +7671,7 @@ function renderVisualBoard() {
     nodes.dataset.boardClickBound = "true";
   }
 
-  // Обновляем содержимое, не меняя положения карточек.
+  // Меняем только содержимое и классы — сами карточки остаются на месте.
   nodes.querySelectorAll("[data-board-evidence]").forEach(button => {
     const id = button.dataset.boardEvidence;
     const evidence = visibleEvidence.find(e => e[0] === id);
@@ -8060,124 +7718,57 @@ function renderVisualBoard() {
           : "◇ ВЫБРАТЬ ДЛЯ ДЕДУКЦИИ";
   });
 
-  const foundCount = visibleEvidence.filter(
-    e => foundIds.includes(e[0])
-  ).length;
-
+  const foundCount = visibleEvidence.filter(e => foundIds.includes(e[0])).length;
   counter.textContent = `УЛИКИ: ${foundCount} / ${visibleEvidence.length}`;
   progress.textContent = `${knownLinks.length} ${
-    knownLinks.length === 1
-      ? "связь установлена"
-      : "связей установлено"
+    knownLinks.length === 1 ? "связь установлена" : "связей установлено"
   }`;
 
-  if (empty) {
-    empty.style.display = visibleEvidence.length ? "none" : "flex";
-  }
+  if (empty) empty.style.display = visibleEvidence.length ? "none" : "flex";
 
   if (insight) {
     if (selectedEvidence.length === 1) {
       insight.textContent =
         "Первая улика выбрана. Нажми на вторую изученную улику, чтобы проверить связь, или выбери подозреваемого справа.";
     } else if (foundCount === 0) {
-      insight.textContent =
-        "Начни с первой улики: изучи материал и обрати внимание на детали.";
+      insight.textContent = "Нажми на карточку, чтобы изучить первый материал дела.";
     } else if (foundCount < visibleEvidence.length) {
       insight.textContent =
-        "Изучай материалы, отмечай противоречия и сопоставляй улики, которые могут быть связаны.";
+        "Изучай новые материалы и выбирай две улики, которые могут быть связаны.";
     } else {
       insight.textContent =
-        "Материалы осмотрены. Теперь сопоставляй улики и проверяй выводы по показаниям подозреваемых.";
+        "Сопоставляй улики и проверяй выводы по показаниям подозреваемых.";
     }
   }
 
-  // Линии соединяют ближайшие края карточек, а не их центры.
+  // Рисуем линии подтверждённых связей между карточками.
   requestAnimationFrame(() => {
     if (!board.isConnected || !svg.isConnected) return;
 
     const boardRect = board.getBoundingClientRect();
-    const width = board.clientWidth;
-    const height = board.clientHeight;
-
-    svg.setAttribute("viewBox", `0 0 ${width} ${height}`);
+    svg.setAttribute("viewBox", `0 0 ${board.clientWidth} ${board.clientHeight}`);
     svg.innerHTML = "";
 
     knownLinks.forEach(key => {
       const [a, b] = key.split("|");
-
-      const first = Array.from(
-        nodes.querySelectorAll("[data-board-evidence]")
-      ).find(el => el.dataset.boardEvidence === a);
-
-      const second = Array.from(
-        nodes.querySelectorAll("[data-board-evidence]")
-      ).find(el => el.dataset.boardEvidence === b);
-
+      const first = nodes.querySelector(`[data-board-evidence="${a}"]`);
+      const second = nodes.querySelector(`[data-board-evidence="${b}"]`);
       if (!first || !second) return;
 
       const r1 = first.getBoundingClientRect();
       const r2 = second.getBoundingClientRect();
 
-      const c1 = {
-        x: r1.left + r1.width / 2,
-        y: r1.top + r1.height / 2
-      };
+      const x1 = r1.left + r1.width / 2 - boardRect.left;
+      const y1 = r1.top + r1.height / 2 - boardRect.top;
+      const x2 = r2.left + r2.width / 2 - boardRect.left;
+      const y2 = r2.top + r2.height / 2 - boardRect.top;
+      const curve = Math.max(24, Math.abs(x2 - x1) * 0.12);
 
-      const c2 = {
-        x: r2.left + r2.width / 2,
-        y: r2.top + r2.height / 2
-      };
-
-      const dx = c2.x - c1.x;
-      const dy = c2.y - c1.y;
-
-      if (Math.abs(dx) < 1 && Math.abs(dy) < 1) return;
-
-      // Находим точку пересечения направления с прямоугольником.
-      function edgePoint(rect, from, to) {
-        const vx = to.x - from.x;
-        const vy = to.y - from.y;
-
-        const halfW = rect.width / 2;
-        const halfH = rect.height / 2;
-
-        const scaleX = Math.abs(vx) > 0.001
-          ? halfW / Math.abs(vx)
-          : Infinity;
-
-        const scaleY = Math.abs(vy) > 0.001
-          ? halfH / Math.abs(vy)
-          : Infinity;
-
-        const scale = Math.min(scaleX, scaleY);
-
-        return {
-          x: from.x + vx * scale,
-          y: from.y + vy * scale
-        };
-      }
-
-      const p1 = edgePoint(r1, c1, c2);
-      const p2 = edgePoint(r2, c2, c1);
-
-      const x1 = p1.x - boardRect.left;
-      const y1 = p1.y - boardRect.top;
-      const x2 = p2.x - boardRect.left;
-      const y2 = p2.y - boardRect.top;
-
-      const bend = Math.min(45, Math.max(12, Math.abs(x2 - x1) * 0.12));
-      const direction = x2 >= x1 ? 1 : -1;
-
-      const path = document.createElementNS(
-        "http://www.w3.org/2000/svg",
-        "path"
-      );
-
+      const path = document.createElementNS("http://www.w3.org/2000/svg", "path");
       path.setAttribute(
         "d",
-        `M ${x1} ${y1} C ${x1 + bend * direction} ${y1}, ${x2 - bend * direction} ${y2}, ${x2} ${y2}`
+        `M ${x1} ${y1} C ${x1 + curve} ${y1}, ${x2 - curve} ${y2}, ${x2} ${y2}`
       );
-
       path.setAttribute("class", "board-line");
       svg.appendChild(path);
     });
@@ -8230,199 +7821,6 @@ document.addEventListener("keydown", event => {
     closeEvidenceViewer();
   }
 });
-
-
-/* =========================================
-   MIND LAB — FULLSCREEN DRAWER CONTROLLER
-   ========================================= */
-
-(() => {
-  const game = document.getElementById("game");
-  const drawer = document.getElementById("mlDrawer");
-  const scrim = document.getElementById("mlScrim");
-  const title = document.getElementById("mlDrawerTitle");
-  const drawerContent = document.querySelector(".ml-drawer-content");
-
-  if (!game || !drawer || !scrim || !drawerContent) return;
-
-  game.classList.add("ml-game-screen");
-
-  const panelNames = {
-    story: "Досье дела",
-    materials: "Материалы дела",
-    deduction: "Проверка связей",
-    suspects: "Досье подозреваемых",
-    theories: "Теории расследования",
-    progress: "Ход расследования",
-    settings: "Настройки и сохранения"
-  };
-
-  const panelFor = key =>
-    drawer.querySelector(`[data-ml-panel="${key}"]`);
-
-  function moveInto(selector, key) {
-    const element = document.querySelector(selector);
-    const target = panelFor(key);
-
-    if (element && target && !target.contains(element)) {
-      target.appendChild(element);
-    }
-
-    return element;
-  }
-
-  // Переносим существующие игровые элементы, не создавая дубликаты ID.
-  moveInto("#storyPanel", "story");
-  moveInto("#materialsSidebarSection", "materials");
-  moveInto("#deductionSidebarSection", "deduction");
-
-  const suspectsSection = document
-    .getElementById("suspectList")
-    ?.closest(".sidebar-section");
-
-  if (suspectsSection) {
-    panelFor("suspects").appendChild(suspectsSection);
-  }
-
-  moveInto(".hypothesis-panel", "theories");
-
-  const progressSection = document
-    .getElementById("progressText")
-    ?.closest(".sidebar-section");
-
-  if (progressSection) {
-    panelFor("progress").appendChild(progressSection);
-  }
-
-  moveInto("#deductionHint", "deduction");
-  moveInto("#deductionResult", "deduction");
-  moveInto(".deduction-history", "progress");
-  moveInto(".investigation-route-dock", "progress");
-  moveInto(".board-progress", "progress");
-
-  // Настройки и управление сохранениями временно доступны внутри игры.
-  const originalTopActions = document.querySelector("header.topbar .top-actions");
-  const settingsPanel = panelFor("settings");
-
-  function syncSettingsLocation() {
-    if (!originalTopActions || !settingsPanel) return;
-
-    if (!game.classList.contains("hidden")) {
-      if (!settingsPanel.contains(originalTopActions)) {
-        settingsPanel.appendChild(originalTopActions);
-      }
-    } else {
-      const header = document.querySelector("header.topbar");
-      if (header && !header.contains(originalTopActions)) {
-        header.appendChild(originalTopActions);
-      }
-    }
-  }
-
-  function closeDrawer() {
-    drawer.classList.remove("open");
-    scrim.classList.remove("open");
-
-    document.querySelectorAll("[data-ml-tool]").forEach(button => {
-      button.classList.remove("active");
-      button.setAttribute("aria-expanded", "false");
-    });
-  }
-
-  function openTool(key) {
-    const target = panelFor(key);
-    if (!target) return;
-
-    const alreadyOpen =
-      drawer.classList.contains("open") &&
-      target.classList.contains("active");
-
-    if (alreadyOpen) {
-      closeDrawer();
-      return;
-    }
-
-    drawer.querySelectorAll(".ml-tool-panel").forEach(panel => {
-      panel.classList.toggle("active", panel === target);
-    });
-
-    title.textContent = panelNames[key] || "Инструменты расследования";
-    drawer.classList.add("open");
-    scrim.classList.add("open");
-
-    document.querySelectorAll("[data-ml-tool]").forEach(button => {
-      const active = button.dataset.mlTool === key;
-      button.classList.toggle("active", active);
-      button.setAttribute("aria-expanded", String(active));
-    });
-  }
-
-  document.querySelectorAll("[data-ml-tool]").forEach(button => {
-    button.setAttribute("aria-expanded", "false");
-
-    button.addEventListener("click", () => {
-      syncSettingsLocation();
-      openTool(button.dataset.mlTool);
-    });
-  });
-
-  document.getElementById("mlCloseDrawer")
-    ?.addEventListener("click", closeDrawer);
-
-  scrim.addEventListener("click", closeDrawer);
-
-  document.addEventListener("keydown", event => {
-    if (event.key === "Escape") closeDrawer();
-  });
-
-  // Когда открываем дело или возвращаемся в архив,
-  // сохраняем правильное расположение верхних настроек.
-  const gameObserver = new MutationObserver(() => {
-    syncSettingsLocation();
-
-    if (game.classList.contains("hidden")) {
-      closeDrawer();
-    }
-  });
-
-  gameObserver.observe(game, {
-    attributes: true,
-    attributeFilter: ["class"]
-  });
-
-  // Финальный вывод и концовка должны сразу становиться видимыми.
-  const storyEyebrow = document.getElementById("storyEyebrow");
-  const storyContent = document.getElementById("storyContent");
-
-  if (storyEyebrow) {
-    const verdictObserver = new MutationObserver(() => {
-      if (storyEyebrow.textContent.trim() === "ФИНАЛЬНЫЙ ВЫВОД") {
-        openTool("story");
-      }
-    });
-
-    verdictObserver.observe(storyEyebrow, {
-      childList: true,
-      characterData: true,
-      subtree: true
-    });
-  }
-
-  if (storyContent) {
-    const endingObserver = new MutationObserver(() => {
-      if (storyContent.querySelector(".ending")) {
-        openTool("story");
-      }
-    });
-
-    endingObserver.observe(storyContent, {
-      childList: true,
-      subtree: true
-    });
-  }
-
-  syncSettingsLocation();
-})();
 
 </script>
 </body>
