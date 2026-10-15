@@ -10965,7 +10965,7 @@ function renderVisualBoard() {
   // без связей — по краям.
   // -------------------------------------------------------
 
-  const compact = board.clientWidth < 760;
+    const compact = board.clientWidth < 760;
   const columnCount = compact ? 3 : 5;
   const outerColumns = compact ? [1, 3] : [1, 5];
   const centralColumns = compact ? [2] : [2, 3, 4];
@@ -10975,48 +10975,64 @@ function renderVisualBoard() {
     `repeat(${columnCount}, minmax(0, 1fr))`,
     "important"
   );
-  nodes.style.setProperty("grid-auto-rows", "minmax(150px, auto)", "important");
+  nodes.style.setProperty(
+    "grid-auto-rows",
+    "minmax(118px, auto)",
+    "important"
+  );
   nodes.style.setProperty("grid-auto-flow", "row", "important");
   nodes.style.setProperty("align-items", "start", "important");
   nodes.style.setProperty("align-content", "start", "important");
-  nodes.style.setProperty("gap", compact ? "15px 10px" : "24px 18px", "important");
-  nodes.style.setProperty("padding", compact ? "18px 8px 28px" : "26px 22px 34px", "important");
+  nodes.style.setProperty(
+    "gap",
+    compact ? "12px 9px" : "17px 14px",
+    "important"
+  );
+  nodes.style.setProperty(
+    "padding",
+    compact ? "10px 4px 18px" : "12px 10px 22px",
+    "important"
+  );
 
   const positions = new Map();
   const occupied = new Set();
   const slotKey = (row, col) => `${row}:${col}`;
 
-  function placeNode(id, row, columns) {
-    let targetRow = Math.max(2, row);
-    let targetCol = columns[0];
+  function placeNode(id, requestedRow, allowedColumns) {
+    let row = Math.max(1, requestedRow);
+    let col;
 
-    // Не допускаем наложения карточек в одной ячейке.
     while (true) {
-      const freeColumn = columns.find(col => !occupied.has(slotKey(targetRow, col)));
+      col = allowedColumns.find(
+        candidate => !occupied.has(slotKey(row, candidate))
+      );
 
-      if (freeColumn !== undefined) {
-        targetCol = freeColumn;
-        break;
-      }
-
-      targetRow++;
+      if (col !== undefined) break;
+      row++;
     }
 
-    occupied.add(slotKey(targetRow, targetCol));
-    positions.set(id, { row: targetRow, col: targetCol });
-    return targetRow;
+    occupied.add(slotKey(row, col));
+    positions.set(id, { row, col });
+
+    return row;
   }
 
-  // Строим уровни центрального дерева обходом графа.
+  // Собираем граф подтверждённых связей.
   const levels = new Map();
   const linkedIds = visibleEvidence
     .map(e => e[0])
     .filter(id => linkedEvidenceIds.has(id));
 
-  const degree = id => (adjacency.get(id)?.size || 0) +
+  const degree = id =>
+    (adjacency.get(id)?.size || 0) +
     suspectLinkEntries.filter(item => item.evidenceId === id).length;
 
-  const roots = [...linkedIds].sort((a, b) => degree(b) - degree(a));
+  // Главная улика — материал с наибольшим числом связей.
+  // Остальные связанные материалы образуют ветви вокруг неё.
+  const roots = [...linkedIds].sort(
+    (a, b) => degree(b) - degree(a)
+  );
+
   let componentLevel = 0;
 
   roots.forEach(root => {
@@ -11028,59 +11044,91 @@ function renderVisualBoard() {
     while (queue.length) {
       const current = queue.shift();
 
-      (adjacency.get(current.id) || new Set()).forEach(next => {
+      const neighbours = [...(adjacency.get(current.id) || [])]
+        .sort((a, b) => degree(b) - degree(a));
+
+      neighbours.forEach(next => {
         if (levels.has(next)) return;
+
         levels.set(next, current.level + 1);
-        queue.push({ id: next, level: current.level + 1 });
+        queue.push({
+          id: next,
+          level: current.level + 1
+        });
       });
     }
 
-    componentLevel = Math.max(
-      componentLevel + 1,
-      ...[...levels.values()].map(level => level + 1)
-    );
+    componentLevel =
+      Math.max(
+        componentLevel + 1,
+        ...[...levels.values()].map(level => level + 1)
+      );
   });
 
-  // Связанные улики занимают центральные ветви.
-  let deepestRow = 2;
+  // Связанные улики — в центре, начиная с первой строки.
+  let deepestRow = 1;
 
   [...linkedIds]
-    .sort((a, b) =>
-      (levels.get(a) || 0) - (levels.get(b) || 0) ||
-      degree(b) - degree(a)
+    .sort(
+      (a, b) =>
+        (levels.get(a) || 0) - (levels.get(b) || 0) ||
+        degree(b) - degree(a)
     )
     .forEach(id => {
-      const row = placeNode(id, 2 + (levels.get(id) || 0), centralColumns);
+      const level = levels.get(id) || 0;
+      const row = placeNode(
+        id,
+        1 + level,
+        centralColumns
+      );
+
       deepestRow = Math.max(deepestRow, row);
     });
 
-  // Улики без связей остаются на периферии.
+  // Несвязанные материалы располагаются у боковых краёв.
   const unlinkedIds = visibleEvidence
     .map(e => e[0])
     .filter(id => !linkedEvidenceIds.has(id));
 
   unlinkedIds.forEach((id, index) => {
     const side = outerColumns[index % outerColumns.length];
-    const row = 2 + Math.floor(index / outerColumns.length);
+    const row = 1 + Math.floor(index / outerColumns.length);
 
     placeNode(id, row, [side]);
   });
 
-  // Подозреваемые располагаются ниже дерева, в его ветвях.
+  // Подозреваемые появляются рядом с нижними ветвями дерева.
+  // Если место занято, карточка аккуратно переносится ниже.
   linkedSuspectIds.forEach((id, index) => {
-    const row = deepestRow + 1 + Math.floor(index / centralColumns.length);
-    const col = centralColumns[index % centralColumns.length];
+    const relatedEvidence = suspectLinkEntries.find(
+      item => item.suspectId === id
+    )?.evidenceId;
 
-    let targetRow = row;
-    while (occupied.has(slotKey(targetRow, col))) targetRow++;
+    const relatedPosition = relatedEvidence
+      ? positions.get(relatedEvidence)
+      : null;
 
-    occupied.add(slotKey(targetRow, col));
-    positions.set(`suspect:${id}`, { row: targetRow, col });
-    deepestRow = Math.max(deepestRow, targetRow);
+    const preferredColumn = relatedPosition
+      ? relatedPosition.col
+      : centralColumns[index % centralColumns.length];
+
+    const orderedColumns = [
+      preferredColumn,
+      ...centralColumns.filter(col => col !== preferredColumn)
+    ];
+
+    const row = placeNode(
+      `suspect:${id}`,
+      relatedPosition
+        ? relatedPosition.row + 1
+        : deepestRow + 1,
+      orderedColumns
+    );
+
+    deepestRow = Math.max(deepestRow, row);
   });
 
-  // Применяем координаты. Наклоны карточек отключаем,
-  // чтобы ветви дерева оставались читаемыми.
+  // Применяем позиции к карточкам.
   nodes.querySelectorAll(".board-node").forEach(button => {
     const id = button.dataset.boardEvidence
       ? button.dataset.boardEvidence
@@ -11089,8 +11137,16 @@ function renderVisualBoard() {
     const position = positions.get(id);
     if (!position) return;
 
-    button.style.setProperty("grid-column-start", String(position.col), "important");
-    button.style.setProperty("grid-row-start", String(position.row), "important");
+    button.style.setProperty(
+      "grid-column-start",
+      String(position.col),
+      "important"
+    );
+    button.style.setProperty(
+      "grid-row-start",
+      String(position.row),
+      "important"
+    );
     button.style.setProperty("margin", "0", "important");
     button.style.setProperty("width", "100%", "important");
     button.style.setProperty("min-width", "0", "important");
