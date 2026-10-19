@@ -7227,6 +7227,35 @@ button:focus-visible {
   }
 }
 
+/* MIND LAB — полный текст улик на доске */
+#game.ml-game-screen #boardNodes .board-node {
+  height: auto !important;
+  min-height: 0 !important;
+  max-height: none !important;
+  overflow: visible !important;
+}
+
+#game.ml-game-screen #boardNodes .board-node-title {
+  display: block !important;
+  -webkit-line-clamp: unset !important;
+  max-height: none !important;
+  height: auto !important;
+  overflow: visible !important;
+  white-space: normal !important;
+  overflow-wrap: anywhere !important;
+}
+
+#game.ml-game-screen #boardNodes .board-node-description {
+  display: block !important;
+  -webkit-line-clamp: unset !important;
+  max-height: none !important;
+  height: auto !important;
+  flex: 0 0 auto !important;
+  overflow: visible !important;
+  white-space: normal !important;
+  overflow-wrap: anywhere !important;
+}
+
 </style>
 </head>
 <body>
