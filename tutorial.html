@@ -1,0 +1,866 @@
+
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>MIND LAB — Первое дело</title>
+<style>
+:root {
+  color-scheme: dark;
+   --bg: #090b10;
+   --panel: #11151e;
+   --panel2: #171d29;
+   --line: #293143;
+   --text: #edf0f7;
+   --muted: #8c97ad;
+   --accent: #69e0dc;
+   --gold: #f0c674;
+   --red: #ff4d67;
+   --violet: #a895ff;
+   --magenta: #d66dbb;
+}
+* { box-sizing: border-box; }
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--text);
+  font: 16px/1.55 system-ui, sans-serif;
+}
+button {
+  font: inherit;
+  cursor: pointer;
+  color: var(--text);
+  background: var(--panel2);
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  padding: 11px 14px;
+  text-align: left;
+  transition: .15s;
+}
+button:hover:not(:disabled) {
+  border-color: var(--accent);
+  background: #223448;
+}
+button:disabled {
+  opacity: .42;
+  cursor: not-allowed;
+}
+button:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 3px;
+}
+.top {
+  padding: 18px 22px;
+  border-bottom: 1px solid var(--line);
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+  align-items: center;
+}
+.brand { font-weight: 800; letter-spacing: 3px; }
+.brand span { color: var(--accent); }
+.skip-link,
+.archive-link {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 40px;
+  padding: 8px 12px;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  color: var(--text);
+  background: var(--panel2);
+  text-decoration: none;
+}
+.skip-link:hover,
+.archive-link:hover {
+  border-color: var(--accent);
+  color: var(--accent);
+}
+.small { font-size: 13px; color: var(--muted); }
+.wrap { max-width: 1050px; margin: auto; padding: 24px 18px 50px; }
+.hero { margin-bottom: 24px; }
+.eyebrow {
+  color: var(--accent);
+  font-size: 12px;
+  letter-spacing: 2px;
+  font-weight: 800;
+}
+h1 { font-size: clamp(27px, 5vw, 42px); line-height: 1.15; margin: 8px 0; }
+h2 { font-size: 21px; margin: 0 0 10px; }
+h3 { font-size: 16px; margin: 0 0 8px; }
+p { margin: 8px 0; }
+.muted { color: var(--muted); }
+.layout { display: grid; grid-template-columns: minmax(0, 1.5fr) minmax(260px, 1fr); gap: 18px; }
+.panel {
+  background: var(--panel);
+  border: 1px solid var(--line);
+  border-radius: 15px;
+  padding: 20px;
+  min-width: 0;
+}
+.scene {
+  min-height: 130px;
+  padding: 22px;
+  border-radius: 12px;
+  margin-bottom: 20px;
+  background:
+    radial-gradient(ellipse at 80% 20%, #264354 0, transparent 55%),
+    linear-gradient(135deg, #192a39, #111823);
+  border: 1px solid #304659;
+}
+.scene-icon { font-size: 35px; }
+.stack { display: grid; gap: 10px; }
+.clue {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+  width: 100%;
+}
+.clue strong { font-size: 15px; }
+.clue small { color: var(--muted); font-size: 13px; }
+.clue.found { border-color: #397b73; }
+.clue.found::before { content: "✓ УЛИКА ИЗУЧЕНА"; color: var(--accent); font-size: 10px; letter-spacing: 1px; }
+.clue.selected { outline: 2px solid var(--gold); border-color: var(--gold); }
+.hidden { display: none !important; }
+.guide {
+  border: 1px solid #3b7775;
+  background: #142b30;
+  border-radius: 13px;
+  padding: 17px;
+  margin-bottom: 18px;
+}
+.guide-title { color: var(--accent); font-weight: 800; }
+.guide p { margin: 7px 0 0; }
+.progress {
+  height: 6px;
+  background: #263343;
+  border-radius: 10px;
+  overflow: hidden;
+  margin: 10px 0 7px;
+}
+.bar { height: 100%; background: var(--accent); width: 0%; transition: width .3s; }
+.row { display: flex; gap: 9px; flex-wrap: wrap; margin-top: 14px; }
+.primary { background: var(--accent); color: #081b1b; border-color: var(--accent); font-weight: 750; }
+.primary:hover:not(:disabled) { background: #a0f0e4; color: #081b1b; }
+.notice {
+  margin-top: 14px;
+  border-radius: 10px;
+  padding: 13px;
+  background: #202e3d;
+  border: 1px solid var(--line);
+}
+.notice.good { border-color: #397b73; }
+.notice.warn { border-color: #846b43; }
+.stage-list { display: grid; gap: 8px; }
+.stage {
+  display: flex; align-items: center; gap: 10px;
+  color: var(--muted); font-size: 14px;
+}
+.dot {
+  width: 25px; height: 25px; border-radius: 50%;
+  display: grid; place-items: center; flex-shrink: 0;
+  background: var(--panel2); border: 1px solid var(--line);
+}
+.stage.active { color: var(--text); }
+.stage.active .dot { color: #071919; background: var(--accent); border-color: var(--accent); }
+.stage.done .dot { color: var(--accent); border-color: var(--accent); }
+footer { text-align: center; color: var(--muted); font-size: 12px; padding: 24px; }
+@media(max-width: 720px) {
+  .layout { grid-template-columns: 1fr; }
+  .top { padding: 15px; }
+  .wrap { padding: 18px 12px 35px; }
+  .panel { padding: 16px; }
+}
+/* MIND LAB visual direction: restrained neon noir, compact evidence photography. */
+body {
+  background:
+    radial-gradient(ellipse at 50% -20%, #283149 0, transparent 55%),
+    var(--bg);
+}
+.top {
+  position: sticky;
+  top: 0;
+  z-index: 5;
+  background: #090b10e8;
+  backdrop-filter: blur(14px);
+}
+.brand span { color: var(--red); }
+.hero {
+  padding: 18px 20px;
+  border: 1px solid #293143;
+  border-radius: 12px;
+  background: linear-gradient(145deg, #111827, #0d1220);
+}
+.scene {
+  min-height: 170px;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  background:
+    linear-gradient(90deg, #090d18ed 0%, #090d18aa 55%, #090d1833 100%),
+    url("./assets/scenes/scene_session_clinic.webp") center 48% / cover,
+    linear-gradient(135deg, #192a39, #111823);
+  border-color: #344968;
+}
+.scene-icon { display: none; }
+.panel {
+  background: linear-gradient(155deg, #141d30, #0f1626);
+  border-color: #304263;
+  border-radius: 12px;
+}
+.guide {
+  background: linear-gradient(120deg, #11222e, #121a2a);
+  border-color: #397b8a;
+}
+button {
+  background: #151e31;
+  border-color: #304263;
+  border-radius: 8px;
+}
+button:hover:not(:disabled) {
+  background: #1b2943;
+  border-color: var(--accent);
+}
+.primary {
+  background: linear-gradient(110deg, #54dce1, #8ba8ff);
+  border-color: transparent;
+}
+.primary:hover:not(:disabled) {
+  background: linear-gradient(110deg, #8beaf0, #b4c5ff);
+}
+.notice {
+  background: #151f34;
+  border-color: #304263;
+}
+.notice.good { border-color: #397b73; }
+.notice.warn { border-color: #846b43; }
+.clue-image {
+  display: block;
+  width: 100%;
+  height: 112px;
+  margin-bottom: 8px;
+  overflow: hidden;
+  border: 1px solid #344968;
+  border-radius: 6px;
+  background: linear-gradient(135deg, #17243a, #0b1120);
+}
+.clue-image img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+.clue.selected {
+  border-color: var(--gold);
+  background: #28243a;
+  box-shadow: 0 0 0 1px #f0c67455;
+}
+.stage.active .dot {
+  background: #17333d;
+  color: var(--accent);
+  border-color: var(--accent);
+}
+.stage.done .dot { color: var(--accent); }
+@media(max-width: 720px) {
+  .scene { min-height: 145px; }
+  .clue-image { height: 145px; }
+}
+.wrap {
+  width: min(1440px, 94%);
+  max-width: none;
+  padding-top: 20px;
+}
+.layout {
+  grid-template-columns: minmax(0, 1fr) minmax(280px, 340px);
+  align-items: start;
+  gap: 18px;
+}
+.hero {
+  position: relative;
+  overflow: hidden;
+  margin-bottom: 14px;
+  padding: 22px 26px;
+}
+.hero::after {
+  content: "";
+  position: absolute;
+  inset: auto 0 0;
+  height: 2px;
+  background: linear-gradient(90deg, var(--accent), var(--violet), var(--magenta), transparent);
+  opacity: .8;
+}
+.hero h1 { margin: 7px 0; }
+.hero .progress { max-width: 520px; }
+.guide {
+  padding: 13px 17px;
+  margin-bottom: 14px;
+  border-radius: 8px;
+}
+.guide-title {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+}
+.guide-title::before {
+  content: "NEXT";
+  color: var(--gold);
+  font: 800 9px/1 system-ui, sans-serif;
+  letter-spacing: .16em;
+}
+.layout > .panel { padding: 18px; }
+.scene {
+  min-height: 190px;
+  margin-bottom: 16px;
+  border-radius: 8px;
+  box-shadow: inset 0 -40px 60px #080d18a8;
+}
+.scene h2 { max-width: 680px; font-size: clamp(22px, 2.6vw, 30px); }
+.scene p { max-width: 720px; margin-bottom: 0; color: #d7deeb; }
+.stage-list { margin-top: 14px; }
+.stage {
+  min-height: 42px;
+  padding: 7px 9px;
+  border: 1px solid transparent;
+  border-radius: 6px;
+}
+.stage.active {
+  border-color: #69e0dc55;
+  background: #12303a80;
+}
+.stage.done { color: #b4c2d7; }
+.dot { width: 27px; height: 27px; }
+#clueButtons,
+#compareButtons,
+#evidenceButtons {
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  align-items: stretch;
+}
+.clue {
+  min-width: 0;
+  min-height: 190px;
+  padding: 10px;
+  gap: 4px;
+  border-radius: 8px;
+}
+.clue strong { line-height: 1.35; }
+.clue small {
+  display: block;
+  line-height: 1.45;
+}
+.clue-image {
+  height: 128px;
+  margin-bottom: 5px;
+}
+.clue.found::before {
+  order: 4;
+  margin-top: 5px;
+  color: var(--accent);
+}
+.notice { line-height: 1.65; }
+.row button,
+.row a { min-height: 42px; }
+footer {
+  max-width: 1440px;
+  margin: auto;
+  border-top: 1px solid #293143;
+}
+@media(max-width: 900px) {
+  .layout { grid-template-columns: minmax(0, 1fr); }
+  .layout > aside { order: -1; }
+  .stage-list { grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); }
+}
+@media(max-width: 720px) {
+  .top { padding: 11px 4%; flex-wrap: wrap; }
+  .top > .row { width: 100%; justify-content: space-between; }
+  .wrap { width: 100%; padding: 14px 12px 28px; }
+  .hero { padding: 17px; }
+  .guide { padding: 12px; }
+  .layout > .panel { padding: 13px; }
+  .scene { min-height: 160px; padding: 17px; }
+  #clueButtons,
+  #compareButtons,
+  #evidenceButtons { grid-template-columns: minmax(0, 1fr); }
+  .clue { min-height: 0; }
+  .clue-image { height: 150px; }
+  .skip-link { font-size: 13px; }
+}
+</style>
+</head>
+<body>
+<header class="top">
+  <div class="brand">MIND <span>LAB</span></div>
+  <div class="row" style="margin:0;align-items:center">
+    <div class="small">ОБУЧАЮЩЕЕ ДЕЛО · 01</div>
+    <a class="skip-link" href="./index.html#archive">← Назад в архив дел</a>
+  </div>
+</header>
+
+<main class="wrap">
+  <section class="hero">
+    <div class="eyebrow">ТВОЁ ПЕРВОЕ РАССЛЕДОВАНИЕ</div>
+    <h1 id="pageTitle">Пропавший ключ</h1>
+    <p class="muted" id="pageSubtitle">Тренировочный эпизод, который научит тебя основам расследования. Он не входит в три дела архива.</p>
+    <div class="progress"><div class="bar" id="progressBar"></div></div>
+    <div class="small" id="progressText">Этап 1 из 5</div>
+  </section>
+
+  <div class="guide" aria-live="polite">
+    <div class="guide-title" id="guideTitle">Твоя первая задача</div>
+    <p id="guideText">Изучи материалы дела. Нажми на улику, чтобы узнать, что она означает.</p>
+    <div class="row" id="guideActions"></div>
+  </div>
+
+  <div class="layout">
+    <section class="panel">
+      <div class="scene">
+        <div class="scene-icon" id="sceneIcon">🔑</div>
+        <h2 id="sceneTitle">Ключ от архива исчез</h2>
+        <p id="sceneText">В небольшой исследовательской лаборатории пропал ключ от архива. Дверь не взламывали. Трое сотрудников находились рядом.</p>
+      </div>
+
+      <div id="workArea"></div>
+      <div class="notice hidden" id="result" aria-live="polite"></div>
+    </section>
+
+    <aside class="panel">
+      <div class="eyebrow">ТВОЙ МАРШРУТ</div>
+      <h2 style="margin-top:7px">Этапы дела</h2>
+      <div class="stage-list" id="stageList"></div>
+      <hr style="border:0;border-top:1px solid var(--line);margin:20px 0">
+      <h3>Что важно помнить</h3>
+      <p class="muted" id="memoryText">Не нужно нажимать на всё подряд. Выполняй текущую задачу — игра сама подскажет следующий шаг.</p>
+      <div class="notice hidden" id="notebook"></div>
+    </aside>
+  </div>
+</main>
+<footer>MIND LAB · Учебный эпизод · Прогресс обучения не меняет сохранения дел</footer>
+
+<script>
+"use strict";
+
+const stages = [
+  "Осмотр места происшествия",
+  "Сопоставление улик",
+  "Проверка подозреваемого",
+  "Выбор версии",
+  "Вердикт"
+];
+
+const clues = [
+  {
+    id: "cup",
+    title: "Кружка на столе",
+    short: "На столе осталась кружка.",
+    detail: "Кружка ещё тёплая. Кто-то недавно находился в комнате, но сама по себе кружка не доказывает, кто взял ключ.",
+    image: "./улики/session_cup.webp"
+  },
+  {
+    id: "log",
+    title: "Журнал доступа",
+    short: "Запись времени входа в архив.",
+    detail: "В 18:10 в архив вошла сотрудница Нина. Ключ нужен для входа, но запись не показывает, что она унесла его.",
+    image: "./улики/session_log.webp"
+  },
+  {
+    id: "note",
+    title: "Записка техника",
+    short: "Записка оставлена у двери.",
+    detail: "Техник написал: «Верну ключ после проверки замка». Это показывает, что он брал ключ раньше, но не доказывает, что он всё ещё у него.",
+    image: "./улики/session_note.webp"
+  }
+];
+
+function fillClueButton(button, clue) {
+  button.replaceChildren();
+  const media = document.createElement("span");
+  media.className = "clue-image";
+  const image = document.createElement("img");
+  image.src = clue.image;
+  image.alt = "";
+  image.loading = "lazy";
+  image.addEventListener("error", () => media.remove(), { once: true });
+  media.appendChild(image);
+
+  const title = document.createElement("strong");
+  title.textContent = clue.title;
+  const description = document.createElement("small");
+  description.textContent = clue.short;
+  button.append(media, title, description);
+}
+
+let stage = 0;
+let found = [];
+let selectedClues = [];
+let resultText = "";
+let suspectChecked = false;
+let hypothesis = "";
+let verdict = "";
+
+const $ = id => document.getElementById(id);
+
+function setGuide(title, text, buttons = []) {
+  $("guideTitle").textContent = title;
+  $("guideText").textContent = text;
+  $("guideActions").replaceChildren();
+  buttons.forEach(item => {
+    const b = document.createElement("button");
+    b.textContent = item.label;
+    if (item.primary) b.className = "primary";
+    b.addEventListener("click", item.action);
+    $("guideActions").appendChild(b);
+  });
+}
+
+function updateProgress() {
+  $("progressBar").style.width = (stage / stages.length * 100) + "%";
+  $("progressText").textContent =
+    "Этап " + Math.min(stage + 1, stages.length) + " из " + stages.length;
+
+  $("stageList").innerHTML = stages.map((name, i) => `
+    <div class="stage ${i < stage ? "done" : i === stage ? "active" : ""}">
+      <span class="dot">${i < stage ? "✓" : i + 1}</span>
+      <span>${name}</span>
+    </div>
+  `).join("");
+}
+
+function showResult(text, type = "") {
+  $("result").textContent = text;
+  $("result").className = "notice" + (type ? " " + type : "");
+}
+
+function nextStage() {
+  stage++;
+  selectedClues = [];
+  resultText = "";
+  render();
+}
+
+function render() {
+  updateProgress();
+  $("result").className = "notice hidden";
+
+  if (stage === 0) renderInspection();
+  else if (stage === 1) renderComparison();
+  else if (stage === 2) renderSuspect();
+  else if (stage === 3) renderHypothesis();
+  else renderVerdict();
+}
+
+function renderInspection() {
+  $("sceneIcon").textContent = "🔑";
+  $("sceneTitle").textContent = "Ключ от архива исчез";
+  $("sceneText").textContent =
+    "В лаборатории пропал ключ. Осмотри три материала. После изучения всех трёх можно будет перейти к анализу.";
+
+  $("workArea").innerHTML = `
+    <h3>Материалы дела</h3>
+    <p class="muted">Нажми на каждый материал, чтобы изучить его.</p>
+    <div class="stack" id="clueButtons"></div>
+  `;
+
+  clues.forEach(clue => {
+    const b = document.createElement("button");
+    b.className = "clue" + (found.includes(clue.id) ? " found" : "");
+    fillClueButton(b, clue);
+    b.addEventListener("click", () => {
+      if (!found.includes(clue.id)) found.push(clue.id);
+      showResult(clue.detail, "good");
+      renderClueButtons();
+      if (found.length === clues.length) {
+        setGuide(
+          "Осмотр завершён",
+          "Ты изучил все материалы. Теперь пора искать связь между ними.",
+          [{label:"Перейти к сопоставлению", primary:true, action:nextStage}]
+        );
+      } else {
+        setGuide(
+          "Улика изучена",
+          "Хорошо. Изучи оставшиеся материалы. Не нужно искать виновного до того, как собраны факты."
+        );
+      }
+      updateProgress();
+    });
+    $("clueButtons").appendChild(b);
+  });
+
+  function renderClueButtons() {
+    const buttons = $("clueButtons");
+    if (!buttons) return;
+    [...buttons.children].forEach((button, i) => {
+      button.classList.toggle("found", found.includes(clues[i].id));
+    });
+  }
+
+  setGuide(
+    "Шаг 1. Изучи материалы",
+    "Нажимай на карточки улик. Игра объяснит, что каждая из них подтверждает и чего она пока не доказывает."
+  );
+}
+
+function renderComparison() {
+  $("sceneIcon").textContent = "🧩";
+  $("sceneTitle").textContent = "Найди важное совпадение";
+  $("sceneText").textContent =
+    "Выбери оба материала, которые относятся к одной версии событий. В настоящем деле ты будешь выбирать две карточки улик на доске и проверять связь между ними.";
+
+  $("workArea").innerHTML = `
+    <h3>Выбери две улики</h3>
+    <p class="muted">Выбери журнал доступа и записку техника. Можно снять выбор повторным нажатием.</p>
+    <div class="stack" id="compareButtons"></div>
+    <div class="row"><button class="primary" id="compareBtn" disabled>Сопоставить улики</button></div>
+  `;
+
+  ["log", "note"].forEach(id => {
+    const clue = clues.find(c => c.id === id);
+    const b = document.createElement("button");
+    b.className = "clue" + (selectedClues.includes(id) ? " selected" : "");
+    fillClueButton(b, clue);
+    b.addEventListener("click", () => {
+      if (selectedClues.includes(id)) {
+        selectedClues = selectedClues.filter(selected => selected !== id);
+      } else if (selectedClues.length < 2) {
+        selectedClues.push(id);
+      }
+      renderComparison();
+    });
+    $("compareButtons").appendChild(b);
+  });
+
+  $("compareBtn").disabled = selectedClues.length !== 2;
+  $("compareBtn").textContent = selectedClues.length === 2
+    ? "Сопоставить две улики"
+    : "Выбери две улики · " + selectedClues.length + "/2";
+
+  $("compareBtn").onclick = () => {
+    showResult(
+      "Журнал подтверждает, что Нина входила в архив. Записка подтверждает, что техник брал ключ для проверки замка. Вместе эти факты помогают восстановить события, но не доказывают, кто оставил ключ у себя. В основной игре после сопоставления появится вывод о связи; при необходимости его можно будет дополнительно проверить в допросе.",
+      "good"
+    );
+    setGuide(
+      "Ты нашёл важное различие",
+      "Улика может подтверждать факт, но не обязательно доказывает вину. Теперь проверим показания одного из участников.",
+      [{label:"Перейти к допросу", primary:true, action:nextStage}]
+    );
+    $("notebook").classList.remove("hidden");
+    $("notebook").textContent = "Вывод: доступ к архиву и владение ключом — не одно и то же.";
+  };
+}
+
+function renderSuspect() {
+  $("sceneIcon").textContent = "🗣️";
+  $("sceneTitle").textContent = "Разговор с техником";
+  $("sceneText").textContent =
+    "Ты открыл допрос. Техник утверждает, что вернул ключ до 18:00. Выбери улику, которая поможет проверить именно это утверждение.";
+
+  $("workArea").innerHTML = `
+    <h3>Проверь показания уликой</h3>
+    <div class="notice">Техник: «Я закончил проверку замка и вернул ключ до шести часов вечера».</div>
+    <p class="muted">Предъяви материал, который относится к его словам. Нерелевантная улика не опровергает ответ.</p>
+    <div class="stack" id="evidenceButtons"></div>
+  `;
+
+  const evidenceOptions = [
+    {
+      clueId:"note",
+      label:"Предъявить записку техника",
+      good:true,
+      text:"Техник: «Да, я брал ключ для проверки замка. Записка не говорит, когда именно я его вернул». Записка даёт основание уточнить его слова, но ещё не доказывает, что он забрал ключ."
+    },
+    {
+      clueId:"log",
+      label:"Предъявить журнал доступа Нины",
+      good:false,
+      text:"Журнал подтверждает вход Нины, но не проверяет утверждение техника о времени возврата ключа. Выбери улику, которая относится именно к его словам."
+    },
+    {
+      clueId:"cup",
+      label:"Предъявить кружку",
+      good:false,
+      text:"Кружка показывает, что кто-то недавно был в комнате, но ничего не говорит о том, когда техник вернул ключ. Эта улика пока не помогает проверить его утверждение."
+    }
+  ];
+
+  evidenceOptions.forEach(evidence => {
+    const b = document.createElement("button");
+    const clue = clues.find(item => item.id === evidence.clueId);
+    b.className = "clue";
+    fillClueButton(b, {
+      ...clue,
+      title: evidence.label
+    });
+    b.addEventListener("click", () => {
+      showResult(evidence.text, evidence.good ? "good" : "warn");
+      if (evidence.good) {
+        suspectChecked = true;
+        setGuide(
+          "Открылся уточняющий вопрос",
+          "Предъявленная улика помогла проверить ответ. В основном деле после реакции подозреваемого могут открыться дополнительные вопросы. Задай уточнение, прежде чем переходить к версии.",
+          [{
+            label:"Задать уточняющий вопрос",
+            primary:true,
+            action:() => {
+              showResult(
+                "Ты уточняешь, когда ключ вернули. Техник отвечает: «Точного времени в записке нет. Нужно проверить журнал и слова остальных сотрудников». Ответ добавляет контекст, но не устанавливает виновного.",
+                "good"
+              );
+              setGuide(
+                "Ответ зафиксирован",
+                "Допрос помогает уточнить показания, но сам по себе не заменяет доказательства. Теперь оцени, какая версия подтверждается собранными фактами.",
+                [{label:"Перейти к версиям", primary:true, action:nextStage}]
+              );
+            }
+          }]
+        );
+      } else {
+        setGuide(
+          "Эта улика не проверяет утверждение",
+          "Сопоставь содержание материала с конкретными словами подозреваемого. Попробуй предъявить записку техника."
+        );
+      }
+    });
+    $("evidenceButtons").appendChild(b);
+  });
+
+  setGuide(
+    "Шаг 3. Предъяви улику в допросе",
+    "Выбери записку техника: она относится к его словам о ключе. Не спеши обвинять человека — сначала зафиксируй, что именно подтверждает материал."
+  );
+}
+
+function renderHypothesis() {
+  $("sceneIcon").textContent = "💭";
+  $("sceneTitle").textContent = "Выбери версию";
+  $("sceneText").textContent =
+    "Ты знаешь, что Нина входила в архив, а техник пользовался ключом. Но прямого доказательства кражи пока нет.";
+
+  $("workArea").innerHTML = `
+    <h3>Какая версия наиболее обоснована?</h3>
+    <div class="stack" id="hypotheses"></div>
+  `;
+
+  const options = [
+    {
+      id:"tech",
+      label:"Техник мог не вернуть ключ вовремя",
+      text:"Это правдоподобная версия, но записка и противоречие ещё не доказывают кражу."
+    },
+    {
+      id:"nina",
+      label:"Нина точно украла ключ",
+      text:"Запись о входе не доказывает, что Нина забрала ключ. Это слишком категоричный вывод."
+    },
+    {
+      id:"unknown",
+      label:"Данных пока недостаточно для уверенного вывода",
+      text:"Это наиболее осторожный вывод: известны действия двух сотрудников, но нет прямого доказательства того, кто оставил ключ у себя."
+    }
+  ];
+
+  options.forEach(option => {
+    const b = document.createElement("button");
+    b.textContent = option.label;
+    b.addEventListener("click", () => {
+      hypothesis = option.id;
+      showResult(option.text, option.id === "unknown" ? "good" : "warn");
+      if (option.id === "unknown") {
+        setGuide(
+          "Версия выбрана",
+          "Ты отделил факты от предположений. В реальном деле можно продолжить сбор доказательств, но сейчас учебное дело проверяет именно этот принцип.",
+          [{label:"Перейти к вердикту", primary:true, action:nextStage}]
+        );
+      } else {
+        setGuide(
+          "Проверь силу доказательств",
+          "Спроси себя: подтверждают ли найденные улики эту версию напрямую или лишь допускают её?"
+        );
+      }
+    });
+    $("hypotheses").appendChild(b);
+  });
+
+  setGuide(
+    "Шаг 4. Не путай версию с фактом",
+    "Выбирай вывод, который действительно поддерживается доказательствами. Хороший детектив не делает вид, что знает больше, чем показывают улики."
+  );
+}
+
+function renderVerdict() {
+  $("sceneIcon").textContent = "⚖️";
+  $("sceneTitle").textContent = "Учебное дело завершено";
+  $("sceneText").textContent =
+    "Ты осмотрел материалы, проверил противоречие и выбрал осторожную версию. Теперь закрепим главный принцип расследования.";
+
+  $("workArea").innerHTML = `
+    <h3>Твой итоговый вывод</h3>
+    <div class="notice good">
+      Не каждое подозрение — доказательство. Если данных недостаточно, честный вывод — признать это и продолжить расследование.
+    </div>
+    <div class="row">
+      <button class="primary" id="finish">Завершить обучение</button>
+      <button id="restart">Пройти ещё раз</button>
+    </div>
+  `;
+
+  $("finish").onclick = () => {
+    $("pageTitle").textContent = "Ты готов к настоящему делу";
+    $("pageSubtitle").textContent =
+      "Теперь ты знаешь основы: изучай факты, проверяй версии и не путай подозрение с доказательством.";
+    $("sceneTitle").textContent = "Обучение завершено";
+    $("sceneText").textContent =
+      "В основных расследованиях MIND LAB подсказки будут появляться по мере необходимости. Не обязательно проверять каждую возможную комбинацию.";
+    $("workArea").innerHTML = `
+      <h3>Что ты освоил</h3>
+      <div class="stack">
+        <div class="notice good">✓ Изучать улики и понимать их ограничения</div>
+        <div class="notice good">✓ Сопоставлять сведения, а не нажимать наугад</div>
+        <div class="notice good">✓ Проверять показания подозреваемых</div>
+        <div class="notice good">✓ Отличать гипотезу от доказанного факта</div>
+      </div>
+      <div class="row">
+        <button class="primary" id="again">Пройти обучение заново</button>
+        <a class="archive-link" href="./index.html#archive">Вернуться в архив дел →</a>
+      </div>
+    `;
+    $("again").onclick = reset;
+    $("guideTitle").textContent = "Обучение завершено";
+    $("guideText").textContent =
+      "Ты освоил основные действия. Теперь можешь открыть любое дело в архиве; обучение можно пройти повторно.";
+    $("guideActions").replaceChildren();
+    $("progressBar").style.width = "100%";
+    $("progressText").textContent = "Обучение завершено";
+    $("stageList").innerHTML = stages.map(name =>
+      `<div class="stage done"><span class="dot">✓</span><span>${name}</span></div>`
+    ).join("");
+  };
+
+  $("restart").onclick = reset;
+
+  setGuide(
+    "Финальный шаг",
+    "Заверши учебное дело, чтобы увидеть, чему ты научился."
+  );
+}
+
+function reset() {
+  stage = 0;
+  found = [];
+  selectedClues = [];
+  resultText = "";
+  suspectChecked = false;
+  hypothesis = "";
+  verdict = "";
+  $("pageTitle").textContent = "Пропавший ключ";
+  $("pageSubtitle").textContent =
+    "Тренировочный эпизод, который научит тебя основам расследования. Он не входит в три дела архива.";
+  $("notebook").classList.add("hidden");
+  $("notebook").textContent = "";
+  render();
+}
+
+render();
+</script>
+</body>
+</html>
