@@ -45,11 +45,21 @@ p { margin:8px 0 15px }
   min-height:300px; border:1px solid var(--line); border-radius:20px;
   padding:clamp(23px,5vw,55px); position:relative; overflow:hidden;
   display:flex; align-items:center;
-  background:linear-gradient(90deg,#0b0e16 0%,#0b0e16ed 44%,#0b0e1640 100%),
-  url('https://images.unsplash.com/photo-1519608487953-e999c86e7455?auto=format&fit=crop&w=1600&q=85') center/cover;
+  background:linear-gradient(90deg,#0b0e16 0%,#0b0e16ed 44%,#0b0e1640 100%);
 }
 .hero-copy { max-width:640px; position:relative }
 .hero .muted { max-width:540px }
+.hero-actions { display:flex; flex-wrap:wrap; gap:10px; margin-top:18px }
+.hero-actions .btn { display:inline-flex; align-items:center; text-decoration:none }
+.hero-actions .btn-cyan { background:#141c2b; }
+#catalog {
+  width: min(1120px, 92%);
+  margin-inline: auto;
+}
+#catalog .hero {
+  min-height: 300px;
+  padding: 32px clamp(23px, 5vw, 55px);
+}
 .btn-primary { background:var(--red); color:white; border-color:var(--red); font-weight:800 }
 .btn-primary:hover { background:#ff6b80; border-color:#ff6b80 }
 .btn-cyan { border-color:#397b7a; color:var(--cyan) }
@@ -66,9 +76,11 @@ p { margin:8px 0 15px }
 }
 .cover:after { content:""; position:absolute; inset:0; background:linear-gradient(transparent,#090b10e8) }
 .cover-label { position:relative; z-index:1; font-size:11px; letter-spacing:.16em; font-weight:900 }
-.cover-one { background-image:linear-gradient(120deg,#25394b77,#090b1088),url('https://images.unsplash.com/photo-1519608487953-e999c86e7455?auto=format&fit=crop&w=900&q=80') }
-.cover-two { background-image:linear-gradient(120deg,#52392a55,#090b10a8),url('https://images.unsplash.com/photo-1511818966892-d7d671e672a2?auto=format&fit=crop&w=900&q=80') }
-.cover-three { background-image:linear-gradient(120deg,#193f4f55,#090b10a8),url('https://images.unsplash.com/photo-1518770660439-4636190af475?auto=format&fit=crop&w=900&q=80') }
+.cover-one { background-image:linear-gradient(120deg,#25394b77,#090b1088) }
+.cover-two { background-image:linear-gradient(120deg,#263653aa,#090b10a8) }
+.cover-three { background-image:linear-gradient(120deg,#193f4f88,#090b10a8) }
+
+
 .card-body { padding:18px }
 .card-body p { color:var(--muted); font-size:13px; min-height:63px }
 .meta { display:flex; gap:7px; flex-wrap:wrap; margin:12px 0 }
@@ -657,6 +669,20 @@ footer { text-align:center; color:#626d82; font-size:12px; padding:22px }
   width: 100%;
   margin: 0;
 }
+
+.twist-scene {
+  margin-top: 18px;
+  padding: 18px;
+  border: 1px solid rgba(81, 214, 238, .42);
+  border-radius: 14px;
+  background: linear-gradient(135deg, rgba(21, 43, 67, .88), rgba(19, 24, 43, .94));
+}
+
+.twist-scene[hidden] { display: none !important; }
+.twist-scene p { color: var(--muted, #a9b6cc); line-height: 1.65; }
+.twist-choices { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 14px; }
+.twist-choices[hidden], #twistOutcome[hidden] { display: none !important; }
+.twist-choices .btn { min-height: 42px; }
 
 .investigation-main > .investigation-board {
   flex: 1 1 auto;
@@ -2247,7 +2273,7 @@ body {
 }
 
 .ml-scrim {
-  position: absolute;
+  position: fixed;
   z-index: 20;
   inset: 68px 0 0;
   background: #0008;
@@ -2262,7 +2288,7 @@ body {
 }
 
 .ml-drawer {
-  position: absolute;
+  position: fixed;
   z-index: 21;
   top: 68px;
   right: 0;
@@ -3844,7 +3870,7 @@ body {
 }
 
 /* A — прокручивается вся страница */
-body.ml-page-scroll > .topbar {
+body.ml-page-scroll:has(#game:not(.hidden)) > .topbar {
   display: none !important;
 }
 
@@ -5842,9 +5868,7 @@ button:focus-visible {
       #090e1bf7 0%,
       #0b1120e8 46%,
       #10182c72 100%
-    ),
-    url("https://images.unsplash.com/photo-1519608487953-e999c86e7455?auto=format&fit=crop&w=1600&q=85")
-    center / cover;
+    );
   box-shadow:
     inset 0 1px #ffffff0c,
     0 22px 65px #0004;
@@ -6578,9 +6602,7 @@ button:focus-visible {
 }
 
 #catalog .cover-two {
-  background-image:
-    linear-gradient(120deg, #a98bff20, #090d1bdc),
-    url("https://images.unsplash.com/photo-1511818966892-d7d671e672a2?auto=format&fit=crop&w=900&q=80") !important;
+  background-image: linear-gradient(120deg, #a98bff20, #090d1bdc) !important;
 }
 
 /* MIND LAB — unified neon evidence map */
@@ -6982,6 +7004,229 @@ button:focus-visible {
   background: #52ddf5;
 }
 
+
+/* Local character portraits */
+.interrogation-portrait {
+  float: left; width: clamp(92px, 14vw, 148px); aspect-ratio: 4 / 5;
+  margin: 0 16px 12px 0; object-fit: cover; object-position: center 30%;
+  border: 1px solid rgba(130, 158, 194, 0.34); border-radius: 9px; background: #11182a;
+}
+#boardNodes .board-suspect-portrait { position: relative; overflow: hidden; }
+#boardNodes .suspect-board-image {
+  position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; object-position: center 30%;
+}
+#boardNodes .suspect-portrait-caption { position: relative; z-index: 1; }
+@media (max-width: 560px) { .interrogation-portrait { width: 84px; margin-right: 12px; } }
+
+/* Board B: preserve the lower clue strip and prevent empty broken-image boxes. */
+#game.ml-game-screen.ml-scroll-board #visualBoardPanel {
+  overflow-x: hidden !important;
+  overflow-y: auto !important;
+  scrollbar-gutter: stable;
+}
+#game.ml-game-screen #boardNodes .board-node-image.hidden,
+#game.ml-game-screen #boardNodes .suspect-board-image.hidden { display: none !important; }
+#game.ml-game-screen #boardNodes .board-node-placeholder {
+  display: grid !important; width: 100% !important; height: 96px !important;
+  min-height: 96px !important; box-sizing: border-box !important; place-items: center !important;
+  padding: 12px !important; border: 1px dashed #52617d !important; border-radius: 6px !important;
+  color: #91a4c7 !important;
+  background: repeating-linear-gradient(135deg, #ffffff04 0 9px, transparent 9px 18px), #11182a !important;
+  font: 9px/1.5 ui-monospace, monospace !important; letter-spacing: .08em !important; text-align: center !important;
+}
+#boardNodes .board-suspect-node.has-portrait .suspect-portrait-caption,
+#boardNodes .board-suspect-node.has-portrait .suspect-portrait-placeholder { display: none !important; }
+
+/* MIND LAB artwork: local generated backgrounds */
+#catalog .hero {
+  background-image:
+    linear-gradient(90deg, rgba(9,13,27,.97) 0%, rgba(9,13,27,.84) 38%, rgba(9,13,27,.24) 100%),
+    url("./assets/main_menu_hero.webp") !important;
+  background-position: center !important;
+  background-size: cover !important;
+}
+#catalog .cover-one {
+  background-image: linear-gradient(120deg,#25394b77,#090b10aa), url("./assets/covers/cover_session.webp") !important;
+}
+#catalog .cover-two {
+  background-image: linear-gradient(120deg,#26365388,#090b10aa), url("./assets/covers/cover_room.webp") !important;
+}
+#catalog .cover-three {
+  background-image: linear-gradient(120deg,#193f4f88,#090b10aa), url("./assets/covers/cover_zero.webp") !important;
+}
+.ending-art {
+  display: block;
+  width: min(100%, 920px);
+  max-height: 390px;
+  margin: 0 auto 22px;
+  object-fit: cover;
+  border: 1px solid rgba(130,158,194,.34);
+  border-radius: 12px;
+  box-shadow: 0 18px 55px rgba(0,0,0,.28);
+}
+
+/* MIND LAB: компактные портреты в списке подозреваемых */
+#game.ml-game-screen #suspectList .suspect {
+  display: flex !important;
+  align-items: center;
+  gap: 11px;
+  min-height: 68px;
+  padding: 8px 10px !important;
+}
+#game.ml-game-screen #suspectList .suspect::before { display: none !important; }
+#game.ml-game-screen #suspectList .suspect-avatar {
+  position: relative;
+  display: grid;
+  flex: 0 0 44px;
+  width: 44px;
+  height: 52px;
+  overflow: hidden;
+  place-items: center;
+  color: #a8b3c3;
+  background: #252c37;
+  border: 1px solid #aab6c044;
+  border-radius: 5px;
+}
+#game.ml-game-screen #suspectList .suspect-avatar img {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+#game.ml-game-screen #suspectList .suspect-copy { min-width: 0; }
+#game.ml-game-screen #suspectList .suspect strong { overflow-wrap: anywhere; }
+
+/* Архивные лица: Марк/Алексей и жертва Павел Арден */
+#casePortraitSection[hidden] { display: none !important; }
+.case-portrait-list { display: grid; gap: 10px; }
+.case-portrait-card {
+  padding: 10px;
+  border: 1px solid #9daabd20;
+  border-radius: 6px;
+  background: #111827;
+}
+.case-portrait-images { display: grid; grid-template-columns: repeat(auto-fit,minmax(85px,1fr)); gap: 8px; margin-bottom: 8px; }
+.case-portrait-images figure { min-width: 0; margin: 0; }
+.case-portrait-images img { display: block; width: 100%; aspect-ratio: 4 / 5; object-fit: cover; border-radius: 4px; }
+.case-portrait-images figcaption { margin-top: 4px; color: #9eacc4; font-size: 10px; line-height: 1.35; }
+.case-portrait-card > strong,.case-portrait-card > small { display: block; }
+.case-portrait-card > strong { font-size: 12px; }
+.case-portrait-card > small { margin-top: 4px; color: #929daf; font-size: 10px; line-height: 1.4; }
+
+/* Допрос в одном окне: закреплённое лицо/состояние и лента диалога */
+.suspect-viewer-card { overflow-y: auto; scrollbar-gutter: stable; }
+.interrogation-header {
+  position: sticky;
+  top: -1px;
+  z-index: 1;
+  display: grid;
+  grid-template-columns: minmax(0,1.05fr) minmax(300px,.95fr);
+  align-items: center;
+  gap: 18px;
+  margin: -8px -8px 14px;
+  padding: 12px 52px 12px 8px;
+  background: linear-gradient(180deg,#101827f7 84%,#101827ed);
+  border-bottom: 1px solid #344663;
+  backdrop-filter: blur(14px);
+}
+.interrogation-person { display: flex; align-items: center; gap: 16px; min-width: 0; }
+.interrogation-header-main h3 { margin: 8px 0 3px; }
+.interrogation-header-main .muted,.interrogation-header-main .interrogation-meta { margin: 3px 0; }
+.interrogation-portrait {
+  display: block;
+  flex: 0 0 96px;
+  width: 96px;
+  height: 120px;
+  margin: 0;
+  object-fit: cover;
+  border: 1px solid #526887;
+  border-radius: 7px;
+  background: #0b1220;
+  transition: opacity .2s ease;
+}
+.interrogation-readout { display: grid; grid-template-columns: auto minmax(0,1fr); align-items: center; gap: 10px; }
+.interrogation-counter { min-width: 70px; }
+.interrogation-pressure {
+  min-width: 0;
+  padding: 11px 13px;
+  border: 1px solid #344663;
+  border-radius: 9px;
+  background: #171f30;
+}
+.interrogation-pressure-heading { display: flex; justify-content: space-between; gap: 10px; align-items: center; margin-bottom: 8px; }
+.interrogation-pressure-heading strong { font-size: 11px; letter-spacing: .06em; }
+.interrogation-pressure-heading span { flex: 0 0 auto; color: #b9c9e1; font-size: 11px; }
+.interrogation-pressure-track { height: 6px; overflow: hidden; border-radius: 10px; background: #303644; }
+.interrogation-pressure-track > div { width: 0; height: 100%; border-radius: inherit; transition: width .35s ease,background .35s ease; }
+.interrogation-pressure p { margin: 7px 0 0; color: #aab2c2; font-size: 11px; line-height: 1.4; }
+.interrogation-panel { margin: 18px 0 24px; }
+.interrogation-status { margin: 12px 0 16px; }
+.interrogation-chat { display: grid; gap: 14px; margin: 14px 0 20px; }
+.interrogation-chat-empty { padding: 22px; border: 1px dashed #415574; border-radius: 10px; color: #9eacc4; text-align: center; }
+.interrogation-chat-turn { display: grid; gap: 8px; }
+.interrogation-chat-question,.interrogation-chat-answer { max-width: min(88%,780px); padding: 12px 15px; border: 1px solid #344763; border-radius: 12px; }
+.interrogation-chat-question { justify-self: end; background: #1c2c45; border-color: #526b91; }
+.interrogation-chat-question span,.interrogation-chat-answer span { display: block; margin-bottom: 5px; color: #83dff1; font-size: 9px; font-weight: 800; letter-spacing: .12em; }
+.interrogation-chat-question strong { font-size: 13px; line-height: 1.5; }
+.interrogation-chat-answer { justify-self: start; background: #131d2d; }
+.interrogation-chat-answer p { margin: 0; color: #d4deef; font-size: 13px; line-height: 1.65; white-space: pre-line; }
+.interrogation-chat-turn.is-evidence .interrogation-chat-question { border-color: #a98bff88; background: #a98bff12; }
+.interrogation-chat-turn.is-evidence .interrogation-chat-question span { color: #c2adff; }
+#interrogationAnswer { display: none !important; }
+#game.ml-game-screen .deduction-history { max-height: none !important; overflow: visible !important; }
+#game.ml-game-screen #visualBoardPanel { overflow-x: hidden !important; overflow-y: auto !important; }
+
+@media (max-width: 760px) {
+  .interrogation-header { position: sticky; grid-template-columns: 1fr; gap: 10px; padding-right: 46px; }
+  .interrogation-portrait { flex-basis: 72px; width: 72px; height: 90px; }
+  .interrogation-readout { grid-template-columns: auto minmax(0,1fr); }
+  .interrogation-person { gap: 10px; }
+  .interrogation-chat-question,.interrogation-chat-answer { max-width: 96%; }
+}
+
+/* До отдельной мобильной компоновки сохраняем содержимое доступным в узком окне. */
+@media (max-width: 1100px) {
+  #game.ml-game-screen .game-layout.investigation-layout {
+    grid-template-columns: minmax(0, 1fr) !important;
+    inset-inline: 0 !important;
+  }
+
+  #game.ml-game-screen .investigation-main,
+  #game.ml-game-screen .investigation-board,
+  #game.ml-game-screen #storyPanel {
+    display: flex !important;
+    width: 100% !important;
+    min-width: 0 !important;
+  }
+
+  #game.ml-game-screen #storyPanel {
+    display: block !important;
+  }
+
+  #game.ml-game-screen .investigation-sidebar {
+    display: grid !important;
+    grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+    width: 100% !important;
+  }
+
+  #game.ml-game-screen .ml-tools,
+  #game.ml-game-screen #mlDrawer,
+  #game.ml-game-screen #mlScrim {
+    display: none !important;
+  }
+}
+
+@media (max-width: 650px) {
+  #game.ml-game-screen .investigation-sidebar {
+    grid-template-columns: minmax(0, 1fr) !important;
+  }
+
+  #game.ml-game-screen .investigation-board .visual-board {
+    min-height: 520px;
+  }
+}
+
 </style>
 </head>
 <body>
@@ -7004,11 +7249,14 @@ button:focus-visible {
         <div class="eyebrow">Архив закрытых дел / 001—003</div>
         <h1>Правда редко<br>лежит на поверхности.</h1>
         <p class="muted">Три расследования. Десятки деталей. Люди, которые лгут — иногда даже сами себе. Собирай улики, проверяй версии и решай, кому верить.</p>
-        <button class="btn btn-primary" id="startBtn" type="button">Открыть архив →</button>
+        <div class="hero-actions">
+          <button class="btn btn-primary" id="startBtn" type="button">Открыть архив →</button>
+          <a class="btn btn-cyan" href="./tutorial.html">Пройти обучение · около 5 минут</a>
+        </div>
       </div>
     </div>
 
-    <div class="section-head">
+    <div class="section-head" id="archive">
       <div><div class="eyebrow">Выбери расследование</div><h2>Архив дел</h2></div>
       <span class="muted" id="archiveCount">0 / 3 завершено</span>
     </div>
@@ -7031,19 +7279,6 @@ button:focus-visible {
   </div>
 
   <div class="ml-progress-slot" id="mlProgressSlot"></div>
-
-  
-    <div class="ml-layout-switch" role="group" aria-label="Режим прокрутки">
-    <button type="button" data-layout-mode="page" aria-pressed="false">
-        A · Вся страница
-    </button>
-    <button type="button" data-layout-mode="board" aria-pressed="true">
-        B · Только доска
-    </button>
-    <button type="button" data-layout-mode="hybrid" aria-pressed="false">
-        C · Гибрид
-    </button>
-    </div>
 
   <nav class="ml-tools" aria-label="Инструменты расследования">
     <button type="button" data-ml-tool="story">Досье</button>
@@ -7089,6 +7324,15 @@ button:focus-visible {
       <div id="noticeArea"></div>
       <div class="divider"></div>
       <div id="storyContent"></div>
+      <section class="twist-scene" id="twistScene" hidden aria-live="polite">
+        <div class="eyebrow">НОВОЕ НАПРАВЛЕНИЕ РАССЛЕДОВАНИЯ</div>
+        <p id="twistStory"></p>
+        <div class="twist-choices" id="twistChoices">
+          <button class="btn" type="button" data-twist-choice="doctor">Проверить версию Левина</button>
+          <button class="btn" type="button" data-twist-choice="archive">Проверить историю архива</button>
+        </div>
+        <p id="twistOutcome" hidden></p>
+      </section>
     </article>
 
     <section class="panel investigation-board" id="visualBoardPanel">
@@ -7170,6 +7414,12 @@ button:focus-visible {
       <div class="suspect-list" id="suspectList"></div>
     </section>
 
+    <section class="panel sidebar-section" id="casePortraitSection" hidden>
+      <div class="eyebrow">ARCHIVE FACES</div>
+      <h3>Архивные лица дела</h3>
+      <div class="case-portrait-list" id="casePortraitList"></div>
+    </section>
+
     <section class="panel sidebar-section hypothesis-panel">
     <div class="eyebrow">CASE THEORY / 01</div>
     <h3>Теории расследования</h3>
@@ -7208,6 +7458,15 @@ button:focus-visible {
   <p id="routeNextStep" class="route-next-step" aria-live="polite"></p>
 </div>
 
+<nav class="mobile-game-nav" id="mobileGameNav" aria-label="Разделы расследования">
+  <button type="button" data-mobile-jump="storyPanel">Дело</button>
+  <button type="button" data-mobile-jump="visualBoardPanel">Доска</button>
+  <button type="button" data-mobile-jump="materialsSidebarSection">Улики</button>
+  <button type="button" data-mobile-jump="deductionSidebarSection">Связи</button>
+  <button type="button" data-mobile-jump="suspectList">Люди</button>
+  <button type="button" data-mobile-jump="hypothesisList">Версии</button>
+</nav>
+
   <div id="toast" class="toast hidden" role="status"></div>
 
 <div id="evidenceViewer" class="evidence-viewer hidden" role="dialog" aria-modal="true" aria-labelledby="viewerTitle">
@@ -7229,12 +7488,6 @@ class="suspect-viewer hidden"
   <div class="suspect-viewer-backdrop" data-close-suspect></div>
 
   <div class="suspect-viewer-card">
-    <button type="button"
-        class="suspect-viewer-close"
-        data-close-suspect
-        aria-label="Закрыть"
-        >×</button>
-
     <div id="suspectViewerContent"></div>
   </div>
 </div>
@@ -7245,11 +7498,102 @@ class="suspect-viewer hidden"
 
 <script>
 "use strict";
+const EVIDENCE_ASSETS = {
+  session: {
+    clock: "./улики/session_clock.webp", cup: "./улики/session_cup.webp",
+    log: "./улики/session_log.webp", tape: "./улики/session_tape.webp",
+    keycard: "./улики/session_keycard.webp", note: "./улики/session_note.webp",
+    message: "./улики/session_message.webp",
+    archive: "./улики/session_archive.webp", protocol: "./улики/session_protocol.webp",
+    metadata: "./улики/session_metadata.webp"
+  },
+  room: {
+    glass: "./улики/room_glass.webp", clock: "./улики/room_clock.webp",
+    window: "./улики/room_window.webp", letters: "./улики/room_letters.webp",
+    music: "./улики/room_music.webp", mud: "./улики/room_mud.webp",
+    panel: "./улики/room_panel.webp", will: "./улики/room_will.webp",
+    metadata: "./улики/room_metadata.webp"
+  },
+  zero: {
+    server: "./улики/zero_server.webp", badge: "./улики/zero_badge.webp",
+    mail: "./улики/zero_mail.webp", account: "./улики/zero_account.webp",
+    backup: "./улики/zero_backup.webp", invoice: "./улики/zero_invoice.webp",
+    protocol: "./улики/zero_protocol.webp", payment: "./улики/zero_payment.webp"
+  }
+};
+
+const CHARACTER_ASSETS = {
+  session: { levin: "session_levin", nina: "session_nina", tech: "session_ilya" },
+  room: { heir: "room_eleonora", secretary: "room_mikhail", gardener: "room_stepan" },
+  zero: { director: "zero_kramer", engineer: "zero_irina", vendor: "zero_veil" }
+};
+
+// Архивные персонажи, которые важны для сюжета, но не допрашиваются.
+const CASE_ARCHIVE_PORTRAITS = {
+  session: [{
+    title: "Марк Ветров / Алексей Орлов",
+    note: "Один человек в двух периодах жизни",
+    images: [
+      { src: "./Герои/session_mark_vetrov_portrait.webp", label: "Марк Ветров" },
+      { src: "./Герои/session_alexey_orlov_archive.webp", label: "Архив: Алексей Орлов" }
+    ]
+  }],
+  room: [{
+    title: "Павел Арден",
+    note: "Архивный портрет жертвы",
+    images: [
+      { src: "./Герои/room_pavel_arden_portrait.webp", label: "Павел Арден" }
+    ]
+  }],
+  zero: []
+};
+
+const CASE_SCENE_ASSETS = {
+  session: "./assets/scenes/scene_session_clinic.webp",
+  room: "./assets/scenes/scene_room_study.webp",
+  zero: "./assets/scenes/scene_zero_serverroom.webp"
+};
+const ENDING_ASSETS = {
+  session: "./assets/endings/ending_session.webp",
+  room: "./assets/endings/ending_room.webp",
+  zero: "./assets/endings/ending_zero.webp"
+};
+
+function evidenceImagePath(caseId, evidenceId) {
+  return EVIDENCE_ASSETS[caseId]?.[evidenceId] || "";
+}
+
+function characterImagePath(caseId, suspectId, emotion = "neutral") {
+  const stem = CHARACTER_ASSETS[caseId]?.[suspectId];
+  if (!stem) return "";
+  const suffix = emotion === "neutral" ? "_neutral" : `_${emotion}`;
+  return `./Герои/${stem}${suffix}.webp`;
+}
+
+function interrogationPortraitEmotion(caseId, suspectId, history, override = "") {
+  if (Object.values(history?.chains || {}).some(chain => Boolean(chain?.confession))) {
+    return "confession";
+  }
+  if (["shocked", "irritated"].includes(override)) return override;
+
+  const pressure = getInterrogationPressure(history);
+  if (pressure >= 75) return "defensive";
+  if (pressure >= 50) return "anxious";
+  if (pressure >= 25) return "guarded";
+  if (
+    (history?.asked || []).length ||
+    Object.keys(history?.presented || {}).length
+  ) {
+    return "attentive";
+  }
+  return "neutral";
+}
+
 
 const CASES = [
 {
  id:"session", number:"001", title:"Последний сеанс", genre:"ПСИХОЛОГИЧЕСКИЙ ТРИЛЛЕР",
- difficulty:"Сложность: высокая", time:"15–20 мин",
+ difficulty:"Сложность: высокая", time:"20–30 мин",
  short:"Пациент исчез из закрытой клиники. Последняя запись его психотерапевта обрывается на одной фразе.",
  cover:"cover-one",
  intro:"22:14. Частная клиника «Белый шум». Пациент Марк Ветров исчез из запертой комнаты для сеансов. Окно закрыто изнутри, коридор снимала камера, а дверь открывали только ключом врача. На столе остались диктофон и чашка с ещё тёплым чаем.\n\nТебя пригласили как независимого консультанта. До утра клиника собирается объявить, что пациент сбежал. Но кто-то удалил последние одиннадцать минут записи.",
@@ -7275,7 +7619,7 @@ const CASES = [
   ["protocol", "Исправленный протокол", "В копии протокола указано время встречи, которое не совпадает с официальным отчётом."],
   ["metadata", "Метаданные записи", "Время изменения файла отличается от времени, указанного в официальном журнале."]
 ],
- finalQuestion:"Кто несёт главную ответственность за исчезновение Марка?",
+ finalQuestion:"Кто несёт главную ответственность за ложную версию и сокрытие старого дела?",
  choices:[
   {id:"levin",label:"Обвинить доктора Левина",desc:"Поздний визит, ложь о времени и удалённые документы указывают на него.",score:100,ending:"truth",result:"Верная версия — но не вся правда."},
   {id:"nina",label:"Обвинить Нину Соколову",desc:"Она слышала спор и скрыла часть событий.",score:20,ending:"partial",result:"Ты нашёл свидетеля, но перепутал молчание с причиной."},
@@ -7289,12 +7633,12 @@ const CASES = [
 },
 {
  id:"room",number:"002",title:"Запертая комната",genre:"КЛАССИЧЕСКИЙ ДЕТЕКТИВ",
-difficulty:"Сложность: средняя",time:"10–15 мин",short:"Коллекционер найден мёртвым в кабинете, запертом изнутри. Все трое гостей утверждают, что не входили туда после ужина.",cover:"cover-two",
+difficulty:"Сложность: средняя",time:"15–20 мин",short:"Коллекционер найден мёртвым в кабинете, запертом изнутри. Все трое гостей утверждают, что не входили туда после ужина.",cover:"cover-two",
 intro:"Поместье «Северный мыс». Во время бури коллекционер Павел Арден найден в своём кабинете. Дверь заперта изнутри, окна заколочены на зиму. На ковре — разбитый бокал, на камине — нетронутая пыль.\n\nВ доме три человека: наследница, секретарь и садовник. Каждый слышал удар часов в десять. Но часы остановились на девять семнадцать.",
 chapters:[
 {title:"Кабинет",text:"Осмотр комнаты показывает, что ничего не похищено. Дорогие часы лежат на месте, а сейф закрыт. Врач предполагает, что смерть наступила около десяти, но точного времени пока нет.\n\nНаследница утверждает, что весь вечер играла на пианино. Секретарь говорит, что разбирал письма. Садовник был в оранжерее.",clues:["glass","clock","window"],next:"Комната кажется запертой. Возможно, неверно само представление о времени преступления."},
 {title:"Три показания",text:"Секретарь помнит звук падающего бокала в 21:17. Наследница говорит, что в это время играла сонату, которую слышали все в доме. Садовник утверждает, что видел свет в кабинете уже после десяти.\n\nНо в нотах наследницы есть пропуск ровно на четыре минуты.",clues:["letters","music","mud"],next:"У каждого есть алиби. И каждое алиби построено на том, что другие считают доказательством."},
-{title:"Последняя деталь",text:"Пыль на камине нарушена только у одной кирпичной панели. За ней — старый узкий канал для подачи угля, ведущий в служебный коридор. Он слишком мал для взрослого человека, но через него можно провести тонкий шнур.\n\nВрач пересматривает время смерти: Павел умер значительно раньше, чем считали гости.",clues:["panel","will"],next:"Пора решить, кто воспользовался ложным временем и почему."}
+{title:"Последняя деталь",text:"Пыль на камине нарушена только у одной кирпичной панели. За ней — старый узкий канал для подачи угля, ведущий в служебный коридор. Он слишком мал для взрослого человека, но через него можно провести тонкий шнур.\n\nВрач пересматривает время смерти: Павел умер значительно раньше, чем считали гости. В архиве также найден цифровой снимок каминных часов; его временные отметки требуют отдельной проверки.",clues:["panel","will","metadata"],next:"Пора решить, кто воспользовался ложным временем и почему."}
 ],
 suspects:[
 {id:"heir",name:"Элеонора Арден",role:"Наследница",desc:"Получает поместье и коллекцию.",tell:"Она действительно пропустила четыре минуты в музыке. Но это было до смерти Павла, а не доказательство убийства."},
@@ -7309,7 +7653,8 @@ evidence:[
 ["music","Ноты сонаты","Четыре минуты музыки отсутствуют. Наследница могла уходить из гостиной, но в это время Павел был ещё жив."],
 ["mud","Следы в оранжерее","Следы садовника идут только от оранжереи к кухне. К кабинету они не ведут."],
 ["panel","Кирпичная панель","За камином скрывается канал и тонкий шнур. Им можно было остановить часы из соседнего служебного прохода."],
-["will","Новое завещание","Павел лишал секретаря доступа к коллекции и планировал передать её музею."]
+["will","Новое завещание","Павел лишал секретаря доступа к коллекции и планировал передать её музею."],
+["metadata","Метаданные снимка часов","Свойства цифрового снимка показывают, что файл изменили позже времени, указанного в отчёте. Это ставит снимок под сомнение, но не устанавливает, кто его изменил."]
 ],
 finalQuestion:"Кто организовал обман с запертой комнатой?",
 choices:[
@@ -7318,14 +7663,14 @@ choices:[
 {id:"gardener",label:"Степан Рудин, садовник",desc:"Он знал служебные проходы и видел свет.",score:10,ending:"wrong",result:"Ты поверил наблюдению, не проверив время."}
 ],
 endings:{
-truth:{title:"Дело раскрыто: неправильное время",text:"Секретарь отравил Павла раньше десяти, затем разбил бокал и остановил часы в 21:17. Позже он воспользовался тонким шнуром через старый канал, чтобы создать впечатление, будто часы остановились в момент смерти. Дверь оставалась запертой, потому что убийца покинул кабинет до того, как запер её сам хозяин.\n\nРешающей уликой стали не следы в комнате, а завещание: у секретаря был мотив, знание распорядка и возможность подделать временную линию.",rank:"МАСТЕР ДЕДУКЦИИ"},
+truth:{title:"Дело раскрыто: неправильное время",text:"Михаил Воронцов организовал обман с временем. Письма и новое завещание подтверждают его конфликт с Павлом, а скрытый канал позволял остановить часы из служебного прохода. Секретарь признал, что показания часов нельзя считать временем смерти, и объяснил, как работал механизм.\n\nМатериалы подтверждают подмену временной линии, мотив и возможность вмешательства. Они не содержат заключения о причине смерти, поэтому версия об отравлении не считается доказанной. Итог расследования устанавливает, кто подготовил обман с запертой комнатой, но не приписывает уликам то, чего они не доказывают.",rank:"МАСТЕР ДЕДУКЦИИ"},
 partial:{title:"Часть правды",text:"Элеонора скрыла свой уход из гостиной, но это не делает её организатором преступления. Она искала письмо, которое могло изменить завещание. Настоящий мотив был у человека, который составлял документы.",rank:"НЕПОЛНОЕ РАССЛЕДОВАНИЕ"},
 wrong:{title:"Алиби оказалось ловушкой",text:"Садовник знал поместье, но его следы не ведут к кабинету. Он стал удобным подозреваемым, потому что мог объяснить служебные проходы. Ты не учёл фальшивое время на часах.",rank:"ДЕЛО НЕ РАСКРЫТО"}
 }
 },
 {
 id:"zero",number:"003",title:"Нулевой пациент",genre:"ТЕХНОТРИЛЛЕР",
-difficulty:"Сложность: высокая",time:"15–20 мин",short:"В исследовательской компании исчез серверный журнал. Через час неизвестный прислал сообщение: «Первый пациент никогда не существовал».",cover:"cover-three",
+difficulty:"Сложность: высокая",time:"20–30 мин",short:"В исследовательской компании исчез серверный журнал. Через час неизвестный прислал сообщение: «Первый пациент никогда не существовал».",cover:"cover-three",
 intro:"03:06. Исследовательская компания «Helix North». Из закрытого сегмента сети исчезли данные испытаний проекта ZERO. Руководство утверждает, что это обычная ошибка синхронизации.\n\nНо ночью сотрудница безопасности получила письмо с единственной строкой: «Нулевой пациент никогда не существовал». Через час отправитель пропал из корпоративной системы.",
 chapters:[
 {title:"Цифровой след",text:"На сервере сохранились три события: вход администратора в 02:11, экспорт архива в 02:14 и удаление журнала в 02:19. В официальном отчёте написано, что сервер был отключён с полуночи.\n\nРуководитель проекта называет это тестовой средой. Инженер безопасности говорит, что тестовой среды у них никогда не было.",clues:["server","badge","mail"],next:"Данные не исчезают без следа. Но иногда оставленный след создан специально."},
@@ -7354,7 +7699,7 @@ choices:[
 {id:"vendor",label:"Внешний подрядчик похитил результаты",desc:"У него был аккаунт и техническая возможность.",score:10,ending:"wrong",result:"Ты нашёл фиктивный аккаунт, но не того, кто его создал."}
 ],
 endings:{
-truth:{title:"Дело раскрыто: пациент-призрак",text:"Н. Вейл — служебная личность, созданная руководством для маскировки доступа и выплат. Проект ZERO проводил испытания, которые компания официально отрицала. Крамер подписывал протоколы и платёжные ведомости, а затем распорядился удалить журналы. Инженер Волкова сохранила письмо и часть резервной копии, благодаря чему схема восстановлена.\n\nСамого «нулевого пациента» в документах действительно нет: идентификаторы подменяли настоящее имя. Но отсутствие имени не означает отсутствия человека.",rank:"ЦИФРОВОЙ КРИМИНАЛИСТ"},
+truth:{title:"Дело раскрыто: пациент-призрак",text:"Н. Вейл — служебная личность, созданная внутри компании для доступа и выплат. Протокол, платёжные документы и ответы Крамера показывают, что он руководил проектом ZERO, скрывал испытания и согласовал вводящую в заблуждение формулировку об отключённом сервере. Журнал и резервная копия подтверждают, что архив экспортировали перед удалением. Вместе эти материалы раскрывают схему сокрытия проекта и роль руководителя в ней.\n\nОни не устанавливают, кто физически выполнил удаление журнала: в доступных записях нет идентификатора оператора. Инженер Волкова сохранила письмо и часть резервной копии, благодаря чему расследование восстановило скрытые связи. Самого «нулевого пациента» в документах действительно нет, но отсутствие имени не доказывает, что испытаний не было.",rank:"ЦИФРОВОЙ КРИМИНАЛИСТ"},
 partial:{title:"Слишком простое объяснение",text:"Ирина имела доступ, но её копия письма стала единственным способом восстановить удалённую цепочку. Ты принял близость к доказательствам за вину и пропустил связь между фиктивным аккаунтом и платежами.",rank:"ПРОВЕРЬ ФИНАНСОВЫЙ СЛЕД"},
 wrong:{title:"Подставная личность",text:"Аккаунт Н. Вейла действительно использовался для доступа к архиву. Но он был создан внутри компании и получал финансирование через её подрядчика. Ты нашёл инструмент сокрытия, а не организатора.",rank:"ДЕЛО НЕ РАСКРЫТО"}
 }
@@ -7368,6 +7713,7 @@ let activeId=null, chapterIndex=0, soundOn=false, audioContext=null;
 let selectedEvidence = [];
 let selectedSuspect = null;
 let deductionMessage = "";
+let deductionResultTimer = null;
 
 
 const HYPOTHESES = {
@@ -7850,6 +8196,11 @@ const DEDUCTIONS = {
       title: "Подтверждено: механизм обмана",
       text: "Скрытый канал и остановленные часы позволяют объяснить, как создали ложную временную линию.",
       good: true
+    },
+    "clock|metadata": {
+      title: "Временная отметка снимка ненадёжна",
+      text: "Свойства файла показывают, что цифровую копию часов изменили позже. Это подтверждает, что метка снимка не устанавливает время преступления и сама по себе не определяет автора изменения.",
+      good: true
     }
   },
   zero: {
@@ -8311,6 +8662,15 @@ deductionMessage = "";
  chapterIndex=Math.min(s.chapter,c.chapters.length-1);
  document.getElementById("catalog").classList.add("hidden");
  document.getElementById("game").classList.remove("hidden");
+ const storyPanel = document.getElementById("storyPanel");
+ const scenePath = CASE_SCENE_ASSETS[id];
+ if (storyPanel) {
+   storyPanel.style.backgroundImage = scenePath
+     ? `linear-gradient(180deg, rgba(17,24,42,.91), rgba(9,13,27,.96)), url("${scenePath}")`
+     : "";
+   storyPanel.style.backgroundPosition = "center";
+   storyPanel.style.backgroundSize = "cover";
+ }
  if(s.finished&&s.ending){renderEnding();return;}
  renderChapter();ping(620,.12);window.scrollTo({top:0,behavior:"smooth"});
 }
@@ -8677,6 +9037,27 @@ if (deductionHint) {
       (deductionMessage ? "" : " hidden");
 
     deductionResult.textContent = deductionMessage;
+
+    if (deductionMessage) {
+      if (deductionResult.dataset.feedbackText !== deductionMessage) {
+        clearTimeout(deductionResultTimer);
+        deductionResult.dataset.feedbackText = deductionMessage;
+        deductionResult.dataset.feedbackDismissed = "";
+        deductionResult.classList.remove("hidden");
+        deductionResultTimer = setTimeout(() => {
+          if (deductionResult.dataset.feedbackText === deductionMessage) {
+            deductionResult.classList.add("hidden");
+            deductionResult.dataset.feedbackDismissed = deductionMessage;
+          }
+        }, 5000);
+      } else if (deductionResult.dataset.feedbackDismissed === deductionMessage) {
+        deductionResult.classList.add("hidden");
+      }
+    } else {
+      clearTimeout(deductionResultTimer);
+      deductionResult.dataset.feedbackText = "";
+      deductionResult.dataset.feedbackDismissed = "";
+    }
   }
   
   // История проверенных связей
@@ -8732,9 +9113,37 @@ if (deductionHint) {
       `).join("");
     }
   }
- document.getElementById("suspectList").innerHTML=c.suspects.map(p=>
- `<button class="suspect" data-suspect="${p.id}"><strong>${esc(p.name)}</strong><small>${esc(p.role)} · нажми для досье</small></button>`
- ).join("");
+ document.getElementById("suspectList").innerHTML=c.suspects.map(p=> {
+   const portrait = characterImagePath(activeId, p.id);
+   return `<button class="suspect" data-suspect="${esc(p.id)}">
+     <span class="suspect-avatar" aria-hidden="true">
+       ${portrait ? `<img src="${esc(portrait)}" alt="" onerror="this.hidden=true;this.nextElementSibling.hidden=false">` : ""}
+       <span ${portrait ? "hidden" : ""}>◉</span>
+     </span>
+     <span class="suspect-copy"><strong>${esc(p.name)}</strong><small>${esc(p.role)} · нажми для досье</small></span>
+   </button>`;
+ }).join("");
+
+ const archiveSection = document.getElementById("casePortraitSection");
+ const archiveList = document.getElementById("casePortraitList");
+ const archiveEntries = CASE_ARCHIVE_PORTRAITS[activeId] || [];
+ if (archiveSection && archiveList) {
+   archiveSection.hidden = archiveEntries.length === 0;
+   archiveList.innerHTML = archiveEntries.map(entry => `
+     <article class="case-portrait-card">
+       <div class="case-portrait-images">
+         ${entry.images.map(image => `
+           <figure>
+             <img src="${esc(image.src)}" alt="${esc(image.label)}" loading="lazy" onerror="this.hidden=true">
+             <figcaption>${esc(image.label)}</figcaption>
+           </figure>
+         `).join("")}
+       </div>
+       <strong>${esc(entry.title)}</strong>
+       <small>${esc(entry.note)}</small>
+     </article>
+   `).join("");
+ }
  
 document.querySelectorAll("[data-suspect]").forEach(button => {
   button.addEventListener("click", () => {
@@ -9980,6 +10389,9 @@ if (
 ) {
   interrogationHistory.chains = {};
 }
+if (!Array.isArray(interrogationHistory.conversation)) {
+  interrogationHistory.conversation = [];
+}
   // История предъявления улик, включая старые сохранения
   if (
     !interrogationHistory.presented ||
@@ -10525,7 +10937,7 @@ if (
   // =====================================================
 
   
-  // Обновление содержимого вкладки «Результаты»
+  // Обновление зафиксированных показаний и реакций.
   const renderResults = () => {
     const resultsPanel = content.querySelector(
       '[data-interrogation-panel="results"]'
@@ -10623,8 +11035,7 @@ if (
 
       ${askedHtml || `
         <div class="interrogation-empty">
-          Показаний пока нет. Перейди во вкладку «Допрос»
-          и задай первый вопрос.
+          Показаний пока нет. Выбери вопрос ниже, чтобы начать разговор.
         </div>
       `}
 
@@ -10662,6 +11073,48 @@ ${timelineHtml}
     `;
   };
 
+  const renderConversation = () => {
+    const thread = content.querySelector("#interrogationConversation");
+    if (!thread) return;
+
+    if (!interrogationHistory.conversation.length) {
+      thread.innerHTML = '<div class="interrogation-chat-empty">Выбери вопрос или предъяви найденную улику — разговор появится здесь.</div>';
+      return;
+    }
+
+    thread.innerHTML = interrogationHistory.conversation.map(item => `
+      <article class="interrogation-chat-turn ${item.type === "evidence" ? "is-evidence" : ""}">
+        <div class="interrogation-chat-question">
+          <span>${item.type === "evidence" ? "МАТЕРИАЛ СЛЕДСТВИЯ" : "СЛЕДОВАТЕЛЬ"}</span>
+          <strong>${esc(item.title || "Вопрос")}</strong>
+        </div>
+        <div class="interrogation-chat-answer">
+          <span>${esc(p.name.toUpperCase())}</span>
+          <p>${esc(item.response || "")}</p>
+        </div>
+      </article>
+    `).join("");
+  };
+
+  // Миграция прежних сохранений в ленту переписки.
+  if (!interrogationHistory.conversation.length) {
+    interrogationHistory.asked.forEach(questionId => {
+      const question = questions.find(item => item.id === questionId);
+      if (!question) return;
+      interrogationHistory.conversation.push({
+        type: "question",
+        title: question.title,
+        response: interrogationHistory.answers[questionId] || question.answer || ""
+      });
+    });
+    Object.values(interrogationHistory.presented).forEach(item => {
+      interrogationHistory.conversation.push({
+        type: "evidence",
+        title: item.title || "Предъявлена улика",
+        response: item.response || ""
+      });
+    });
+  }
   const foundEvidenceHtml = foundEvidence.length
     ? foundEvidence.map(e => `
         <article class="interrogation-dossier">
@@ -10705,50 +11158,45 @@ ${timelineHtml}
   content.innerHTML = `
     <div class="eyebrow">MIND LAB / CASE INTERROGATION</div>
 
-    <div class="interrogation-header">
-      <div class="interrogation-header-main">
-        <div class="interrogation-kicker">
-          Материалы следствия · ${esc(c.title || c.id)}
+    <header class="interrogation-header">
+      <button type="button"
+          class="suspect-viewer-close"
+          data-close-suspect
+          aria-label="Закрыть допрос"
+          >×</button>
+      <div class="interrogation-person">
+        <img class="interrogation-portrait" src="${esc(characterImagePath(activeId, id))}" alt="Портрет: ${esc(p.name)}" onerror="this.hidden=true">
+        <div class="interrogation-header-main">
+          <div class="interrogation-kicker">
+            Материалы следствия · ${esc(c.title || c.id)}
+          </div>
+          <h3>${esc(p.name)}</h3>
+          <p class="muted">${esc(p.role)}</p>
+          <p class="interrogation-meta">${esc(p.desc)}</p>
+        </div>
+      </div>
+
+      <div class="interrogation-readout">
+        <div class="interrogation-counter">
+          <div>ДОПРОС</div>
+          <strong>${interrogationHistory.asked.length} / ${questions.length}</strong>
+          <div>вопросов</div>
         </div>
 
-        <h3>${esc(p.name)}</h3>
-        <p class="muted">${esc(p.role)}</p>
-        <p class="interrogation-meta">${esc(p.desc)}</p>
+        <div id="interrogationPressure" class="interrogation-pressure">
+          <div class="interrogation-pressure-heading">
+            <strong id="interrogationMoodTitle">ДЕРЖИТСЯ УВЕРЕННО</strong>
+            <span id="interrogationPressureValue">0 / 100</span>
+          </div>
+          <div class="interrogation-pressure-track">
+            <div id="interrogationPressureFill"></div>
+          </div>
+          <p id="interrogationMoodDescription">Пока у следствия недостаточно подтверждённых зацепок.</p>
+        </div>
       </div>
-
-      <div class="interrogation-counter">
-        <div>ДОПРОС</div>
-        <strong>${interrogationHistory.asked.length}
-          / ${questions.length}</strong>
-        <div>вопросов</div>
-      </div>
-    </div>
+    </header>
 
     <div class="divider"></div>
-
-    <div class="interrogation-tabs" role="tablist"
-         aria-label="Разделы досье">
-      <button type="button"
-        class="interrogation-tab active"
-        data-interrogation-tab="dossier"
-        role="tab" aria-selected="true">
-        Досье
-      </button>
-
-      <button type="button"
-        class="interrogation-tab"
-        data-interrogation-tab="interview"
-        role="tab" aria-selected="false">
-        Допрос
-      </button>
-
-      <button type="button"
-        class="interrogation-tab"
-        data-interrogation-tab="results"
-        role="tab" aria-selected="false">
-        Результаты
-      </button>
-    </div>
 
     <section class="interrogation-panel"
       data-interrogation-panel="dossier"
@@ -10775,7 +11223,7 @@ ${timelineHtml}
 
     <section class="interrogation-panel"
       data-interrogation-panel="interview"
-      role="tabpanel" hidden>
+      role="tabpanel">
 
       <div class="interrogation-status">
         <span class="insight-icon">◆</span>
@@ -10786,41 +11234,9 @@ ${timelineHtml}
       </div>
 
       
-<div id="interrogationPressure"
-     style="margin:16px 0;padding:14px;
-            border:1px solid #343b49;
-            border-radius:10px;background:#171b23;">
+      <div class="interrogation-chat" id="interrogationConversation" aria-live="polite"></div>
 
-  <div style="display:flex;justify-content:space-between;
-              gap:12px;align-items:center;margin-bottom:9px;">
-    <strong id="interrogationMoodTitle"
-            style="font-size:12px;letter-spacing:.7px;">
-      ДЕРЖИТСЯ УВЕРЕННО
-    </strong>
-
-    <span id="interrogationPressureValue"
-          style="font-size:12px;color:#aab2c2;">
-      0 / 100
-    </span>
-  </div>
-
-  <div style="height:6px;background:#303644;
-              border-radius:10px;overflow:hidden;">
-    <div id="interrogationPressureFill"
-         style="width:0%;height:100%;
-                background:#8d96a8;
-                border-radius:10px;
-                transition:width .35s ease,background .35s ease;">
-    </div>
-  </div>
-
-  <p id="interrogationMoodDescription"
-     style="font-size:12px;color:#aab2c2;
-            margin:9px 0 0;">
-    Пока у следствия недостаточно подтверждённых зацепок.
-  </p>
-</div>
-
+      <h4 class="interrogation-section-title">Выбери вопрос для разговора</h4>
       <div class="interrogation-questions">
         ${questions.map(q => {
           const unlocked = hasAll(q.requires);
@@ -10900,13 +11316,15 @@ ${timelineHtml}
 
     <section class="interrogation-panel"
       data-interrogation-panel="results"
-      role="tabpanel" hidden>
+      role="tabpanel">
     </section>
   `;
 
-   
+  renderConversation();
+  renderResults();
+
   // Обновление психологического состояния подозреваемого
-  const updateInterrogationPressure = () => {
+  const updateInterrogationPressure = (emotionOverride = "") => {
     const pressure = getInterrogationPressure(
       interrogationHistory
     );
@@ -10946,6 +11364,27 @@ ${timelineHtml}
     if (description) {
       description.textContent = mood.description;
     }
+
+    const portrait = content.querySelector(".interrogation-portrait");
+    const emotion = interrogationPortraitEmotion(
+      activeId, id, interrogationHistory, emotionOverride
+    );
+    const portraitPath = characterImagePath(activeId, id, emotion);
+    if (portrait && portraitPath && portrait.getAttribute("src") !== portraitPath) {
+      portrait.onerror = () => {
+        const neutralPath = characterImagePath(activeId, id, "neutral");
+        if (neutralPath && portrait.getAttribute("src") !== neutralPath) {
+          portrait.onerror = () => { portrait.hidden = true; };
+          portrait.src = neutralPath;
+        } else {
+          portrait.hidden = true;
+        }
+      };
+      portrait.onload = () => { portrait.hidden = false; };
+      portrait.hidden = false;
+      portrait.src = portraitPath;
+    }
+    if (portrait) portrait.dataset.emotion = emotion;
   };
 
   updateInterrogationPressure();
@@ -11033,6 +11472,13 @@ ${timelineHtml}
 
       interrogationHistory.asked.push(questionId);
       interrogationHistory.answers[questionId] = displayedAnswer;
+      interrogationHistory.conversation.push({
+        type: "question",
+        title: question.title,
+        response: displayedAnswer
+      });
+      renderConversation();
+      renderResults();
 
       updateInterrogationPressure();
       button.classList.add("question-asked");
@@ -11261,7 +11707,14 @@ if (completedChains.length) {
 }
 
 answerBox.textContent = fullResponse;
-updateInterrogationPressure();
+interrogationHistory.conversation.push({
+  type: "evidence",
+  title: evidence.title,
+  response: fullResponse
+});
+renderConversation();
+renderResults();
+updateInterrogationPressure(contradiction ? "shocked" : "");
 
 
   // МГНОВЕННОЕ ОТКРЫТИЕ НОВЫХ ВОПРОСОВ ПОСЛЕ ЦЕПОЧКИ
@@ -11495,12 +11948,19 @@ updateInterrogationPressure();
 
           answerBox.textContent = displayedAnswer;
 
-        // Учитываем новый результат допроса немедленно.
-        updateInterrogationPressure();
-
         interrogationHistory.asked.push(question.id);
           interrogationHistory.answers[question.id] =
             displayedAnswer;
+          interrogationHistory.conversation.push({
+            type: "question",
+            title: question.title,
+            response: displayedAnswer
+          });
+          renderConversation();
+          renderResults();
+
+          // Обновляем портрет после записи ответа в историю.
+          updateInterrogationPressure();
 
           newButton.classList.add("question-asked");
 
@@ -11595,7 +12055,10 @@ function renderVerdictChecklist(c, s) {
   const questionName = id => ({
     evidence: "Что показывает улика?",
     timeline: "Вопрос о хронологии",
-    protocol: "Вопрос о протоколе"
+    protocol: "Вопрос о протоколе",
+    room_timeline: "Секретарь о времени и бокале",
+    room_motive: "Секретарь о конфликте из-за коллекции",
+    room_mechanism: "Секретарь о механизме часов"
   }[id] || id);
 
   const hasFinding = ({ suspect, question }) =>
@@ -11716,10 +12179,17 @@ truthFindings: [
     minimumEvidence: ["clock", "glass"],
     minimumLinks: ["clock|glass"],
     minimumHypotheses: ["staged"],
+    minimumFindings: [
+      { suspect: "secretary", question: "room_timeline" }
+    ],
 
     truthEvidence: ["letters", "will", "panel"],
     truthLinks: ["letters|will", "clock|panel"],
-    truthHypotheses: ["inheritance"]
+    truthHypotheses: ["inheritance"],
+    truthFindings: [
+      { suspect: "secretary", question: "room_motive" },
+      { suspect: "secretary", question: "room_mechanism" }
+    ]
   },
 
   zero: {
@@ -11953,6 +12423,7 @@ function renderEnding(){
  document.getElementById("noticeArea").innerHTML="";
  document.getElementById("storyContent").innerHTML=`
  <div class="ending animate">
+ <img class="ending-art" src="${ENDING_ASSETS[activeId] || ""}" alt="Сцена завершения дела: ${esc(c.title)}" onerror="this.hidden=true">
  <div class="ending-mark">${s.ending==="truth"?"✦":"◈"}</div>
  <div class="eyebrow">РАССЛЕДОВАНИЕ ЗАВЕРШЕНО</div>
  <h2>${esc(ending.title)}</h2>
@@ -12204,25 +12675,7 @@ function renderVisualBoard() {
     linkedEvidenceIds.add(item.evidenceId);
   });
 
-  const imageById = {
-    clock: "https://images.unsplash.com/photo-1523275335684-37898b6baf30?auto=format&fit=crop&w=640&q=80",
-    cup: "https://images.unsplash.com/photo-1514228742587-6b1558fcca3d?auto=format&fit=crop&w=640&q=80",
-    log: "https://images.unsplash.com/photo-1455390582262-044cdead277a?auto=format&fit=crop&w=640&q=80",
-    tape: "https://images.unsplash.com/photo-1511379938547-c1f69419868d?auto=format&fit=crop&w=640&q=80",
-    keycard: "https://images.unsplash.com/photo-1500530855697-b586d89ba3ee?auto=format&fit=crop&w=640&q=80",
-    note: "https://images.unsplash.com/photo-1455390582262-044cdead277a?auto=format&fit=crop&w=640&q=80",
-    archive: "https://images.unsplash.com/photo-1455390582262-044cdead277a?auto=format&fit=crop&w=640&q=80",
-    message: "https://images.unsplash.com/photo-1516321318423-f06f85e504b3?auto=format&fit=crop&w=640&q=80",
-    protocol: "https://images.unsplash.com/photo-1517842645767-c639042777db?auto=format&fit=crop&w=640&q=80",
-    metadata: "https://images.unsplash.com/photo-1516321318423-f06f85e504b3?auto=format&fit=crop&w=640&q=80",
-    glass: "https://images.unsplash.com/photo-1514228742587-6b1558fcca3d?auto=format&fit=crop&w=640&q=80",
-    letters: "https://images.unsplash.com/photo-1455390582262-044cdead277a?auto=format&fit=crop&w=640&q=80",
-    will: "https://images.unsplash.com/photo-1517842645767-c639042777db?auto=format&fit=crop&w=640&q=80",
-    account: "https://images.unsplash.com/photo-1516321318423-f06f85e504b3?auto=format&fit=crop&w=640&q=80",
-    invoice: "https://images.unsplash.com/photo-1455390582262-044cdead277a?auto=format&fit=crop&w=640&q=80",
-    backup: "https://images.unsplash.com/photo-1558494949-ef010cbdcc31?auto=format&fit=crop&w=640&q=80",
-    server: "https://images.unsplash.com/photo-1558494949-ef010cbdcc31?auto=format&fit=crop&w=640&q=80"
-  };
+
 
   // Перестраиваем DOM только когда меняется состав доски.
   const boardSignature = [
@@ -12274,7 +12727,8 @@ function renderVisualBoard() {
           <span class="board-node-number">PERSON / DOSSIER</span>
 
           <span class="board-node-media board-suspect-portrait">
-            <span class="suspect-portrait-placeholder" aria-hidden="true">◉</span>
+            <img class="suspect-board-image hidden" data-suspect-image alt="" loading="lazy">
+            <span class="suspect-portrait-placeholder" data-suspect-placeholder aria-hidden="true">◉</span>
             <span class="suspect-portrait-caption">ПОРТРЕТ ДОПРОСА</span>
           </span>
 
@@ -12347,12 +12801,21 @@ function renderVisualBoard() {
     const placeholder = button.querySelector("[data-evidence-placeholder]");
     const description = button.querySelector("[data-evidence-description]");
     const status = button.querySelector("[data-evidence-status]");
-    const imageUrl = imageById[id];
+    const imageUrl = evidenceImagePath(activeId, id);
+    placeholder.textContent = !found
+      ? "МАТЕРИАЛ НЕ ИЗУЧЕН"
+      : imageUrl
+        ? "ИЗОБРАЖЕНИЕ НЕДОСТУПНО"
+        : "ИЛЛЮСТРАЦИЯ ЕЩЁ НЕ ДОБАВЛЕНА";
 
-    if (found && imageUrl) {
-      if (img.getAttribute("src") !== imageUrl) {
-        img.setAttribute("src", imageUrl);
-      }
+    if (found && imageUrl && img.dataset.failedSrc !== imageUrl) {
+      img.onerror = () => {
+        img.dataset.failedSrc = imageUrl;
+        img.classList.add("hidden");
+        placeholder.classList.remove("hidden");
+      };
+      img.onload = () => { delete img.dataset.failedSrc; };
+      if (img.getAttribute("src") !== imageUrl) img.setAttribute("src", imageUrl);
       img.alt = evidence[1];
       img.classList.remove("hidden");
       placeholder.classList.add("hidden");
@@ -12374,9 +12837,32 @@ function renderVisualBoard() {
           : "◇ МАТЕРИАЛ ДЕЛА";
   });
 
-  // Подозреваемые также получают статус связи.
+  // Нейтральные портреты подозреваемых с безопасной заглушкой.
   nodes.querySelectorAll("[data-board-suspect]").forEach(button => {
     const id = button.dataset.boardSuspect;
+    const portrait = button.querySelector("[data-suspect-image]");
+    const portraitFallback = button.querySelector("[data-suspect-placeholder]");
+    const portraitPath = characterImagePath(activeId, id);
+    if (portrait && portraitPath) {
+      if (portrait.dataset.failedSrc !== portraitPath) {
+        portrait.onerror = () => {
+          portrait.dataset.failedSrc = portraitPath;
+          portrait.classList.add("hidden");
+          portraitFallback?.classList.remove("hidden");
+          button.classList.remove("has-portrait");
+        };
+        portrait.onload = () => { delete portrait.dataset.failedSrc; };
+        if (portrait.getAttribute("src") !== portraitPath) portrait.setAttribute("src", portraitPath);
+        portrait.alt = c.suspects.find(person => person.id === id)?.name || "Портрет подозреваемого";
+        portrait.classList.remove("hidden");
+        portraitFallback?.classList.add("hidden");
+        button.classList.add("has-portrait");
+      } else {
+        portrait.classList.add("hidden");
+        portraitFallback?.classList.remove("hidden");
+      }
+    }
+
     const hasGoodLink = suspectLinkEntries.some(
       item => item.suspectId === id && item.good
     );
@@ -12394,8 +12880,10 @@ function renderVisualBoard() {
   const boardWidth = Math.max(board.clientWidth, 320);
   const compact = boardWidth < 620;
 
-  const cardWidth = compact ? 138 : 166;
-  const cardHeight = compact ? 250 : 280;
+  const cardWidth = compact
+    ? Math.min(166, Math.max(148, Math.floor((boardWidth - 42) / 2)))
+    : 166;
+  const cardHeight = compact ? 270 : 280;
   const sidePadding = compact ? 14 : 24;
   const cardGap = compact ? 12 : 22;
   const rowStep = cardHeight + (compact ? 22 : 26);
@@ -12484,15 +12972,36 @@ function renderVisualBoard() {
 
   const fullBoardHeight = Math.max(440, contentHeight + 24);
 
-  const viewportLimit = Math.max(
-    360,
-    Math.round(window.innerHeight * 0.68)
-  );
+  let viewportLimit = Math.max(360, Math.round(window.innerHeight * 0.68));
 
-  const visibleBoardHeight = Math.min(
-    fullBoardHeight,
-    viewportLimit
-  );
+  if (document.getElementById("game")?.classList.contains("ml-scroll-board")) {
+    const boardPanel = board.closest("#visualBoardPanel");
+    const boardHeading = boardPanel?.querySelector(".board-heading");
+    const panelStyle = boardPanel ? getComputedStyle(boardPanel) : null;
+    const toPixels = value => Number.parseFloat(value) || 0;
+    let reservedHeight = boardHeading?.getBoundingClientRect().height || 0;
+
+    // Резервируем место для всех элементов под доской, включая журнал выводов.
+    for (let sibling = board.nextElementSibling; sibling; sibling = sibling.nextElementSibling) {
+      const style = getComputedStyle(sibling);
+      if (style.display === "none") continue;
+      reservedHeight += sibling.getBoundingClientRect().height;
+      reservedHeight += toPixels(style.marginTop) + toPixels(style.marginBottom);
+    }
+
+    const panelPadding = panelStyle
+      ? toPixels(panelStyle.paddingTop) + toPixels(panelStyle.paddingBottom)
+      : 0;
+    const availableBoardHeight = boardPanel
+      ? boardPanel.clientHeight - reservedHeight - panelPadding - 20
+      : Math.round(window.innerHeight * 0.52);
+    viewportLimit = Math.max(200, availableBoardHeight);
+  }
+
+  const boardOnlyMode = document.getElementById("game")?.classList.contains("ml-scroll-board");
+  const visibleBoardHeight = boardOnlyMode
+    ? Math.min(fullBoardHeight, viewportLimit)
+    : fullBoardHeight;
 
   board.style.setProperty(
     "height",
@@ -12508,13 +13017,13 @@ function renderVisualBoard() {
 
   board.style.setProperty(
     "max-height",
-    `${visibleBoardHeight}px`,
+    boardOnlyMode ? `${visibleBoardHeight}px` : "none",
     "important"
   );
 
   board.style.setProperty(
     "overflow",
-    "auto",
+    boardOnlyMode ? "auto" : "visible",
     "important"
   );
 
@@ -12738,14 +13247,587 @@ document.addEventListener("keydown", event => {
 
 </script>
 
+<style>
+/* Keep deduction feedback visible while the player is working on the board. */
+#game.ml-game-screen #deductionResult:not(.hidden) {
+  position: fixed;
+  z-index: 120;
+  left: 50%;
+  bottom: max(18px, env(safe-area-inset-bottom));
+  transform: translateX(-50%);
+  width: min(560px, calc(100vw - 32px));
+  max-height: min(34vh, 260px);
+  overflow-y: auto;
+  padding: 16px 18px 16px 20px;
+  border: 1px solid #4d687d;
+  border-left-width: 4px;
+  border-radius: 10px;
+  box-shadow: 0 14px 45px #000b;
+  color: #e8eef8;
+  font-size: 14px;
+  line-height: 1.6;
+  white-space: pre-line;
+  backdrop-filter: blur(14px);
+  animation: deduction-result-in .2s ease-out;
+}
+
+#game.ml-game-screen #deductionResult:not(.hidden)::before {
+  content: "ИТОГ СОПОСТАВЛЕНИЯ";
+  display: block;
+  margin-bottom: 6px;
+  color: #79d8e7;
+  font-size: 10px;
+  font-weight: 800;
+  letter-spacing: .16em;
+}
+
+#game.ml-game-screen #deductionResult.deduction-good:not(.hidden) {
+  border-color: #38c4d8;
+  background: #101f2cf2;
+}
+
+#game.ml-game-screen #deductionResult.deduction-bad:not(.hidden) {
+  border-color: #d56b83;
+  background: #241722f2;
+}
+
+#game.ml-game-screen #deductionResult.deduction-neutral:not(.hidden) {
+  border-color: #b99b61;
+  background: #211e18f2;
+}
+
+@keyframes deduction-result-in {
+  from { opacity: 0; transform: translate(-50%, 8px); }
+  to { opacity: 1; transform: translate(-50%, 0); }
+}
+
+@media (max-width: 600px) {
+  #game.ml-game-screen #deductionResult:not(.hidden) {
+    bottom: max(10px, env(safe-area-inset-bottom));
+    width: calc(100vw - 20px);
+    max-height: 30vh;
+    padding: 13px 14px 13px 16px;
+    font-size: 13px;
+  }
+}
+
+.mobile-game-nav { display: none; }
+
+/* Mobile layout: keep the full case playable without tiny desktop columns. */
+@media (max-width: 760px) {
+  html { scroll-padding-top: 170px; }
+  body { overflow-x: hidden; }
+
+  body > .topbar {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 8px;
+    padding: 10px 12px;
+  }
+
+  body > .topbar .top-actions {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 6px;
+    width: 100%;
+  }
+
+  body > .topbar .top-actions button {
+    min-width: 0;
+    min-height: 42px;
+    padding: 7px;
+    font-size: 11px;
+    line-height: 1.25;
+  }
+
+  body > main {
+    width: 100% !important;
+    margin: 0 !important;
+    padding: 18px 12px 30px !important;
+  }
+
+  #catalog { width: 100% !important; }
+
+  #catalog .hero {
+    min-height: 0;
+    padding: 25px 18px;
+    border-radius: 14px;
+  }
+
+  #catalog .hero h1 {
+    font-size: clamp(31px, 9vw, 42px);
+    line-height: 1.04;
+  }
+
+  #catalog .hero .muted { font-size: 14px; line-height: 1.65; }
+  #catalog .hero-actions { display: grid; grid-template-columns: 1fr; }
+  #catalog .hero-actions .btn { justify-content: center; min-height: 46px; }
+
+  #catalog .section-head {
+    align-items: flex-start;
+    flex-direction: column;
+    gap: 2px;
+    margin: 25px 0 12px;
+  }
+
+  #catalog .case-grid { grid-template-columns: minmax(0, 1fr); gap: 12px; }
+  #catalog .cover { height: 150px; }
+  #catalog .card-body { padding: 15px; }
+  #catalog .card-foot { flex-wrap: wrap; }
+  #catalog .card-foot .btn { min-height: 44px; }
+  #catalog .stats { grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 6px; }
+  #catalog .stat { min-width: 0; padding: 10px 8px; }
+  #catalog .stat strong { font-size: 20px; }
+  #catalog .stat span { font-size: 10px; line-height: 1.3; }
+
+  #game.ml-game-screen.ml-scroll-page:not(.hidden) {
+    min-height: 100dvh;
+    padding-bottom: calc(78px + env(safe-area-inset-bottom)) !important;
+    overflow: visible !important;
+  }
+
+  #game.ml-game-screen.ml-scroll-page .ml-topbar {
+    position: sticky !important;
+    top: 0 !important;
+    min-height: 58px;
+    height: auto !important;
+    flex-wrap: nowrap;
+    gap: 9px;
+    padding: 8px 10px !important;
+  }
+
+  #game.ml-game-screen .ml-back {
+    min-height: 42px;
+    padding: 7px 9px;
+    font-size: 12px;
+  }
+
+  #game.ml-game-screen .ml-case-heading { min-width: 0; flex: 1; }
+  #game.ml-game-screen .ml-case-heading .eyebrow { font-size: 8px; }
+  #game.ml-game-screen .ml-case-heading .chapter-label { font-size: 11px; }
+  #game.ml-game-screen .ml-progress-slot,
+  #game.ml-game-screen .ml-tools { display: none !important; }
+
+  #game.ml-game-screen.ml-scroll-page .investigation-route-dock {
+    position: sticky !important;
+    top: 58px !important;
+    z-index: 15 !important;
+    margin: 0 8px 10px !important;
+    padding: 7px 8px !important;
+    border: 1px solid #344663 !important;
+    border-radius: 8px !important;
+    background: #10182af5 !important;
+  }
+
+  #game.ml-game-screen .route-dock-heading { margin-bottom: 5px !important; }
+  #game.ml-game-screen .route-dock-caption { display: none; }
+  #game.ml-game-screen .route-dock-heading .eyebrow { font-size: 9px !important; }
+  #game.ml-game-screen .route-steps {
+    display: grid !important;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 5px !important;
+  }
+
+  #game.ml-game-screen .route-step {
+    min-width: 0;
+    min-height: 36px;
+    padding: 5px 6px !important;
+    gap: 5px !important;
+  }
+
+  #game.ml-game-screen .route-step:last-child { grid-column: 1 / -1; }
+  #game.ml-game-screen .route-step-marker {
+    flex: 0 0 21px !important;
+    width: 21px !important;
+    height: 21px !important;
+    font-size: 10px !important;
+  }
+
+  #game.ml-game-screen .route-step-title {
+    font-size: 10px !important;
+    line-height: 1.25;
+    white-space: normal;
+  }
+
+  #game.ml-game-screen .route-next-step {
+    margin-top: 6px !important;
+    padding: 5px 7px !important;
+    font-size: 10px !important;
+    line-height: 1.4;
+  }
+
+  #game.ml-game-screen.ml-scroll-page .game-layout.investigation-layout {
+    position: relative !important;
+    inset: auto !important;
+    display: flex !important;
+    flex-direction: column !important;
+    gap: 12px !important;
+    width: 100% !important;
+    height: auto !important;
+    min-height: 0 !important;
+    margin: 0 !important;
+    padding: 0 10px !important;
+    overflow: visible !important;
+  }
+
+  #game.ml-game-screen.ml-scroll-page .investigation-main {
+    display: flex !important;
+    flex-direction: column !important;
+    gap: 12px !important;
+    width: 100% !important;
+    height: auto !important;
+    min-height: 0 !important;
+  }
+
+  #game.ml-game-screen.ml-scroll-page #storyPanel,
+  #game.ml-game-screen.ml-scroll-page #visualBoardPanel {
+    display: block !important;
+    width: 100% !important;
+    min-width: 0 !important;
+    height: auto !important;
+    min-height: 0 !important;
+    max-height: none !important;
+    margin: 0 !important;
+    padding: 14px !important;
+    overflow: visible !important;
+  }
+
+  #game.ml-game-screen .story-text { font-size: 15px; line-height: 1.75; }
+  #game.ml-game-screen .investigation-board .board-heading { gap: 8px; }
+  #game.ml-game-screen .board-counter { padding: 7px 8px; font-size: 9px; }
+
+  #game.ml-game-screen.ml-scroll-page #visualBoard {
+    width: 100% !important;
+    min-width: 0 !important;
+    height: auto !important;
+    min-height: 0 !important;
+    max-height: none !important;
+    overflow: visible !important;
+    margin-top: 10px;
+    border-radius: 10px !important;
+  }
+
+  #game.ml-game-screen.ml-scroll-page .investigation-sidebar {
+    display: flex !important;
+    flex-direction: column !important;
+    gap: 10px !important;
+    width: 100% !important;
+    min-width: 0 !important;
+  }
+
+  #game.ml-game-screen.ml-scroll-page .investigation-sidebar > .sidebar-section {
+    width: 100% !important;
+    min-width: 0 !important;
+    padding: 14px !important;
+    margin: 0 !important;
+  }
+
+  #game.ml-game-screen .investigation-sidebar .clue,
+  #game.ml-game-screen .investigation-sidebar .suspect,
+  #game.ml-game-screen .hypothesis-card {
+    min-height: 48px;
+    padding: 12px !important;
+    font-size: 14px;
+  }
+
+  #game.ml-game-screen #boardNodes .board-node {
+    border-radius: 8px !important;
+    padding: 9px !important;
+  }
+
+  #game.ml-game-screen #boardNodes .board-node-media {
+    height: 72px !important;
+    min-height: 72px !important;
+  }
+
+  #game.ml-game-screen #boardNodes .board-node-title {
+    font-size: 12px !important;
+    line-height: 1.35 !important;
+  }
+
+  #game.ml-game-screen #boardNodes .board-node-description {
+    font-size: 10px !important;
+    line-height: 1.4 !important;
+    -webkit-line-clamp: 4 !important;
+  }
+
+  #game.ml-game-screen .mobile-game-nav {
+    position: fixed;
+    z-index: 40;
+    inset: auto 0 0;
+    display: grid;
+    grid-template-columns: repeat(6, minmax(0, 1fr));
+    gap: 3px;
+    padding: 6px 5px calc(6px + env(safe-area-inset-bottom));
+    border-top: 1px solid #344663;
+    background: #0b1220f5;
+    box-shadow: 0 -8px 28px #0008;
+    backdrop-filter: blur(14px);
+  }
+
+  #game.ml-game-screen .mobile-game-nav button {
+    min-width: 0;
+    min-height: 46px;
+    padding: 5px 2px;
+    border: 1px solid transparent;
+    border-radius: 7px;
+    color: #aebedb;
+    background: transparent;
+    font: 650 10px/1.2 system-ui, sans-serif;
+    touch-action: manipulation;
+  }
+
+  #game.ml-game-screen .mobile-game-nav button[aria-current="location"] {
+    color: #eafaff;
+    border-color: #52ddf566;
+    background: #52ddf512;
+  }
+
+  #game.ml-game-screen [id="storyPanel"],
+  #game.ml-game-screen [id="visualBoardPanel"],
+  #game.ml-game-screen [id="materialsSidebarSection"],
+  #game.ml-game-screen [id="deductionSidebarSection"],
+  #game.ml-game-screen [id="suspectList"],
+  #game.ml-game-screen [id="hypothesisList"] {
+    scroll-margin-top: 165px;
+    scroll-margin-bottom: 86px;
+  }
+
+  #game.ml-game-screen #deductionResult:not(.hidden) {
+    bottom: calc(68px + env(safe-area-inset-bottom));
+  }
+
+  #game.ml-game-screen .suspect-viewer {
+    inset: 0;
+    padding: 0;
+    align-items: stretch;
+  }
+
+  #game.ml-game-screen .suspect-viewer-card {
+    width: 100%;
+    height: 100dvh;
+    max-height: 100dvh;
+    padding: calc(14px + env(safe-area-inset-top)) 14px calc(18px + env(safe-area-inset-bottom));
+    border-radius: 0 !important;
+    overscroll-behavior: contain;
+  }
+
+  #game.ml-game-screen .suspect-viewer-card .interrogation-header {
+    top: calc(-1 * env(safe-area-inset-top));
+    margin-top: calc(-14px - env(safe-area-inset-top));
+    padding-top: calc(12px + env(safe-area-inset-top));
+  }
+
+  #game.ml-game-screen .suspect-viewer-card .interrogation-pressure {
+    padding: 9px 10px;
+  }
+
+  #game.ml-game-screen .suspect-viewer-card .interrogation-question {
+    min-height: 58px;
+    padding: 12px;
+  }
+
+  #game.ml-game-screen .suspect-viewer-card
+  .interrogation-result-card {
+    margin-bottom: 9px;
+    padding: 12px;
+    border-radius: 8px;
+  }
+
+  #game.ml-game-screen .suspect-viewer-card
+  .interrogation-result-card p:not(.interrogation-result-title):not(.interrogation-result-meta) {
+    font-size: 13px;
+    line-height: 1.55;
+  }
+
+  #game.ml-game-screen .suspect-viewer-card .interrogation-result-title {
+    margin-bottom: 6px !important;
+    font-size: 14px;
+    line-height: 1.4;
+  }
+
+  #game.ml-game-screen .suspect-viewer-card .interrogation-result-meta {
+    margin-bottom: 6px !important;
+    font-size: 10px;
+    line-height: 1.4;
+  }
+
+  #game.ml-game-screen .suspect-viewer-card .interrogation-section-title {
+    font-size: 14px;
+    line-height: 1.35;
+  }
+
+  #game.ml-game-screen .suspect-viewer-card .interrogation-dossier p,
+  #game.ml-game-screen .suspect-viewer-card .interrogation-empty {
+    font-size: 13px;
+    line-height: 1.55;
+  }
+
+  #game.ml-game-screen .evidence-viewer { padding: 0; }
+  #game.ml-game-screen .evidence-viewer-card {
+    width: 100%;
+    min-height: 100dvh;
+    max-height: 100dvh;
+    overflow-y: auto;
+    padding: calc(54px + env(safe-area-inset-top)) 14px calc(20px + env(safe-area-inset-bottom));
+    border-radius: 0;
+    overscroll-behavior: contain;
+  }
+
+  #game.ml-game-screen .evidence-viewer-image {
+    max-height: 48dvh;
+    object-fit: contain;
+  }
+
+  #game.ml-game-screen .evidence-viewer-close,
+  #game.ml-game-screen .suspect-viewer-close,
+  #game.ml-game-screen .ml-close {
+    width: 44px;
+    height: 44px;
+    min-width: 44px;
+    min-height: 44px;
+  }
+
+  #game.ml-game-screen button { touch-action: manipulation; }
+
+  @media (hover: none) {
+    #game.ml-game-screen .board-node:hover,
+    #game.ml-game-screen .suspect:hover,
+    #game.ml-game-screen .clue:hover,
+    #catalog .case-card:hover {
+      transform: none !important;
+    }
+  }
+}
+
+@media (max-width: 370px) {
+  #catalog .stats { grid-template-columns: 1fr; }
+  #game.ml-game-screen .route-step-title { font-size: 9px !important; }
+  #game.ml-game-screen .mobile-game-nav button { font-size: 9px; }
+}
+
+/* Compact desktop interrogation: keep the dialogue readable without filling the screen. */
+@media (min-width: 761px) {
+  #game.ml-game-screen .suspect-viewer {
+    padding: 2vh 24px;
+  }
+
+  #game.ml-game-screen .suspect-viewer-card {
+    width: min(1080px, calc(100vw - 48px)) !important;
+    max-width: 1080px !important;
+    max-height: 88vh;
+    padding: 22px 26px;
+    border-radius: 13px !important;
+  }
+
+  #game.ml-game-screen .suspect-viewer-card .interrogation-header {
+    gap: 14px;
+    margin: 6px 0 14px;
+    padding-right: 42px;
+  }
+
+  #game.ml-game-screen .suspect-viewer-card .interrogation-portrait {
+    flex-basis: 82px;
+    width: 82px;
+    height: 104px;
+  }
+
+  #game.ml-game-screen .suspect-viewer-card .interrogation-header-main h3 {
+    margin: 5px 0 2px;
+    font-size: 28px;
+    line-height: 1.15;
+  }
+
+  #game.ml-game-screen .suspect-viewer-card .interrogation-kicker {
+    font-size: 10px;
+    letter-spacing: .14em;
+  }
+
+  #game.ml-game-screen .suspect-viewer-card .interrogation-header-main .muted,
+  #game.ml-game-screen .suspect-viewer-card .interrogation-header-main .interrogation-meta {
+    margin: 2px 0;
+    font-size: 12px;
+    line-height: 1.45;
+  }
+
+  #game.ml-game-screen .suspect-viewer-card .interrogation-counter {
+    padding: 8px 10px;
+    font-size: 11px;
+  }
+
+  #game.ml-game-screen .suspect-viewer-card .interrogation-pressure {
+    padding: 9px 11px;
+  }
+
+  #game.ml-game-screen .suspect-viewer-card .interrogation-pressure p {
+    font-size: 10px;
+  }
+
+  #game.ml-game-screen .suspect-viewer-card .interrogation-section-title {
+    margin-bottom: 9px;
+    font-size: 15px;
+  }
+
+  #game.ml-game-screen .suspect-viewer-card .interrogation-dossier,
+  #game.ml-game-screen .suspect-viewer-card .interrogation-result-card {
+    margin-bottom: 9px;
+    padding: 13px 15px;
+    border-radius: 9px;
+  }
+
+  #game.ml-game-screen .suspect-viewer-card .interrogation-dossier p,
+  #game.ml-game-screen .suspect-viewer-card .interrogation-result-card p:not(.interrogation-result-title):not(.interrogation-result-meta) {
+    font-size: 14px;
+    line-height: 1.55;
+  }
+
+  #game.ml-game-screen .suspect-viewer-card .interrogation-result-title {
+    margin-bottom: 5px !important;
+    font-size: 14px;
+    line-height: 1.4;
+  }
+
+  #game.ml-game-screen .suspect-viewer-card .interrogation-result-meta,
+  #game.ml-game-screen .suspect-viewer-card .interrogation-dossier-label {
+    margin-bottom: 5px;
+    font-size: 10px;
+  }
+
+  #game.ml-game-screen .suspect-viewer-card .interrogation-status {
+    margin: 9px 0 12px;
+    font-size: 13px;
+  }
+
+  #game.ml-game-screen .suspect-viewer-card .interrogation-chat-answer p {
+    font-size: 13px;
+    line-height: 1.55;
+  }
+
+  #game.ml-game-screen .suspect-viewer-card .interrogation-question {
+    min-height: 64px;
+    padding: 11px 13px;
+    font-size: 13px;
+  }
+
+  #game.ml-game-screen .suspect-viewer-card .interrogation-question small {
+    margin-top: 5px;
+    font-size: 11px;
+  }
+
+  #game.ml-game-screen .suspect-viewer-card .interrogation-tab {
+    padding: 10px 8px;
+    font-size: 13px;
+  }
+}
+</style>
+
 <script>
 (() => {
   const game = document.getElementById("game");
   const layout = game?.querySelector(".game-layout.investigation-layout");
   const routeDock = game?.querySelector(".investigation-route-dock");
-  const buttons = game?.querySelectorAll("[data-layout-mode]");
-
-  if (!game || !layout || !routeDock || !buttons?.length) return;
+  if (!game || !layout || !routeDock) return;
 
   function setLayoutMode(mode) {
     if (!["page", "board", "hybrid"].includes(mode)) {
@@ -12769,12 +13851,8 @@ document.addEventListener("keydown", event => {
       layout.after(routeDock);
     }
 
-    buttons.forEach(button => {
-      button.setAttribute(
-        "aria-pressed",
-        String(button.dataset.layoutMode === mode)
-      );
-    });
+    // Recalculate board bounds after switching between full-page and board-only layouts.
+    if (typeof renderVisualBoard === "function") renderVisualBoard();
 
     window.scrollTo(0, 0);
 
@@ -12782,14 +13860,38 @@ document.addEventListener("keydown", event => {
     if (board) board.scrollTop = 0;
   }
 
-  buttons.forEach(button => {
+  /* Оставляем единый режим A: вся страница прокручивается целиком. */
+  setLayoutMode("page");
+})();
+</script>
+
+<script>
+(() => {
+  const mobileNav = document.getElementById("mobileGameNav");
+  if (!mobileNav) return;
+
+  const resolveTarget = id => {
+    const element = document.getElementById(id);
+    if (!element) return null;
+    return id === "suspectList" || id === "hypothesisList"
+      ? element.closest(".sidebar-section") || element
+      : element;
+  };
+
+  mobileNav.querySelectorAll("[data-mobile-jump]").forEach(button => {
     button.addEventListener("click", () => {
-      setLayoutMode(button.dataset.layoutMode);
+      const target = resolveTarget(button.dataset.mobileJump);
+      if (!target) return;
+
+      mobileNav.querySelectorAll("[data-mobile-jump]").forEach(item => {
+        item.removeAttribute("aria-current");
+      });
+      button.setAttribute("aria-current", "location");
+
+      const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+      target.scrollIntoView({ behavior: reducedMotion ? "auto" : "smooth", block: "start" });
     });
   });
-
-  /* По умолчанию открываем привычный режим B */
-  setLayoutMode("board");
 })();
 </script>
 </body>
