@@ -86,6 +86,9 @@ p { margin:8px 0 15px }
 .meta { display:flex; gap:7px; flex-wrap:wrap; margin:12px 0 }
 .tag { border:1px solid var(--line); border-radius:5px; padding:3px 7px; font-size:11px; color:var(--muted) }
 .card-foot { display:flex; justify-content:space-between; align-items:center; gap:8px; margin-top:14px }
+.case-card-actions { display:flex; align-items:center; gap:8px; flex-wrap:wrap; justify-content:flex-end }
+.case-reset { color:var(--muted); border-color:var(--line); padding:9px 12px }
+.case-reset:hover { color:var(--red); border-color:var(--red) }
 .progress { height:4px; background:#252c3a; border-radius:4px; overflow:hidden; margin-top:12px }
 .progress > div { height:100%; background:var(--cyan); transition:width .3s }
 .stats { display:grid; grid-template-columns:repeat(3,1fr); gap:12px; margin-top:18px }
@@ -8143,7 +8146,7 @@ const missingFindings = (hypothesis.requiresFindings || [])
 
     const twistBonus = 30;
     s.score = (Number(s.score) || 0) + twistBonus;
-    state.score = (Number(state.score) || 0) + twistBonus;
+    addScore(twistBonus);
 
     s.lastHypothesisFeedback +=
       "\n\n+30 очков: открыта новая зацепка.";
@@ -8422,7 +8425,7 @@ function analyzeSuspectDeduction(evidenceId, suspectId) {
     const points = 15;
 
     s.score = (Number(s.score) || 0) + points;
-    state.score = (Number(state.score) || 0) + points;
+    addScore(points);
 
     deductionMessage =
       known.title + "\n\n" +
@@ -8512,7 +8515,7 @@ function analyzeDeduction(a, b) {
     const points = 20;
 
     s.score = (Number(s.score) || 0) + points;
-    state.score = (Number(state.score) || 0) + points;
+    addScore(points);
 
     deductionMessage =
       known.title + "\n\n" +
@@ -8583,6 +8586,7 @@ function caseState(id) {
       finished: false,
       ending: null,
       score: 0,
+      earnedScore: 0,
       interrogations: {}
     };
   }
@@ -8607,7 +8611,49 @@ function caseState(id) {
     state.cases[id].interrogations = {};
   }
 
+  if (!Object.prototype.hasOwnProperty.call(state.cases[id], "earnedScore")) {
+    state.cases[id].earnedScore = estimateLegacyCaseScore(state.cases[id]);
+  } else if (!Number.isFinite(Number(state.cases[id].earnedScore))) {
+    state.cases[id].earnedScore = 0;
+  }
+
   return state.cases[id];
+}
+
+function addScore(points) {
+  const amount = Number(points) || 0;
+  if (!amount) return;
+  state.score = (Number(state.score) || 0) + amount;
+  if (activeId) {
+    const s = caseState(activeId);
+    s.earnedScore = (Number(s.earnedScore) || 0) + amount;
+  }
+}
+
+function estimateLegacyCaseScore(s) {
+  const interrogations = Object.values(s.interrogations || {});
+  const asked = interrogations.reduce((n, h) => n + (Array.isArray(h.asked) ? h.asked.length : 0), 0);
+  const findings = interrogations.reduce((n, h) => n + Object.keys(h.findings || {}).length, 0);
+  const presented = interrogations.reduce((n, h) => n + Object.keys(h.presented || {}).length, 0);
+  const contradictions = interrogations.reduce((n, h) => n + Object.values(h.presented || {}).filter(item => item && item.contradiction).length, 0);
+  const chains = interrogations.reduce((n, h) => n + Object.keys(h.chains || {}).length, 0);
+  return (Number(s.score) || 0) + (Array.isArray(s.found) ? s.found.length * 10 : 0) + asked * 5 + findings * 10 + presented * 5 + contradictions * 10 + chains * 15;
+}
+
+function resetCaseProgress(id) {
+  const c = CASES.find(item => item.id === id);
+  const s = state.cases[id];
+  if (!c || !s) return;
+  if (!confirm(`Сбросить прогресс дела «${c.title}»? Улики, допросы, связи, гипотезы и вердикт этого дела будут удалены. Прогресс остальных дел сохранится.`)) return;
+
+  const points = Number(s.earnedScore) > 0
+    ? Number(s.earnedScore)
+    : estimateLegacyCaseScore(s);
+  state.score = Math.max(0, (Number(state.score) || 0) - points);
+  delete state.cases[id];
+  saveState();
+  renderCatalog();
+  toast(`Прогресс дела «${c.title}» сброшен.`);
 }
 function esc(s){
  return String(s).replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
@@ -8633,7 +8679,8 @@ function renderCatalog(){
  document.getElementById("game").classList.add("hidden");
  const grid=document.getElementById("caseGrid");
  grid.innerHTML=CASES.map(c=>{
-  const s=caseState(c.id), total=c.evidence.length;
+   const s=caseState(c.id), total=c.evidence.length;
+   const hasProgress=Boolean(s.found?.length||s.finished||s.chapter>0||s.seen?.length||s.links?.length||s.suspectLinks?.length||Object.keys(s.interrogations||{}).length);
   const pct=s.finished?100:Math.round((s.found.length/total)*100);
   const status=s.finished?"Завершено":s.found.length?"В процессе":"Не начато";
   return `<article class="case-card">
@@ -8643,11 +8690,13 @@ function renderCatalog(){
       <p>${esc(c.short)}</p>
       <div class="meta"><span class="tag">${esc(c.difficulty)}</span><span class="tag">${esc(c.time)}</span></div>
       <div class="card-foot"><span class="muted" style="font-size:12px">${status}</span>
-      <button class="btn ${s.found.length||s.finished?"btn-cyan":"btn-primary"}" data-open="${c.id}">${s.finished?"Пересмотреть":s.found.length?"Продолжить":"Начать"} →</button></div>
+      <div class="case-card-actions"><button class="btn ${s.found.length||s.finished?"btn-cyan":"btn-primary"}" data-open="${c.id}">${s.finished?"Пересмотреть":s.found.length?"Продолжить":"Начать"} →</button>
+      ${hasProgress?`<button class="small-btn case-reset" type="button" data-reset-case="${c.id}" aria-label="Сбросить дело «${esc(c.title)}»" title="Сбросить только это дело">Сбросить дело</button>`:""}</div></div>
       <div class="progress"><div style="width:${pct}%"></div></div>
     </div></article>`;
  }).join("");
- grid.querySelectorAll("[data-open]").forEach(b=>b.addEventListener("click",()=>openCase(b.dataset.open)));
+  grid.querySelectorAll("[data-open]").forEach(b=>b.addEventListener("click",()=>openCase(b.dataset.open)));
+  grid.querySelectorAll("[data-reset-case]").forEach(b=>b.addEventListener("click",()=>resetCaseProgress(b.dataset.resetCase)));
  const solved=CASES.filter(c=>caseState(c.id).finished).length;
  const clues=CASES.reduce((n,c)=>n+caseState(c.id).found.length,0);
  document.getElementById("archiveCount").textContent=`${solved} / ${CASES.length} завершено`;
@@ -8725,6 +8774,25 @@ document.getElementById("hintBtn").onclick = () => {
 
 
 
+function hasRequiredInterrogationFinding(interrogations, suspect, question, caseId = activeId) {
+  const history = interrogations?.[suspect];
+  if (history?.findings?.[question]) return true;
+
+  // Старые сохранения могли содержать ответ на follow-up до того,
+  // как для него начали отдельно сохранять finding.
+  const roomFollowUps = [
+    "after_room_timeline",
+    "after_room_motive",
+    "after_room_mechanism"
+  ];
+
+  return caseId === "room" &&
+    suspect === "secretary" &&
+    roomFollowUps.includes(question) &&
+    Array.isArray(history?.asked) &&
+    history.asked.includes(question);
+}
+
 function renderInvestigationRoute() {
   const container = document.getElementById("investigationRoute");
   const nextStep = document.getElementById("routeNextStep");
@@ -8763,7 +8831,7 @@ function renderInvestigationRoute() {
 
   // Проверяем обязательные результаты допросов.
   const hasFinding = ({ suspect, question }) =>
-    Boolean(interrogations[suspect]?.findings?.[question]);
+    hasRequiredInterrogationFinding(interrogations, suspect, question);
 
   const requiredFindings = rules.minimumFindings || [];
   const missingFindings = requiredFindings.filter(
@@ -8898,7 +8966,10 @@ function renderInvestigationRoute() {
                 alibi: "алиби",
                 evidence: "уликах",
                 timeline: "хронологии",
-                protocol: "протоколе"
+                protocol: "протоколе",
+                after_room_timeline: "времени и бокале",
+                after_room_motive: "мотиве секретаря",
+                after_room_mechanism: "механизме часов"
               }[item.question] || "обстоятельствах дела")
             ).join("; ") + "."
           : "Открой досье любого подозреваемого и задай хотя бы один вопрос.";
@@ -9173,7 +9244,7 @@ function inspectClue(id){
  const c=CASES.find(x=>x.id===activeId),s=caseState(activeId),e=c.evidence.find(x=>x[0]===id);
  if(!e)return;
  if(!s.found.includes(id)){
-  s.found.push(id);state.score=(state.score||0)+10;saveState();ping(760,.13);
+   s.found.push(id);addScore(10);saveState();ping(760,.13);
   toast("Новая улика: +10 очков");
  }else ping(430,.07);
  renderSidebar();
@@ -9865,6 +9936,32 @@ INTERROGATION_FINDINGS.room.gardener = {
       "Найденные следы согласуются с этим маршрутом и не ведут " +
       "к кабинету. Оснований считать его организатором обмана " +
       "на основании этой улики недостаточно."
+  }
+};
+
+// Результаты обязательных уточняющих вопросов Михаила Воронцова.
+// Идентификаторы совпадают с вопросами, которые открываются после цепочек улик.
+INTERROGATION_FINDINGS.room.secretary = {
+  after_room_timeline: {
+    title: "Хронология Воронцова уточнена",
+    text:
+      "Воронцов признал, что остановившиеся часы не подтверждают " +
+      "точное время смерти и его прежнюю хронологию. Алиби нужно " +
+      "сопоставить с независимыми материалами дела."
+  },
+  after_room_motive: {
+    title: "Конфликт из-за коллекции подтверждён",
+    text:
+      "Воронцов признал, что новое завещание лишало его доступа " +
+      "к коллекции и стало серьёзным конфликтом с Павлом. Мотив " +
+      "сам по себе не доказывает причастность к преступлению."
+  },
+  after_room_mechanism: {
+    title: "Возможность изменить показания часов подтверждена",
+    text:
+      "Воронцов подтвердил, что механизм часов можно было остановить " +
+      "из служебного прохода через скрытый канал. Это объясняет " +
+      "способ подмены времени, но не доказывает, кто им воспользовался."
   }
 };
 
@@ -11464,7 +11561,7 @@ ${timelineHtml}
           finding.text +
           "\n\n+10 очков за новый результат.";
 
-        state.score = (Number(state.score) || 0) + 10;
+        addScore(10);
       }
 
       answerBox.textContent = displayedAnswer;
@@ -11648,11 +11745,7 @@ if (completedChains.length) {
 const bonus = contradiction ? 10 : 0;
 const chainBonus = completedChains.length * 15;
 
-state.score =
-(Number(state.score) || 0) +
-5 +
-bonus +
-chainBonus;
+addScore(5 + bonus + chainBonus);
 
 
   // Фиксируем завершение цепочки в хронологии
@@ -11942,8 +12035,7 @@ updateInterrogationPressure(contradiction ? "shocked" : "");
               finding.text +
               "\n\n+10 очков за новый результат.";
 
-            state.score =
-              (Number(state.score) || 0) + 10;
+            addScore(10);
           }
 
           answerBox.textContent = displayedAnswer;
@@ -12058,11 +12150,14 @@ function renderVerdictChecklist(c, s) {
     protocol: "Вопрос о протоколе",
     room_timeline: "Секретарь о времени и бокале",
     room_motive: "Секретарь о конфликте из-за коллекции",
-    room_mechanism: "Секретарь о механизме часов"
+    room_mechanism: "Секретарь о механизме часов",
+    after_room_timeline: "Михаил о времени и бокале",
+    after_room_motive: "Михаил о конфликте из-за коллекции",
+    after_room_mechanism: "Михаил о механизме часов"
   }[id] || id);
 
   const hasFinding = ({ suspect, question }) =>
-    Boolean(interrogations[suspect]?.findings?.[question]);
+    hasRequiredInterrogationFinding(interrogations, suspect, question);
 
   const row = (label, done) => `
     <li class="${done ? "done" : "missing"}">
@@ -12180,15 +12275,15 @@ truthFindings: [
     minimumLinks: ["clock|glass"],
     minimumHypotheses: ["staged"],
     minimumFindings: [
-      { suspect: "secretary", question: "room_timeline" }
+      { suspect: "secretary", question: "after_room_timeline" }
     ],
 
     truthEvidence: ["letters", "will", "panel"],
     truthLinks: ["letters|will", "clock|panel"],
     truthHypotheses: ["inheritance"],
     truthFindings: [
-      { suspect: "secretary", question: "room_motive" },
-      { suspect: "secretary", question: "room_mechanism" }
+      { suspect: "secretary", question: "after_room_motive" },
+      { suspect: "secretary", question: "after_room_mechanism" }
     ]
   },
 
@@ -12255,7 +12350,7 @@ function chooseVerdict(id) {
       : {};
 
   const hasFinding = ({ suspect, question }) =>
-    Boolean(interrogations[suspect]?.findings?.[question]);
+    hasRequiredInterrogationFinding(interrogations, suspect, question);
 
   const missingFrom = (required, actual) =>
     (required || []).filter(item => !actual.includes(item));
@@ -12403,7 +12498,7 @@ function chooseVerdict(id) {
 
   // Сохраняем награду за завершение расследования.
   s.score = (Number(s.score) || 0) + bonus;
-  state.score = (Number(state.score) || 0) + bonus;
+  addScore(bonus);
 
   s.finished = true;
   s.ending = choice.ending;
@@ -12441,7 +12536,8 @@ function renderEnding(){
  document.getElementById("archiveBtn").onclick=()=>{renderCatalog();window.scrollTo({top:0,behavior:"smooth"});};
  document.getElementById("replayBtn").onclick=()=>{
   const old=caseState(activeId);
-  if(old.score)state.score=Math.max(0,(state.score||0)-old.score);
+   const oldPoints = Number(old.earnedScore) > 0 ? Number(old.earnedScore) : estimateLegacyCaseScore(old);
+   state.score=Math.max(0,(state.score||0)-oldPoints);
   state.cases[activeId]={chapter:0,found:[],seen:[],finished:false,ending:null,score:0};
   saveState();openCase(activeId);
  };
