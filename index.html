@@ -7259,6 +7259,113 @@ button:focus-visible {
   overflow-wrap: anywhere !important;
 }
 
+/* CASE 004 — isolated illustrated-novel shell. The legacy case layouts remain untouched. */
+.case004-screen {
+  --c4-bg: #090d1b; --c4-surface: #11182a; --c4-line: #263653;
+  --c4-cyan: #52ddf5; --c4-pink: #ff5eaa; --c4-violet: #a98bff; --c4-text: #edf2ff;
+  position: fixed; inset: 0; z-index: 100; overflow: auto; background: var(--c4-bg); color: var(--c4-text);
+  font-family: Inter, ui-sans-serif, system-ui, sans-serif;
+}
+.case004-screen.hidden { display: none !important; }
+.case004-bar { position: sticky; top: 0; z-index: 5; min-height: 64px; display: grid; grid-template-columns: 1fr auto 1fr; align-items: center; gap: 12px; padding: 10px clamp(14px,4vw,56px); background: #090d1beF; border-bottom: 1px solid #263653; backdrop-filter: blur(14px); }
+.case004-brand { display: flex; gap: 12px; align-items: baseline; font-size: 12px; letter-spacing: .18em; font-weight: 800; white-space: nowrap; }
+.case004-brand span { color: var(--c4-cyan); }.case004-brand i { color: #9aa9c2; font-size: 10px; font-style: normal; }
+.case004-quiet-button,.case004-archive-button,.case004-button,.case004-choice,.case004-hotspot { font: inherit; cursor: pointer; }
+.case004-quiet-button,.case004-archive-button { color: #c9d3e7; background: transparent; border: 0; padding: 10px 6px; text-align: left; }
+.case004-archive-button { justify-self: end; border: 1px solid var(--c4-line); border-radius: 999px; padding: 8px 13px; }
+.case004-archive-button b { display: inline-grid; place-items: center; min-width: 22px; height: 22px; margin-left: 8px; color: var(--c4-bg); background: var(--c4-cyan); border-radius: 50%; font-size: 11px; }
+.case004-main { width: min(1200px,100%); margin: 0 auto; padding: clamp(16px,3vw,38px); }
+.cover.case004-cover { background-image: linear-gradient(0deg,#090d1bed,transparent 72%),url("./assets/case004/case004-cover.png"); background-position: center; background-size: cover; }
+.case004-scene { min-height: 0; display: grid; grid-template-rows: auto auto; gap: 0; }
+.case004-art { position: relative; min-height: 340px; overflow: hidden; border: 1px solid #314362; border-radius: 14px 14px 0 0; background: radial-gradient(ellipse at 68% 45%,#253859 0,#151f35 34%,#0d1427 69%,#080c18 100%); isolation: isolate; }
+.case004-art::before { content: ""; position: absolute; inset: 0; z-index: -1; opacity: .75; background: linear-gradient(115deg,transparent 42%,#7fa0c21c 43%,transparent 44%), radial-gradient(ellipse at 55% 110%,#52ddf51b,transparent 46%), linear-gradient(0deg,#090d1b 0%,transparent 48%); }
+.case004-art::after { content: ""; }
+.case004-art.has-image { background-repeat: no-repeat; background-color: #0b1221; background-size: cover; background-position: center; }
+.case004-art.has-image::before { opacity: 1; z-index: 0; background: linear-gradient(0deg,#090d1b66,transparent 58%); pointer-events: none; }
+.case004-art-label { position: absolute; left: 22px; bottom: 20px; color: #dbe7f8a8; font-size: 10px; letter-spacing: .15em; text-transform: uppercase; }
+.case004-copy { position: relative; z-index: 1; padding: clamp(22px,4vw,48px); background: linear-gradient(180deg,#11182af5,#0d1424); border: 1px solid var(--c4-line); border-top: 0; border-radius: 0 0 14px 14px; }
+.case004-kicker { color: var(--c4-cyan); font-size: 10px; font-weight: 800; letter-spacing: .19em; text-transform: uppercase; }
+.case004-copy h1,.case004-copy h2,.case004-title { margin: 11px 0 16px; font-family: "Palatino Linotype","Book Antiqua",Palatino,Cambria,serif; font-weight: 500; letter-spacing: -.02em; }
+.case004-copy h1 { max-width: 760px; font-size: clamp(27px,3.7vw,44px); line-height: 1.12; }
+.case004-copy h2,.case004-title { font-size: clamp(22px,2.65vw,32px); line-height: 1.18; }
+.case004-prose { max-width: 88ch; color: #dce4f4; font-family: "Palatino Linotype","Book Antiqua",Palatino,Cambria,serif; font-size: clamp(14px,1.08vw,16px); line-height: 1.68; white-space: pre-line; }
+.case004-prose p { margin: 0 0 .85em; }.case004-foot { display: flex; justify-content: space-between; align-items: center; gap: 16px; margin-top: 22px; }
+.case004-progress { color: #8798b5; font-size: 11px; letter-spacing: .1em; }
+.case004-button { min-height: 46px; padding: 12px 20px; color: #07101e; background: var(--c4-cyan); border: 0; border-radius: 7px; font-weight: 800; transition: transform .2s,filter .2s; }
+.case004-button:hover { transform: translateY(-1px); filter: brightness(1.08); }.case004-button.secondary { color: #dce6f6; background: #17233a; border: 1px solid #344867; }
+.case004-stage { min-height: 0; position: relative; overflow: hidden; border: 1px solid #314362; border-radius: 14px; background: #0c1323; }
+.case004-image-area { position: relative; width: 100%; aspect-ratio: 16/9; overflow: hidden; background:#0b1221; }
+.case004-stage .case004-image-area .case004-art { position: absolute; inset: 0; min-height: 0; border: 0; border-radius: 0; background-size:cover; }
+.case004-scene-panel { position: relative; z-index: 2; max-width: 900px; margin: 0 auto; padding: 22px clamp(18px,3vw,36px) 26px; background: linear-gradient(180deg,#11182a,#0d1424); }
+.case004-scene-panel .case004-prose { font-size: clamp(14px,1.15vw,16px); }
+.case004-hotspot { position: absolute; z-index: 3; width: 44px; min-width: 44px; aspect-ratio: 1; border: 1px solid #52ddf577; border-radius: 50%; background: #52ddf51a; box-shadow: 0 0 0 3px #090d1b66,0 0 18px #52ddf51f; transform: translate(-50%,-50%); }
+.case004-hotspot:hover,.case004-hotspot:focus-visible,.case004-hotspot.is-read { border-color: #52ddf5d0; background: #52ddf536; box-shadow: 0 0 0 4px #090d1b88,0 0 26px #52ddf54c; }
+.case004-hotspot.is-read::after { content: "✓"; color: var(--c4-cyan); font-size: 14px; }
+.case004-hotspot[data-c4-evidence="statuette"] { left: 77%; top: 42%; }.case004-hotspot[data-c4-evidence="glass"] { left: 37%; top: 78%; }.case004-hotspot[data-c4-evidence="desk"] { left: 52%; top: 52%; }.case004-hotspot[data-c4-evidence="envelope"] { left: 72%; top: 70%; }.case004-hotspot[data-c4-evidence="entrylog"] { left: 12%; top: 23%; }.case004-hotspot[data-c4-evidence="expert"] { left: 84%; top: 63%; }.case004-hotspot[data-c4-evidence="recorder"] { left: 61%; top: 57%; }.case004-hotspot[data-c4-evidence="lightlog"] { left: 12%; top: 72%; }.case004-hotspot[data-c4-evidence="ledger"] { left: 22%; top: 42%; }.case004-hotspot[data-c4-evidence="restorationTag"] { left: 69%; top: 48%; }.case004-hotspot[data-c4-evidence="lampbase"] { left: 92%; top: 51%; }
+.case004-grid { display: grid; grid-template-columns: repeat(3,minmax(0,1fr)); gap: 16px; }
+.case004-card { min-width: 0; overflow: hidden; border: 1px solid var(--c4-line); border-radius: 12px; background: linear-gradient(145deg,#141f34,#0e1525); }
+.case004-card button { width: 100%; height: 100%; padding: 0; color: inherit; text-align: left; background: transparent; border: 0; cursor: pointer; }
+.case004-portrait { height: auto; aspect-ratio: 1/1; position: relative; background: radial-gradient(ellipse at 52% 38%,#667b98 0,#354761 18%,#1a2941 47%,#0b1221 79%); background-repeat:no-repeat; background-size:200% 300%; }
+.case004-portrait::before { content: ""; position: absolute; width: 36%; height: 52%; left: 32%; top: 15%; border-radius: 48% 48% 43% 43%; background: linear-gradient(135deg,#a4b0bf,#3c4b61 75%); box-shadow: 0 110px 0 45px #1c2940; opacity: .62; }
+.case004-portrait.has-image::before { display: none; }
+.case004-card-body { padding: 18px; }.case004-card-body h3 { margin: 0 0 6px; font: 500 24px Georgia,serif; }.case004-muted { color: #9caec8; font-size: 13px; line-height: 1.6; }
+.case004-evidence { display: grid; grid-template-columns: 90px minmax(0,1fr); gap: 14px; align-items: start; padding: 14px 0; border-bottom: 1px solid #263653; }
+.case004-evidence:last-child { border-bottom: 0; }.case004-thumb { min-height: 68px; border-radius: 8px; background: linear-gradient(145deg,#263653,#11182a); }
+.case004-modal { position: fixed; inset: 0; z-index: 10; display: grid; place-items: center; padding: 18px; background: #030711d9; backdrop-filter: blur(8px); }
+.case004-modal[hidden] { display: none; }.case004-modal-card { width: min(820px,100%); max-height: min(88vh,900px); overflow: auto; padding: clamp(22px,4vw,42px); border: 1px solid #344867; border-radius: 14px; background: #10192a; box-shadow: 0 25px 90px #0008; }
+.case004-dialog { max-width: 800px; margin: 0 auto; }.case004-dialog-top { display: flex; align-items: center; gap: 20px; }.case004-dialog .case004-portrait { flex: 0 0 190px; height: auto; aspect-ratio: 1/1; border-radius: 10px; }
+.case004-confidence { width: min(320px,65vw); margin-top: 12px; display: grid; grid-template-columns: 1fr auto; gap: 7px 12px; color: #b9c9e1; font-size: 11px; }.case004-confidence-track { grid-column: 1/-1; height: 5px; overflow: hidden; border-radius: 9px; background: #263653; }.case004-confidence-track i { display: block; height: 100%; background: linear-gradient(90deg,var(--c4-violet),var(--c4-cyan)); transition: width .35s ease; }
+.case004-actions { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 20px; }.case004-choice { padding: 13px 16px; color: #dce6f6; text-align: left; border: 1px solid #344867; border-radius: 8px; background: #141f34; }.case004-choice:hover { border-color: var(--c4-cyan); }
+.case004-choice:disabled { opacity: .5; cursor: default; border-color: #263653; }
+@media(max-width:760px) { .case004-bar { grid-template-columns: auto 1fr auto; padding: 8px 12px; }.case004-brand { justify-self: center; flex-direction: column; gap: 2px; text-align: center; }.case004-quiet-button,.case004-archive-button { font-size: 12px; }.case004-main { padding: 12px; }.case004-scene { min-height: calc(100dvh - 90px); grid-template-rows: minmax(300px,44vh) auto; }.case004-art { min-height: 280px; }.case004-prose { font-size: 15px; line-height: 1.68; }.case004-grid { grid-template-columns: repeat(2,minmax(0,1fr)); gap: 10px; }.case004-portrait { height: 190px; }.case004-card-body { padding: 13px; }.case004-card-body h3 { font-size: 20px; }.case004-dialog-top { align-items: flex-start; }.case004-dialog .case004-portrait { flex-basis: 112px; height: 150px; }.case004-evidence { grid-template-columns: 66px minmax(0,1fr); gap: 10px; }.case004-scene-panel { margin-top: 32vh; padding: 20px; background: linear-gradient(180deg,#090d1b00,#090d1bf5 15%); } }
+@media(max-width:420px) { .case004-archive-button { padding: 7px 9px; }.case004-grid { grid-template-columns: 1fr; }.case004-portrait { height: 230px; }.case004-foot { align-items: flex-start; flex-direction: column; }.case004-button { width: 100%; }.case004-dialog-top { display: block; }.case004-dialog .case004-portrait { width: 100%; height: 240px; margin-bottom: 16px; } }
+.case004-scene > .case004-art[data-c4-art="cover"] { width:100%; aspect-ratio:16/9; min-height:0; }
+.case004-scene > .case004-art[data-c4-art^="story"],.case004-scene > .case004-art[data-c4-art^="reconstruction"] { width:100%; aspect-ratio:16/9; min-height:0; margin:0 auto; }
+.case004-image-area .case004-hotspot::after { content:""; position:absolute; width:7px; height:7px; left:50%; top:50%; border-radius:50%; background:#52ddf5; box-shadow:0 0 11px #52ddf5aa; transform:translate(-50%,-50%); }
+.case004-image-area .case004-hotspot.is-read::after { content:"✓"; width:auto; height:auto; color:var(--c4-cyan); background:none; box-shadow:none; font-size:14px; }
+.case004-evidence-large { aspect-ratio:4/3; min-height:0; background-size:contain; background-position:center; background-color:#080d18; }
+.case004-button:disabled { opacity:.48; cursor:not-allowed; filter:saturate(.55); }
+.case004-thumb,.case004-archive-thumb,.case004-evidence-visual { background-size:contain; background-position:center; background-color:#080d18; }
+@media(max-width:760px) { .case004-scene { min-height:0; grid-template-rows:auto auto; }.case004-art { min-height:0; }.case004-scene > .case004-art[data-c4-art^="story"],.case004-scene > .case004-art[data-c4-art^="reconstruction"] { width:100%; aspect-ratio:16/9; }.case004-image-area { aspect-ratio:16/9; }.case004-scene-panel { margin:0; background:linear-gradient(180deg,#11182a,#0d1424); } }
+.case004-portrait.has-image { height:auto; aspect-ratio:1/1; }
+.case004-dialog { position:relative; isolation:isolate; padding:clamp(18px,3vw,34px); border:1px solid #263653; border-radius:14px; background:linear-gradient(90deg,#090d1bea,#090d1bb8),url("./assets/case004/case004-interrogation-room.png") center/cover; }
+.case004-evidence-visual { min-height:68px; border-radius:8px; background-color:#11182a; background-repeat:no-repeat; background-size:300% 400%; }
+.case004-evidence-large { min-height:260px; border-radius:10px; background-color:#11182a; background-repeat:no-repeat; background-size:300% 400%; }
+.case004-archive-thumb { width:90px; min-height:68px; border-radius:8px; background-color:#11182a; background-repeat:no-repeat; background-size:300% 400%; }
+.case004-evidence-row { display:grid; grid-template-columns:90px minmax(0,1fr); align-items:center; gap:14px; width:100%; margin:10px 0; }
+.case004-evidence-row .case004-muted { display:block; max-height:4.8em; overflow:hidden; }
+@media(max-width:760px) { .case004-evidence-row { grid-template-columns:66px minmax(0,1fr); gap:10px; } .case004-archive-thumb { width:66px; min-height:60px; } }
+@media(max-width:760px) { .case004-dialog .case004-portrait { height:auto; aspect-ratio:1/1; } }
+@media(max-width:420px) { .case004-dialog .case004-portrait { height:auto; aspect-ratio:1/1; } }
+@media(prefers-reduced-motion: reduce) { .case004-screen *, .case004-screen *::before, .case004-screen *::after { scroll-behavior: auto !important; transition-duration: .01ms !important; animation-duration: .01ms !important; } }
+
+/* Case 004 interviews: seated suspect at left, readable dialogue and choices at right. */
+.case004-interview-layout { display:grid; grid-template-columns:minmax(280px,.88fr) minmax(380px,1.12fr); gap:clamp(16px,2.4vw,30px); align-items:stretch; min-height:min(78vh,820px); }
+.case004-interview-figure { position:relative; min-height:560px; overflow:hidden; border:1px solid #263653; border-radius:14px; background:#0b1221; }
+.case004-interview-art { position:absolute; inset:0; background-color:#0b1221; background-repeat:no-repeat; background-size:cover; background-position:center top; animation:case004PortraitIn .24s ease-out both; }
+@keyframes case004PortraitIn { from { opacity:.45; } to { opacity:1; } }
+.case004-interview-caption { position:absolute; inset:auto 0 0; display:flex; justify-content:space-between; align-items:end; gap:12px; padding:42px 20px 18px; background:linear-gradient(0deg,#090d1bf2,transparent); }
+.case004-interview-caption strong { font:500 clamp(22px,2.4vw,30px) Georgia,serif; }
+.case004-interview-caption span { color:#b7c8df; font-size:12px; text-transform:uppercase; letter-spacing:.12em; }
+.case004-interview-side { min-width:0; display:flex; flex-direction:column; padding:clamp(18px,2.6vw,30px); border:1px solid #263653; border-radius:14px; background:linear-gradient(155deg,#11182a,#0d1424); }
+.case004-interview-top { display:flex; justify-content:space-between; gap:16px; align-items:start; }
+.case004-interview-top h2 { margin:6px 0 0; font:500 clamp(26px,3vw,36px)/1.1 Georgia,serif; }
+.case004-uncertainty { margin:20px 0 18px; padding:13px 15px; border:1px solid #263653; border-radius:9px; background:#0a1120; }
+.case004-uncertainty-label { display:flex; justify-content:space-between; gap:10px; color:#dce4f4; font-size:13px; }
+.case004-uncertainty-label strong { color:var(--c4-cyan); }
+.case004-uncertainty-track { height:7px; margin-top:10px; overflow:hidden; border-radius:8px; background:#263653; }
+.case004-uncertainty-track i { display:block; height:100%; border-radius:inherit; background:linear-gradient(90deg,#52ddf5,#a98bff,#ff5eaa); transition:width .35s ease; }
+.case004-interview-dialogue { min-height:100px; max-height:27vh; overflow:auto; margin-bottom:16px; padding:16px 18px; border-left:2px solid var(--c4-cyan); background:#0b1322; color:#dce4f4; font:16px/1.68 Georgia,serif; }
+.case004-interview-dialogue p { margin:0; }
+.case004-interview-topics { display:grid; gap:10px; }
+.case004-interview-topics details { border:1px solid #263653; border-radius:9px; background:#101a2b; }
+.case004-interview-topics summary { padding:13px 15px; color:#dce6f6; cursor:pointer; font-weight:700; }
+.case004-interview-topics .case004-actions { margin:0; padding:0 12px 12px; }
+.case004-interview-topics .case004-choice { font-size:13px; }
+.case004-interview-footer { display:flex; flex-wrap:wrap; gap:10px; margin-top:auto; padding-top:18px; }
+@media(max-width:820px) { .case004-interview-layout { grid-template-columns:minmax(0,1fr); min-height:0; }.case004-interview-figure { min-height:0; height:min(64vh,620px); }.case004-interview-side { min-height:440px; }.case004-interview-dialogue { max-height:34vh; } }
+@media(max-width:520px) { .case004-interview-figure { height:54vh; min-height:340px; }.case004-interview-caption { display:block; }.case004-interview-caption span { display:block; margin-top:6px; }.case004-interview-side { padding:16px; }.case004-interview-top { align-items:center; }.case004-interview-dialogue { font-size:15px; } }
+
 </style>
 </head>
 <body>
@@ -7278,9 +7385,9 @@ button:focus-visible {
   <section id="catalog">
     <div class="hero">
       <div class="hero-copy">
-        <div class="eyebrow">Архив закрытых дел / 001—003</div>
+        <div class="eyebrow">Архив закрытых дел / 001—004</div>
         <h1>Правда редко<br>лежит на поверхности.</h1>
-        <p class="muted">Три расследования. Десятки деталей. Люди, которые лгут — иногда даже сами себе. Собирай улики, проверяй версии и решай, кому верить.</p>
+        <p class="muted">Четыре расследования. Десятки деталей. Люди, которые лгут — иногда даже сами себе. Собирай улики, проверяй версии и решай, кому верить.</p>
         <div class="hero-actions">
           <button class="btn btn-primary" id="startBtn" type="button">Открыть архив →</button>
           <a class="btn btn-cyan" href="./tutorial.html">Пройти обучение · около 5 минут</a>
@@ -7347,7 +7454,7 @@ button:focus-visible {
 
 <div class="game-layout investigation-layout">
 
-  <main class="investigation-main">
+  <div class="investigation-main">
 
     <article class="panel story-panel animate" id="storyPanel">
       <div class="eyebrow" id="storyEyebrow">Досье</div>
@@ -7414,7 +7521,7 @@ button:focus-visible {
 </section>
 </section>
 
-  </main>
+  </div>
 
   <aside class="investigation-sidebar">
 
@@ -7524,7 +7631,17 @@ class="suspect-viewer hidden"
   </div>
 </div>
 
-</div>
+</section>
+
+  <section id="case004Screen" class="case004-screen hidden" aria-live="polite">
+    <header class="case004-bar">
+      <button class="case004-quiet-button" type="button" data-c4-action="exit">← Архив</button>
+      <div class="case004-brand"><span>MIND LAB</span><i>ДЕЛО 004</i></div>
+      <button class="case004-archive-button" type="button" data-c4-action="archive">Архив улик <b id="case004ClueCount">0</b></button>
+    </header>
+    <div class="case004-main" id="case004Main"></div>
+    <div class="case004-modal" id="case004Modal" hidden></div>
+  </section>
 </main>
 <footer>MIND LAB · Архив психологических расследований</footer>
 
@@ -7736,6 +7853,120 @@ partial:{title:"Слишком простое объяснение",text:"Ири
 wrong:{title:"Подставная личность",text:"Аккаунт Н. Вейла действительно использовался для доступа к архиву. Но он был создан внутри компании и получал финансирование через её подрядчика. Ты нашёл инструмент сокрытия, а не организатора.",rank:"ДЕЛО НЕ РАСКРЫТО"}
 }
 }
+];
+
+// Дело 004: данные каталога старой игры плюс отдельная модель романного интерфейса.
+const CASE_004 = {
+  id: "vale", number: "004", title: "Смерть между двумя ударами",
+  genre: "ИНТЕРАКТИВНЫЙ ДЕТЕКТИВНЫЙ РОМАН", difficulty: "Сложность: высокая", time: "35–50 мин",
+  short: "Адриан Вейл найден в мастерской. Улики указывают на два нападения — и на двух людей, действовавших порознь.",
+  cover: "case004-cover", intro: "Дело Адриана Вейла. Интерактивный детективный роман.",
+  chapters: Array.from({length: 8}, (_, i) => ({title: `Глава ${i + 1}`, text: "История и сцены дела № 004 открываются последовательно.", clues: [], next: "Продолжить чтение."})),
+  suspects: [
+    {id:"julian",name:"Julian Cross",role:"Директор галереи",desc:"Управляет галереей Vale и отвечает за её счета и выставки.",tell:""},
+    {id:"elise",name:"Elise Moreau",role:"Реставратор",desc:"Восстанавливает картины и знает каждый стол мастерской.",tell:""},
+    {id:"thomas",name:"Thomas Reed",role:"Торговец произведениями искусства",desc:"Много лет покупал и продавал работы вместе с Adrian.",tell:""},
+    {id:"claire",name:"Claire Bennett",role:"Бывшая партнёрша Adrian",desc:"Они вместе основали первую галерею и сохранили общие архивы.",tell:""},
+    {id:"marcus",name:"Marcus Bell",role:"Техник здания",desc:"Обслуживает старую электросистему галереи.",tell:""},
+    {id:"vivian",name:"Vivian Shaw",role:"Журналистка",desc:"Готовит расследование о происхождении нескольких коллекций.",tell:""}
+  ],
+  evidence: [
+    ["statuette","Бронзовая статуэтка","На ребре постамента обнаружена кровь Adrian. Под войлочной подкладкой зацепилась тёмно-зелёная шерстяная нить. Микроскопический скол на основании свежий, хотя сам предмет давно стоял на столе."],
+    ["glass","Разбитый бокал","Бокал разбился у края стола. Вино на его ножке высохло до того, как на полу появилась капля крови: бокал упал раньше, чем произошло последнее повреждение. Следы не позволяют считать его орудием убийства."],
+    ["desk","Рабочий стол","В левом углу стола есть неглубокая вмятина и пятно крови с подсохшим краем. На противоположной стороне — более поздний след удара, продавивший древесину глубже. Между ними лежат каталоги, которые кто-то торопливо сдвинул."],
+    ["envelope","Пустое место в ящике","В пыли ящика виден прямоугольный чистый след: отсюда недавно вынули плотный конверт. Бумажная полоска под направляющей сохранила часть машинописной строки: «…изменённая подпись / фонд Bennett»."],
+    ["entrylog","Журнал входов","Электронный журнал фиксирует проходы в мастерскую: старая карта торгового отдела открыла дверь в 21:41 и закрыла её при выходе в 21:57; личный код Claire Bennett открыл дверь в 22:27, выход зарегистрирован в 22:35. Между визитами нет общего входа или выхода. Thomas Reed и Claire Bennett отрицали, что возвращались."],
+    ["expert","Заключение патологоанатома","Обнаружены два самостоятельных удара. Первый рассёк кожу над левой височной костью и оставил линейную трещину, но не вызвал смертельного внутричерепного повреждения. Второй удар пришёлся с противоположной стороны: вдавленный перелом и острое внутричерепное кровоизлияние стали непосредственной причиной смерти. По одному лишь виду тканей нельзя назвать точные минуты; направление повреждений, слои крови и записи доступа подтверждают отдельные эпизоды."],
+    ["recorder","Диктофон Adrian","Устройство сохраняло голосовые заметки в мастерской. В первом фрагменте, около 21:54, слышны падение предмета и Adrian, произносящий: «Thomas, подожди…». Во втором, в 22:29, он зовёт Claire по имени. Её голос отвечает: «Ты всё ещё жив». Запись обрывается через несколько секунд. От первого фрагмента до второго прошло около тридцати пяти минут."],
+    ["lightlog","Журнал электрического щита","В 22:03 линия главного зала была отключена на четыре минуты ручным переключателем. Это совпадает с незарегистрированной проверкой Marcus Bell. Событие объясняет тёмный коридор, но не совпадает по времени ни с первым, ни со вторым ударом."],
+    ["ledger","Счётная книга галереи","Три счета за перевозку оформлены одной и той же фирмой и проведены через бюджет реставрации. Подпись Julian Cross стоит на сводном отчёте, но документы не связывают его с мастерской после закрытия."],
+    ["restorationTag","Бирка реставратора","На бирке от синего футляра Elise Moreau стоит дата вечернего возврата и пометка «раздевалка». След пыли на шкафчике подтверждает, что футляр забрали. Бирка объясняет, почему Elise скрыла второй визит, но не ведёт к мастерской."],
+    ["lampbase","Основание рабочей лампы","Тяжёлое латунное основание лежит справа от стола. На одном краю вычищена узкая полоса; в углублении сохранилась кровь Adrian. Эксперт сопоставит округлый след с правой затылочной раной. На корпусе нет отпечатков, пригодных для идентификации."]
+  ],
+  finalQuestion:"Кто ответственен за оба эпизода?", choices:[
+    {id:"thomas_claire",label:"Два независимых участника",desc:"Реконструкция доступна после завершения расследования.",score:100,ending:"truth",result:""},
+    {id:"one_person",label:"Один человек совершил оба нападения",desc:"Пока недостаточно данных для вывода.",score:0,ending:"partial",result:""},
+    {id:"unknown",label:"Доказательств пока недостаточно",desc:"К материалам можно вернуться.",score:0,ending:"wrong",result:""}
+  ],
+  endings:{truth:{title:"Реконструкция дела",text:"Полная последовательность событий будет добавлена после разработки сюжета и проверки улик.",rank:"ДЕЛО 004"},partial:{title:"Неполная версия",text:"Вернись к материалам и проверь, что именно подтверждает каждый эпизод.",rank:"РАССЛЕДОВАНИЕ ПРОДОЛЖАЕТСЯ"},wrong:{title:"Вывод отложен",text:"Ты можешь перечитать материалы и изменить свою версию.",rank:"ОТКРЫТЫЙ ВОПРОС"}}
+};
+CASES.push(CASE_004);
+// Связи улик описаны отдельно от рендера, чтобы тексты и ресурсы можно было менять независимо.
+const CASE004_EVIDENCE_META = {
+  statuette:{category:"physical",resource:"evidence.statuette",people:["thomas"],scenes:["crime","reconstruction"],questions:["thomas_first_visit"],fact:"Орудие первого удара; следы связывают его с мастерской, но сами по себе не устанавливают владельца следа."},
+  glass:{category:"physical",resource:"evidence.glass",people:[],scenes:["crime"],questions:["timeline"],fact:"Бокал разбился до обоих ударов и не является орудием нападения."},
+  desk:{category:"physical",resource:"evidence.desk",people:["thomas","claire"],scenes:["crime","reconstruction"],questions:["timeline"],fact:"Разные места удара и последовательность пятен крови показывают два эпизода."},
+  envelope:{category:"documents",resource:"evidence.envelope",people:["claire"],scenes:["crime","reconstruction"],questions:["claire_documents"],fact:"Из ящика забрали конверт с бумагами о происхождении работы из фонда Bennett."},
+  entrylog:{category:"records",resource:"evidence.entrylog",people:["thomas","claire","elise"],scenes:["crime","interrogation"],questions:["thomas_first_visit","claire_return"],fact:"Доступ зафиксирован раздельно: Thomas в 21:41, Claire в 22:27; система не связывает их между собой."},
+  expert:{category:"expert",resource:"evidence.expert",people:["thomas","claire"],scenes:["crime","reconstruction"],questions:["timeline","cause_of_death"],fact:"Первая травма не была непосредственной причиной смерти. Смертельным стал второй удар."},
+  recorder:{category:"testimony",resource:"evidence.recorder",people:["thomas","claire","vivian"],scenes:["crime","interrogation","reconstruction"],questions:["thomas_first_visit","claire_return"],fact:"Два фрагмента разделены примерно тридцатью пятью минутами; в последнем Adrian и Claire говорят друг с другом."},
+  lightlog:{category:"records",resource:"evidence.lightlog",people:["marcus"],scenes:["crime","interrogation"],questions:["marcus_blackout"],fact:"Отключение света относится к отдельной проверке Marcus и произошло между двумя посещениями."},
+  ledger:{category:"documents",resource:"evidence.ledger",people:["julian"],scenes:["crime","interrogation"],questions:["julian_accounts"],fact:"Подтверждает финансовую причину скрытности Julian, но не его присутствие в мастерской."},
+  restorationTag:{category:"physical",resource:"evidence.restorationTag",people:["elise"],scenes:["crime","interrogation"],questions:["elise_return"],fact:"Подтверждает, что Elise вернулась за личным футляром и не заходила в мастерскую."},
+  lampbase:{category:"physical",resource:"evidence.lampbase",people:["claire"],scenes:["crime","reconstruction"],questions:["claire_second_visit"],fact:"Форма основания совпадает со смертельным повреждением; кровь Adrian осталась внутри очищенного края."}
+};
+const CASE004_DIALOGUES = {
+  julian:[
+    {id:"cross_relationship",title:"Как вы с Adrian делили работу?",answer:`«Он решал, что достойно попасть в зал. Я решал, как оплатить этот зал. Мы оба считали вторую часть менее важной — до тех пор, пока не приходили счета». Julian говорит о привычном соперничестве без злости.`,emotion:"внимательное",confidence:0},
+    {id:"cross_close",title:"Когда вы ушли из галереи?",requires:["entrylog"],answer:`«До девяти. Я подписал журнал на стойке и поехал домой». На экране он видит запись о проходе позднее и медленно поправляет манжет. «Тогда проверьте, чья карта открыла дверь. Не делайте из этого больше, чем там есть».`,emotion:"настороженное",confidence:-5},
+    {id:"cross_accounts",title:"Что означают повторные счета?",requires:["ledger"],answer:`Julian долго смотрит на три одинаковые суммы. «Я утвердил сводный платёж, не каждую накладную. Да, я должен был проверить фирму. Я боялся, что совет директоров узнает об этом раньше, чем я успею вернуть деньги». Он признаёт финансовый проступок, но не присутствие в мастерской.`,emotion:"раздражённое",confidence:-10}
+  ],
+  elise:[
+    {id:"elise_method",title:"Почему Adrian доверял вам мастерскую?",answer:`«Потому что я не обещала вернуть вещи такими, какими их помнили. Я показывала ему повреждение, даже если знала, что он рассердится». Elise отвечает спокойно, пока разговор не касается вечера.`,emotion:"внимательное",confidence:0},
+    {id:"elise_return",title:"Зачем вы вернулись после закрытия?",requires:["restorationTag"],answer:`Она узнаёт бирку и закрывает глаза. «За синим футляром. Это мой набор, не галерейный. Adrian попросил дождаться инвентаризации, а я боялась, что он решит, будто я унесла инструмент». Журнал и бирка подтверждают её возвращение; в мастерскую она не заходила.`,emotion:"смущённое",confidence:-3},
+    {id:"elise_sound",title:"Вы слышали что-нибудь в коридоре?",requires:["entrylog"],answer:`«Когда я уходила, было тихо. Позже я уже была на улице». Она вспоминает, что красная лампа панели мигнула один раз, но не видела, кто оставался в здании. Её страх потерять место объясняет позднее признание лучше, чем молчание о нападении.`,emotion:"настороженное",confidence:-2}
+  ],
+  thomas:[
+    {id:"thomas_provenance",title:"Почему вы спорили с Adrian о рисунке?",answer:`«Я не продавал подделку. Я продавал работу без подтверждённого автора». Thomas произносит это как фразу, которую уже повторял. «Adrian думал, что если он задержит сделку, то спасёт картину. Он не понимал, сколько людей лишит денег».`,emotion:"раздражённое",confidence:0},
+    {id:"thomas_evening",title:"Вы возвращались в галерею после закрытия?",requires:["entrylog"],answer:`«Нет. Я был за городом». Когда детектив показывает запись старой карты, Thomas впервые перестаёт смотреть в глаза. «Эта карта могла остаться у кого угодно. Я давно не пользовался служебным входом».`,emotion:"напряжённое",confidence:-7},
+    {id:"thomas_voice",title:"Кого Adrian назвал на записи?",requires:["recorder","statuette"],answer:`На фрагменте слышен его собственный голос. Thomas не просит включить его снова. «Я был там. Мы поссорились из-за рисунка. Я схватил статуэтку и ударил его один раз. Он упал и не отвечал. Я решил, что он умер». Он не вызвал помощь. «Я не знал, что кто-то ещё вернётся. Я клянусь, Claire со мной не договаривалась».`,emotion:"потрясённое",confidence:-20}
+  ],
+  claire:[
+    {id:"claire_history",title:"Что осталось между вами и Adrian?",answer:`«Слишком много каталогов и слишком мало разговоров». Claire поправляет рукав. «Мы умели вместе начинать проекты. Заканчивать их — хуже». Она не отрицает, что старые бумаги фонда всё ещё связывали их, но говорит, что это давно стало обычной архивной работой.`,emotion:"настороженное",confidence:0},
+    {id:"claire_envelope",title:"Почему из ящика исчез конверт?",requires:["envelope"],answer:`«Я не знаю, что было в этом конверте». Ответ приходит слишком быстро. Она просит увидеть машинописную полоску и после паузы добавляет: «В фонде были документы по ранним покупкам. Adrian хранил копии, хотя давно обещал вернуть их».`,emotion:"напряжённое",confidence:-5},
+    {id:"claire_second_visit",title:"Что случилось, когда вы вернулись?",requires:["entrylog","recorder","expert"],answer:`Claire слушает запись до конца. «Я пришла за документами. Он лежал у стола, потом поднял голову и назвал меня по имени. Я поняла, что он жив». Она сжимает ладони. «Я увидела на бумагах свою подпись. Я испугалась, что он всё расскажет. Я ударила его основанием лампы. Не знала, что Thomas уже был там. Я пришла одна».`,emotion:"признание",confidence:-25}
+  ],
+  marcus:[
+    {id:"marcus_lines",title:"Как вы обслуживали старое здание?",answer:`«С осторожностью и с теми деталями, которые давно надо было заменить». Marcus усмехается. «Adrian хотел сохранить даже проводку, если она ещё не искрила. Я говорил ему: вещи стареют по-разному».`,emotion:"внимательное",confidence:0},
+    {id:"marcus_blackout",title:"Кто отключил свет в главном зале?",requires:["lightlog"],answer:`Он узнаёт собственную отметку и перестаёт спорить. «Я провёл короткую проверку нагрузки без заявки. Это нарушение договора, не попытка спрятать человека. В щитовой я был один; к мастерской не подходил».`,emotion:"раздражённое",confidence:-6},
+    {id:"marcus_timing",title:"Почему отключение не совпадает со временем ударов?",requires:["recorder","lightlog"],answer:`«Потому что это была отдельная проверка. Я выключил линию в 22:03, включил в 22:07. Запись диктофона с голосом Adrian позже. Если он говорил в 22:29, он был жив после моей проверки».`,emotion:"уверенное",confidence:4}
+  ],
+  vivian:[
+    {id:"vivian_source",title:"Почему вы скрыли имя источника?",answer:`«Потому что согласие на разговор не означает согласия на публикацию». Vivian держит спину прямо. «Adrian просил оставить одно имя за кадром. Я сдержала слово. Если из-за этого моя статья опоздала, это моя проблема».`,emotion:"настороженное",confidence:0},
+    {id:"vivian_recording",title:"Вы забрали диктофон после интервью?",requires:["recorder"],answer:`«Я забрала свой. Этот — Adrian». Она мгновенно различает корпуса. Потом признаётся, что её запись продолжалась ещё несколько минут у входа. «На ней только шаги и дверь. Я не стирала файл, но не хотела отдавать весь разговор вместе с именем источника».`,emotion:"напряжённое",confidence:-4},
+    {id:"vivian_excerpt",title:"Что вы слышали после того, как ушли?",requires:["recorder","entrylog"],answer:`«Ничего. Я не была в здании, когда открыли дверь позднее». Vivian перечитывает метаданные. «Я могла бы скрыть запись, чтобы защитить источник. Но не человека, которому причинили вред. Передайте оригинал эксперту; я оставлю у себя только копию с закрытым именем».`,emotion:"потрясённое",confidence:-2}
+  ]
+};
+const CASE004_EVIDENCE_REACTIONS = {
+  statuette:{thomas:`«Я оценивал эту вещь раньше. Но на записи слышно, что в тот вечер я взял её в руки».`,elise:`«Её не должны были держать без перчаток. На основании давно был скол, но этот свежий».`,claire:`«Adrian коллекционировал бронзу. Я не знаю, кто трогал эту статуэтку после закрытия».`,julian:`«Она стояла в мастерской ещё до моего ухода. Я не отвечаю за то, что происходило потом».`,marcus:`«Я не заходил туда. Я даже не знал, что эту вещь переставили со стола».`,vivian:`«В одном из моих снимков она попала на задний план. Это не доказывает, кто был в комнате ночью».`},
+  entrylog:{thomas:`«Моя карта числилась в старом списке. Я думал, её давно деактивировали».`,claire:`«Код был выдан мне ещё при основании галереи. Я не знала, что он всё ещё работает».`,elise:`«Там моя запись? Я вошла через лестницу, чтобы забрать футляр. В мастерскую не заходила».`,julian:`«Карта торгового отдела была у Thomas. Но запись не говорит, кто держал её в руке».`,marcus:`«Этот журнал хранит только дверные события. Он не показывает, кто и куда пошёл внутри».`,vivian:`«Я ушла раньше. Моя машина уехала до появления этой записи».`},
+  expert:{thomas:`Он смотрит только на заключение о первом ударе. «Я не знаю, что случилось после того, как я ушёл».`,claire:`«Я видела, что он ещё дышит. На записи слышно, что он назвал меня. Я понимала, что делаю».`,julian:`«Значит, дело не сводится к одной травме. Это меняет весь вечер».`,elise:`«Два места повреждения — две разные силы. Нельзя свести их к падению с одного удара».`,marcus:`«Я отключал свет между записями прохода. Это не объясняет ни одного повреждения».`,vivian:`«Тогда редакционная версия о несчастном случае не выдержит проверки. Я передам оригиналы, даже если статья подождёт».`},
+  envelope:{claire:`«Там были копии документов о провенансе. Я забрала их, потому что Adrian собирался сравнить подписи. Да, одна из них была изменена мной».`,julian:`«Claire просила архивную копию, но я не знал, что именно она собиралась забрать».`,elise:`«Я не открывала ящик. Adrian хранил там старые каталоги и письма».`,thomas:`«Похоже на бумаги по коллекции. Я не видел этот конверт».`,marcus:`«В мастерской был только короткий доступ по журналу. Я ничего не трогал».`,vivian:`«Если там документы фонда, я могу проверить их происхождение — но не буду публиковать имя источника без разрешения».`},
+  recorder:{thomas:`«Это мой голос. Я был там и ударил Adrian. Я думал, он умер. Я не знал о Claire».`,claire:`«Я вернулась позже. Он был жив, произнёс моё имя. Я ответила ему — и всё равно ударила».`,vivian:`«Устройство Adrian. В моей записи тоже есть пропущенные секунды, но я не слышала этого фрагмента».`,julian:`«Теперь понятно, почему они оба врали о времени. Но в записи нет разговора между ними».`,elise:`«Голос Adrian после первого посещения означает, что он пережил тот удар».`,marcus:`«Время на файле позже отключения. Моя проверка к записи и смерти отношения не имеет».`},
+  lightlog:{marcus:`«Да, эту отметку сделал я. Я нарушил процедуру, но линия была выключена четыре минуты, не полчаса».`,julian:`«Я не подписывал эту проверку. Marcus просил разрешение, а я отложил заявку».`,elise:`«Свет моргнул, когда я уже вышла. Я не видела, кто был у щитка».`,thomas:`«Я ушёл до этого. Время записи не совпадает с моим визитом».`,claire:`«Я вошла позже. В темноте я не была; свет уже вернулся».`,vivian:`«Запись подтверждает только работу с электрикой. Она не объясняет, кто ударил Adrian».`},
+  ledger:{julian:`«Я провёл эти платежи, не проверив подрядчика. Это моя ответственность. Но в мастерскую я не возвращался».`,thomas:`«Финансовые счета галереи не имеют отношения к нашей ссоре».`,elise:`«Я видела, как Julian собирал накладные, но не знаю, кто их подписал».`,claire:`«Adrian говорил, что проверяет бюджет. Я не знала, что счета оформлены так».`,marcus:`«Эти документы не относятся к электрике».`,vivian:`«У меня была заметка о фирме-посреднике. Источник просил пока не печатать имя».`},
+  restorationTag:{elise:`«Да, футляр был мой. Я вернулась и забрала его. Я солгала, потому что боялась, что меня обвинят в краже инструмента».`,julian:`«Я не видел Elise после закрытия. Если она вернулась за личной вещью, это не объясняет кровь в мастерской».`,thomas:`«Я не знаю, что было в её футляре».`,claire:`«Это подтверждает, что Elise вернулась, но не что она заходила к Adrian».`,marcus:`«Она прошла по служебной лестнице; датчик это зафиксировал».`,vivian:`«Она скрывала неловкий эпизод, не обязательно преступление».`},
+  glass:{julian:`«Мы подали вино на открытии. Бокал мог разбиться ещё до того, как я ушёл».`,elise:`«Осколки лежат поверх старого пятна. Он разбился раньше крови».`,thomas:`«Я не пил здесь в ту ночь».`,claire:`«Я не помню, чтобы в мастерской вообще держали бокалы».`,marcus:`«По осколкам нельзя определить, кто был в комнате».`,vivian:`«Вино не было налито в день происшествия: аромат уже выветрился».`},
+  desk:{julian:`«Я видел вмятину ещё днём. Adrian сказал, что уронил каталог».`,elise:`«Два края повреждения направлены по-разному. Это не одно падение».`,thomas:`«Я не могу объяснить пятна. Я не видел стол после той ссоры».`,claire:`«Я видела кровь. И знала, что Adrian ещё жив».`,marcus:`«На столе два отдельных следа. Я ничего не ремонтировал в мастерской».`,vivian:`«Разные слои говорят о последовательности, но точнее её восстановят вместе с заключением».`},
+  lampbase:{claire:`«Да. Я взяла основание лампы. Он поднял голову и назвал меня по имени. Я не буду говорить, что не понимала, что делаю».`,julian:`«Эта лампа стояла здесь весь сезон. Я не видел её после того, как ушёл».`,elise:`«Латунное основание тяжёлое; его след не похож на удар бронзовой фигуркой».`,thomas:`«Я ударил его статуэткой. Это было другое место и другой край стола».`,marcus:`«Провод цел, значит лампу не уронили при отключении. Кто-то снял её с основания».`,vivian:`«Это отдельное орудие. Не позволяйте одному признанию закрыть вторую часть истории».`}
+};
+const CASE004_FINAL_QUESTIONS = [
+  {id:"first",title:"Кто нанёс первый удар?",prompt:"Кто первым напал на Adrian в мастерской?",answer:"thomas",options:[["thomas","Thomas Reed"],["claire","Claire Bennett"],["julian","Julian Cross"]]},
+  {id:"fatal",title:"Кто нанёс смертельную травму?",prompt:"Чьё действие стало непосредственной причиной смерти?",answer:"claire",options:[["claire","Claire Bennett"],["thomas","Thomas Reed"],["marcus","Marcus Bell"]]},
+  {id:"separate",title:"Что доказывает два эпизода?",prompt:"Какое сочетание материалов позволяет различить два отдельных нападения?",answer:"two_events",options:[["two_events","Два разных повреждения, раздельные записи доступа и два отрывка записи"],["one_event","Одна травма и один выход из галереи"],["glass_only","Разбитый бокал у рабочего стола"]]},
+  {id:"alive",title:"Почему Claire знала, что Adrian жив?",prompt:"Какое свидетельство прямо показывает, что она осознавала его состояние?",answer:"heard_him",options:[["heard_him","Он назвал её по имени, а она ответила: «Ты всё ещё жив»"],["blood","На полу оставалось достаточно крови"],["door","Она знала, что мастерская не заперта"]]},
+  {id:"motives",title:"Что каждый скрывал?",prompt:"Какие мотивы объясняют оба нападения, не превращая их в сговор?",answer:"independent_motives",options:[["independent_motives","Thomas хотел остановить спор о рисунке; Claire — скрыть подделку в документах фонда"],["shared_money","Они вместе хотели получить коллекцию Adrian"],["no_motive","У обоих не было причин скрывать свои действия"]]}
+];
+const CASE004_RECONSTRUCTION = [
+  {title:"Первый удар · 21:54",text:`Thomas Reed вернулся по старой карте торгового отдела. Спор о рисунке, происхождение которого Adrian собирался раскрыть, быстро перешёл в ссору. Thomas схватил бронзовую статуэтку и ударил Adrian слева по голове.
+
+Удар рассёк кожу и оставил линейную трещину височной кости. Внутричерепного повреждения, которое стало причиной смерти, тогда не возникло. Adrian потерял сознание и упал у стола. Thomas не стал проверять, дышит ли он, и не позвал помощь. В 21:57 дверь закрылась за ним. Он решил, что Adrian мёртв, и ушёл один.`},
+  {title:"Второй удар · после 22:27",text:`Спустя полчаса Claire Bennett вошла по старому личному коду. Она вернулась за конвертом с бумагами о ранних покупках фонда. В 22:29 Adrian очнулся, поднял голову и назвал её по имени. Claire ответила: «Ты всё ещё жив». Диктофон сохранил обе реплики.
+
+Она увидела документы, которые могли подтвердить, что подпись на одной из работ была изменена ею. Понимая, что Adrian узнал её и сможет рассказать о подделке, Claire взяла тяжёлое латунное основание рабочей лампы и нанесла второй удар. Он пришёлся с противоположной стороны головы. Именно эта травма вызвала острое внутричерепное кровоизлияние и стала непосредственной причиной смерти. Claire забрала конверт и покинула галерею в 22:35.`},
+  {title:"Два человека · ни одного сообщника",text:`Thomas и Claire не договаривались и не знали о поступках друг друга. Thomas скрыл ссору, визит и первый удар; он не знал, что Adrian придёт в себя. Claire скрыла возвращение, подделку и смертельный удар; она не знала, что Thomas уже побывал в мастерской.
+
+Первое повреждение объясняет кровь у левого края стола и следы на бронзовой статуэтке. Второе — более глубокую вмятину справа, кровь на основании лампы и причину смерти в заключении патологоанатома. Запись проходов и диктофон помещают оба эпизода в один вечер, разделённые примерно тридцатью пятью минутами. Журнал света относится к отдельной проверке Marcus. Счета Julian, футляр Elise и вырезанный фрагмент Vivian объясняют их ложь и умолчания, но не связывают их с убийством.`}
 ];
 
 const STORE_KEY="mindlab_archive_v1";
@@ -8709,9 +8940,10 @@ function renderCatalog(){
  const grid=document.getElementById("caseGrid");
  grid.innerHTML=CASES.map(c=>{
    const s=caseState(c.id), total=c.evidence.length;
-   const hasProgress=Boolean(s.found?.length||s.finished||s.chapter>0||s.seen?.length||s.links?.length||s.suspectLinks?.length||Object.keys(s.interrogations||{}).length);
+    const hasProgress=Boolean(s.found?.length||s.finished||s.chapter>0||s.seen?.length||s.links?.length||s.suspectLinks?.length||Object.keys(s.interrogations||{}).length||s.novel);
   const pct=s.finished?100:Math.round((s.found.length/total)*100);
-  const status=s.finished?"Завершено":s.found.length?"В процессе":"Не начато";
+   const novelProgress=c.id==="vale"&&s.novel&&s.novel.view!=="intro";
+   const status=s.finished?"Завершено":(s.found.length||novelProgress)?"В процессе":"Не начато";
   return `<article class="case-card">
     <div class="cover ${c.cover}"><span class="cover-label">MIND LAB / CASE ${c.number}</span></div>
     <div class="card-body">
@@ -8719,7 +8951,7 @@ function renderCatalog(){
       <p>${esc(c.short)}</p>
       <div class="meta"><span class="tag">${esc(c.difficulty)}</span><span class="tag">${esc(c.time)}</span></div>
       <div class="card-foot"><span class="muted" style="font-size:12px">${status}</span>
-      <div class="case-card-actions"><button class="btn ${s.found.length||s.finished?"btn-cyan":"btn-primary"}" data-open="${c.id}">${s.finished?"Пересмотреть":s.found.length?"Продолжить":"Начать"} →</button>
+       <div class="case-card-actions"><button class="btn ${s.found.length||s.finished||novelProgress?"btn-cyan":"btn-primary"}" data-open="${c.id}">${s.finished?"Пересмотреть":(s.found.length||novelProgress)?"Продолжить":"Начать"} →</button>
       ${hasProgress?`<button class="small-btn case-reset" type="button" data-reset-case="${c.id}" aria-label="Сбросить дело «${esc(c.title)}»" title="Сбросить только это дело">Сбросить дело</button>`:""}</div></div>
       <div class="progress"><div style="width:${pct}%"></div></div>
     </div></article>`;
@@ -8734,10 +8966,20 @@ function renderCatalog(){
  document.getElementById("statScore").textContent=state.score||0;
 }
 function openCase(id){
-selectedEvidence = [];
-deductionMessage = "";
- activeId=id;const c=CASES.find(x=>x.id===id),s=caseState(id);
- chapterIndex=Math.min(s.chapter,c.chapters.length-1);
+ selectedEvidence = [];
+ deductionMessage = "";
+  activeId=id;const c=CASES.find(x=>x.id===id),s=caseState(id);
+  if (id === "vale") {
+    document.getElementById("catalog").classList.add("hidden");
+    document.getElementById("game").classList.add("hidden");
+    document.getElementById("case004Screen").classList.remove("hidden");
+    normalizeCase004State();
+    saveState();
+    renderCase004();
+    window.scrollTo({top:0,behavior:"instant"});
+    return;
+  }
+  chapterIndex=Math.min(s.chapter,c.chapters.length-1);
  document.getElementById("catalog").classList.add("hidden");
  document.getElementById("game").classList.remove("hidden");
  const storyPanel = document.getElementById("storyPanel");
@@ -8751,7 +8993,327 @@ deductionMessage = "";
  }
  if(s.finished&&s.ending){renderEnding();return;}
  renderChapter();ping(620,.12);window.scrollTo({top:0,behavior:"smooth"});
+ }
+
+const CASE004_STORY = [
+  {title:"Человек, который слушал картины",text:`В галерее Adrian Vale никогда не включали музыку. Он говорил, что у картин уже есть собственный голос: треск старого лака, сухой шорох холста, едва заметное напряжение дерева в раме. Посетители принимали это за красивую привычку владельца. Сотрудники знали: Adrian мог провести целый вечер, не заметив, что остыл его кофе, потому что увидел под слоем краски чужую руку.
+
+Галерея занимала бывший банковский зал на Ривер-стрит. Днём здесь спорили о цене и происхождении полотен; за матовым стеклом в глубине здания находилась мастерская, где Adrian снимал старые подрамники, укреплял холст и проверял документы, прежде чем соглашаться на продажу. Он коллекционировал не громкие имена, а истории вещей — кто их хранил, кто менял подпись, что исчезло из каталога.
+
+К пятидесяти двум годам он научился быть обаятельным ровно настолько, чтобы люди забывали, как внимательно он их слушает. Но последнее время Adrian всё чаще запирал мастерскую и переносил разговоры на утро. В книге посетителей появлялись пометки, которые он никому не объяснял. Один конверт с бумагами он убирал в стол каждый раз, когда кто-то входил.
+
+Вечером, когда галерея закрылась, у каждого из шести людей вокруг него оставалась причина вернуться.`},
+  {title:"Julian Cross · безупречный баланс",text:`Julian Cross управлял галереей так, как дирижёр ведёт оркестр: без видимого усилия и с точным пониманием, кто вступит следующим. Adrian доверил ему счета, расписание выставок и переговоры с владельцами коллекций. В ответ Julian превратил маленькую галерею в место, куда приезжали кураторы из Бостона и Лондона.
+
+Их дружба держалась на старой договорённости: Julian не притворяется знатоком реставрации, Adrian не вмешивается в ежедневную бухгалтерию. В последние месяцы границы стали размываться. Несколько счетов за перевозку и страховку задержались; Adrian потребовал оригиналы договоров, хотя прежде ему хватало сводки. Julian назвал это обычной проверкой перед налоговым аудитом. Он улыбнулся, произнося это, но не снял пальто, хотя в кабинете было тепло.
+
+«Ты всегда выбираешь самый неподходящий момент для доверия», — сказал он Adrian утром, когда тот вернул ему папку с закладками.
+
+«Я выбираю момент, когда цифры перестают сходиться», — ответил Adrian.
+
+Julian мог потерять должность, репутацию и право распоряжаться коллекцией. Но его беспокойство не доказывало, что он сделал что-либо с Adrian. В ту ночь он утверждал, что ушёл до закрытия мастерской и больше не возвращался.`},
+  {title:"Elise Moreau · тонкая работа",text:`Elise Moreau работала в мастерской четвёртый год. Она умела так укрепить осыпающийся слой краски, что вмешательство было почти невозможно заметить, и так же умело скрывала собственное раздражение, когда Adrian просил переделать уже законченный участок.
+
+Он научил её главному правилу реставратора: не заполнять утрату тем, что хочется увидеть. Сначала документируй повреждение. Потом решай, что можно сохранить. Для Elise это правило относилось и к людям. Она не рассказывала коллегам, что в начале года один холст пострадал из-за неверно закреплённой лампы. Adrian заметил след, но не сообщил страховой компании, дав ей неделю на исправление. Его молчание она помнила как долг, а не как доброту.
+
+За день до происшествия Elise просила разрешения забрать из раздевалки потёртый синий футляр. Adrian велел ей подождать до инвентаризации. Футляр был её личной вещью, но она опасалась, что внутри лежит инструмент, который галерея считала собственным. После закрытия она вернулась в здание, не отметившись у охраны, и ушла через служебную лестницу.
+
+Когда детектив спросил о втором визите, Elise сразу поняла, что её могут уволить. Она не боялась самого вопроса — она боялась потерять работу, прежде чем успеет объяснить, почему промолчала.`},
+  {title:"Thomas Reed · цена происхождения",text:`Thomas Reed покупал и продавал искусство быстрее, чем большинство людей успевало прочесть подпись на обороте. Он и Adrian познакомились пятнадцать лет назад на аукционе в Чикаго: один хотел продать картину, другой — понять, почему её оценили втрое дешевле похожей работы. С тех пор они то помогали друг другу, то неделями не разговаривали.
+
+Для Thomas происхождение предмета было частью сделки; для Adrian — частью самого предмета. Их последняя ссора началась из-за небольшого рисунка, который Thomas собирался выставить как работу неизвестного ученика. Adrian нашёл в старом каталоге совпадающий след подписи и попросил приостановить продажу. Thomas ответил, что Adrian превратил осторожность в привычку мешать всем вокруг.
+
+На благотворительном ужине он всё же поднял бокал за новую выставку галереи и назвал Adrian единственным человеком, которому доверил бы закрытую коллекцию. Это прозвучало искренне — возможно, потому что так и было. Но после ужина Thomas позвонил ему ещё раз. О чём они говорили, он не сообщил.
+
+Вечером происшествия торговец сказал, что провёл время за городом. В книге входов его имени не было. Полиция отметила его имя в числе тех, кто спорил с Adrian в последние недели, но не нашла причины задерживать его.`},
+  {title:"Claire Bennett · общая история",text:`Ещё до галереи, ещё до коллекции, в жизни Adrian была Claire Bennett. Они вместе открыли небольшое пространство в помещении бывшей типографии, когда денег хватало только на аренду и краску для стен. Claire находила инвесторов, Adrian — работы. Несколько лет они были партнёрами и в бизнесе, и в жизни; расстались тихо, без делёжки газетных заголовков.
+
+Claire ушла в фонд, который помогал частным коллекциям переходить в общественные музеи. Она по-прежнему знала сотрудников галереи и могла пройти в здание, не объясняясь у стойки. Adrian хранил в мастерской бумаги, связанные с их ранними покупками. Иногда он просил Claire взглянуть на старую переписку: не потому, что подозревал её, а потому, что помнил детали лучше, чем даты.
+
+«Ты оставил у себя половину нашей жизни», — сказала она однажды, увидев коробку с прежними каталогами.
+
+«Только бумагу», — ответил Adrian.
+
+В последнее время Claire спрашивала, не сохранилась ли переписка по ранним покупкам фонда. Она объясняла это незакрытым вопросом по одной из картин. Adrian обещал поискать бумаги после выставки. Для обоих этот разговор звучал как продолжение старого дела, которое так и не получило последней подписи.`},
+  {title:"Marcus Bell · электрический шум",text:`Marcus Bell знал здание лучше, чем его собственный план эвакуации. Он мог на слух определить, какая вентиляционная заслонка заедает, и помнил, где прежний владелец спрятал рубильник, отключённый ещё до ремонта. В галерее его уважали, пока всё работало; стоило погаснуть одной лампе — о нём вспоминали сразу все.
+
+Adrian относился к Marcus без снисхождения, но и без терпения. Несколько месяцев назад он запретил технику обходить подрядчика и подключать оборудование напрямую к старой линии. Marcus уверял, что это временно: иначе нельзя было проверить, выдержит ли система свет для новой выставки. Он не получил разрешения и не записал работы в журнал.
+
+В день происшествия Marcus попросил Julian подписать заявку на ремонт. Julian отложил её. К вечеру техник решил провести короткую проверку сам. Он говорил, что свет погас всего на несколько минут и что в это время находился в электрощитовой.
+
+Если бы Adrian узнал о самовольном подключении, Marcus лишился бы контракта. Это объясняло, почему он сначала отрицал отключение. Не объясняло, почему в журнале автоматики осталась запись, сделанная вручную, — и кто именно попросил не включать её в отчёт.`},
+  {title:"Vivian Shaw · запись с краю стола",text:`Vivian Shaw пришла в галерею за статьёй о том, как частные коллекции переживают смену владельцев. Она знала, что Adrian не любит интервью, поэтому принесла маленький диктофон, записала его разрешение и убрала устройство в сумку, когда он попросил не включать в текст имена одного из источников.
+
+Для Vivian источник был важнее заголовка. Её расследование касалось нескольких картин, прошедших через одинаковую цепочку фондов и частных продаж. Adrian помог ей сверить даты, но отказался говорить, кто первым обратил его внимание на несоответствие. Vivian обещала не публиковать имя без согласия. Обещание стоило ей самого простого способа доказать свою историю.
+
+Перед уходом Adrian попросил её оставить запись до утра: на ней был фрагмент разговора, который мог защитить человека, не участвовавшего в сделке. Vivian согласилась. Позже она сказала полиции, что диктофон выключила у выхода. Она не упомянула, что файл продолжился ещё несколько минут, а потом внезапно оборвался.
+
+В редакции Vivian привыкла отстаивать разницу между тем, что она знает, и тем, что может напечатать. В ту ночь эта разница стала похожа на молчание.`},
+  {title:"Когда погас главный зал",text:`К девяти вечера галерея опустела. Дождь ещё не начался, но окна уже отражали тёмную улицу, и выставочные залы казались глубже, чем днём. Julian ушёл первым. Elise забрала пальто из раздевалки. Vivian вызвала машину и уехала с диктофоном в сумке. Marcus остался у щитка, проверяя световую линию.
+
+Adrian закрыл дверь мастерской, но не запер её. На столе лежали каталоги, пара перчаток и конверт, который он обещал разобрать утром. В коридоре тихо щёлкнуло реле. Потом снова стало слышно только вентиляцию.
+
+Через сорок минут охрана зарегистрировала вход по старому коду. Позже в системе появилась короткая потеря питания. В журнале стояли две записи, не похожие друг на друга ни временем, ни способом доступа. Ни одна из них не объясняла, что происходило за закрытой дверью.
+
+Когда детектив прибыл на Ривер-стрит, мастерская уже была залита холодным светом. Adrian Vale лежал у рабочего стола. На полу блестели осколки бокала. Конверта не было.
+
+Сначала это выглядело как одно преступление, совершённое одним человеком. Но прежде чем задавать вопросы, нужно было научиться читать комнату.`}
+];
+
+function case004State() { return caseState("vale"); }
+function case004DisplayNames(value) {
+  let text=String(value??"");
+  const forms=[
+    ["галерее Adrian Vale","галерее Адриана Вейла"],["галерея Adrian Vale","галерея Адриана Вейла"],["владельца Adrian Vale","владельца Адриана Вейла"],["с Adrian Vale","с Адрианом Вейлом"],["к Adrian Vale","к Адриану Вейлу"],["у Adrian Vale","у Адриана Вейла"],["после Adrian Vale","после Адриана Вейла"],
+    ["между вами и Adrian","между вами и Адрианом"],["с Adrian","с Адрианом"],["перед Adrian","перед Адрианом"],["рядом с Adrian","рядом с Адрианом"],
+    ["кровь Adrian","кровь Адриана"],["голосом Adrian","голосом Адриана"],["голос Adrian","голос Адриана"],["устройство Adrian","устройство Адриана"],["Устройство Adrian","Устройство Адриана"],["диктофон Adrian","диктофон Адриана"],["Диктофон Adrian","Диктофон Адриана"],["имя Adrian","имя Адриана"],["партнёрша Adrian","партнёрша Адриана"],["партнерша Adrian","партнерша Адриана"],["галереи Adrian","галереи Адриана"],["жизни Adrian","жизни Адриана"],["мастерскую Adrian","мастерскую Адриана"],["коллекцию Adrian","коллекцию Адриана"],["коллекция Adrian","коллекция Адриана"],["коллекции Adrian","коллекции Адриана"],["подпись Adrian","подпись Адриана"],["документы Adrian","документы Адриана"],["архив Adrian","архив Адриана"],["смерть Adrian","смерть Адриана"],["смерти Adrian","смерти Адриана"],["убийство Adrian","убийство Адриана"],["убийства Adrian","убийства Адриана"],["на Adrian","на Адриана"],["по Adrian","по Адриану"],["ударил Adrian","ударил Адриана"],["ударить Adrian","ударить Адриана"],["напал на Adrian","напал на Адриана"],["назвал Adrian единственным","назвал Адриана единственным"],["между Adrian и мной","между Адрианом и мной"],["Этот — Adrian","Этот диктофон принадлежит Адриану"],["сказал он Adrian","сказал он Адриану"],["сказала Adrian","сказала Адриану"],["ответил Adrian","ответил Адриан"],["о Adrian","об Адриане"],["об Adrian","об Адриане"],["к Adrian","к Адриану"],["у Adrian","у Адриана"],["для Adrian","для Адриана"],["из Adrian","из Адриана"],["от Adrian","от Адриана"],["после Adrian","после Адриана"],
+    ["Подпись Julian Cross","Подпись Джулиана Кросса"],["подпись Julian Cross","подпись Джулиана Кросса"],["Счета Julian","Счета Джулиана"],["счета Julian","счета Джулиана"],["счёта Julian","счёта Джулиана"],["скрытности Julian","скрытности Джулиана"],["к Julian","к Джулиану"],["с Julian","с Джулианом"],["у Julian","у Джулиана"],
+    ["проверкой Marcus Bell","проверкой Маркуса Белла"],["проверкой Marcus","проверкой Маркуса"],["проверке Marcus Bell","проверке Маркуса Белла"],["проверки Marcus Bell","проверки Маркуса Белла"],["проверки Marcus","проверки Маркуса"],["проверке Marcus","проверке Маркуса"],["к Marcus","к Маркусу"],["с Marcus","с Маркусом"],["у Marcus","у Маркуса"],
+    ["у Thomas Reed","у Томаса Рида"],["для Thomas Reed","для Томаса Рида"],["с Thomas Reed","с Томасом Ридом"],["у Thomas","у Томаса"],["для Thomas","для Томаса"],["с Thomas","с Томасом"],["к Thomas","к Томасу"],["о Thomas","о Томасе"],["об Thomas","об Томасе"],["после Thomas","после Томаса"],
+    ["Голос Adrian","Голос Адриана"],["голос Adrian","голос Адриана"],["галерей Vale","галерей Вейла"],["галереей Vale","галереей Вейла"],["галереи Vale","галереи Вейла"],["в галерее Vale","в галерее Вейла"],["фонд Bennett","фонд Беннетт"],["фонда Bennett","фонда Беннетт"]
+  ];
+  for (const [from,to] of forms) {
+    const escaped=from.replace(/[.*+?^${}()|[\]\\]/g,"\\$&");
+    text=text.replace(new RegExp(`(^|[^A-Za-zА-Яа-яЁё0-9])${escaped}(?![A-Za-zА-Яа-яЁё0-9])`,"g"),(_match,prefix)=>prefix+to);
+  }
+  for (const [from,to] of [["Adrian Vale","Адриан Вейл"],["Julian Cross","Джулиан Кросс"],["Elise Moreau","Элиз Моро"],["Thomas Reed","Томас Рид"],["Claire Bennett","Клэр Беннетт"],["Marcus Bell","Маркус Белл"],["Vivian Shaw","Вивиан Шоу"],["Adrian","Адриан"],["Julian","Джулиан"],["Elise","Элиз"],["Thomas","Томас"],["Claire","Клэр"],["Marcus","Маркус"],["Vivian","Вивиан"],["Vale","Вейл"],["Cross","Кросс"],["Moreau","Моро"],["Reed","Рид"],["Bennett","Беннетт"],["Bell","Белл"],["Shaw","Шоу"]]) text=text.replaceAll(from,to);
+  return text;
 }
+function case004Escape(value) { return esc(case004DisplayNames(value)); }
+function case004Paragraphs(value) { return String(value??"").split(/\n\s*\n/).map(paragraph=>`<p>${case004Escape(paragraph.trim())}</p>`).join(""); }
+function case004Evidence(id) { return CASE_004.evidence.find(item => item[0] === id); }
+function case004Suspect(id) { return CASE_004.suspects.find(item => item.id === id); }
+const CASE004_ASSETS={cover:"./assets/case004/case004-cover.png",workshop:"./assets/case004/case004-workshop.png",interview:"./assets/case004/case004-interrogation-room.png",reconstructionFirst:"./assets/case004/reconstruction-thomas-first-attack.png",reconstructionSecond:"./assets/case004/reconstruction-claire-fatal-attack.png"};
+const CASE004_SCENES=["scene-01-adrian-gallery.png","scene-02-julian-office.png","scene-03-elise-restoration.png","scene-04-thomas-meeting.png","scene-05-claire-archive.png","scene-06-marcus-electrical.png","scene-07-vivian-interview.png","scene-08-gallery-exterior.png"].map(file=>`./assets/case004/${file}`);
+const CASE004_PORTRAITS={julian:"portrait-julian-cross.png",elise:"portrait-elise-moreau.png",thomas:"portrait-thomas-reed.png",claire:"portrait-claire-bennett.png",marcus:"portrait-marcus-bell.png",vivian:"portrait-vivian-shaw.png"};
+const CASE004_INTERVIEW_ART={
+  julian:{calm:"interrogation-julian-calm.png",uneasy:"interrogation-julian-uneasy.png",alarmed:"interrogation-julian-alarmed.png"},
+  elise:{calm:"interrogation-elise-calm.png",uneasy:"interrogation-elise-uneasy.png"},
+  thomas:{calm:"interrogation-thomas-calm.png",uneasy:"interrogation-thomas-uneasy.png",alarmed:"interrogation-thomas-alarmed.png"},
+  claire:{calm:"interrogation-claire-calm.png",uneasy:"interrogation-claire-uneasy.png",alarmed:"interrogation-claire-alarmed.png"},
+  marcus:{calm:"interrogation-marcus-calm.png",uneasy:"interrogation-marcus-uneasy.png"},
+  vivian:{calm:"interrogation-vivian-calm.png",uneasy:"interrogation-vivian-uneasy.png"}
+};
+const CASE004_EVIDENCE_IMAGES={statuette:"evidence-statuette.png",glass:"evidence-broken-glass.png",desk:"evidence-worktable.png",envelope:"evidence-empty-envelope-drawer.png",entrylog:"evidence-entry-reader.png",expert:"evidence-forensic-report.png",recorder:"evidence-voice-recorder.png",lightlog:"evidence-breaker-panel.png",ledger:"evidence-ledger.png",restorationTag:"evidence-restoration-tag.png",lampbase:"evidence-lampbase.png"};
+function case004Expression(history={},suspectId="") {
+  if(history.emotion==="признание"||history.emotion==="потрясённое"||Number(history.confidence)<=25)return "alarmed";
+  if(suspectId==="julian"&&Number(history.confidence)<=65)return "alarmed";
+  if(Number(history.confidence)<=65||["напряжённое","настороженное","смущённое","раздражённое"].includes(history.emotion))return "uneasy";
+  return "calm";
+}
+function case004BindVisuals(root=document.getElementById("case004Main")) {
+  if(!root)return;
+  root.querySelectorAll("[data-c4-art]").forEach(el=>{
+    const kind=el.dataset.c4Art||"";let url=CASE004_ASSETS.workshop;
+    if(kind==="cover")url=CASE004_ASSETS.cover;
+    else if(kind==="workshop")url=CASE004_ASSETS.workshop;
+    else if(kind.startsWith("story:"))url=CASE004_SCENES[Math.max(0,Math.min(7,Number(kind.split(":")[1])||0))];
+    else if(kind.startsWith("reconstruction:")){const i=(Number(kind.split(":")[1])||0)%3;url=i===0?CASE004_ASSETS.reconstructionFirst:i===1?CASE004_ASSETS.reconstructionSecond:CASE004_ASSETS.workshop;}
+    el.classList.add("has-image");el.style.backgroundImage=`linear-gradient(0deg,#090d1b66,transparent 58%),url("${url}")`;el.style.backgroundSize="100% 100%,cover";el.style.backgroundPosition="center,center";
+  });
+  root.querySelectorAll("[data-c4-portrait]").forEach(el=>{const file=CASE004_PORTRAITS[el.dataset.c4Portrait];if(!file)return;el.classList.add("has-image");el.style.backgroundImage=`url("./assets/case004/${file}")`;el.style.backgroundSize="cover";el.style.backgroundPosition="center";});
+  root.querySelectorAll("[data-c4-interview-portrait]").forEach(el=>{const id=el.dataset.c4InterviewPortrait,history=case004State().novel?.interrogations?.[id]||{},set=CASE004_INTERVIEW_ART[id]||{},file=set[case004Expression(history,id)]||set.calm;if(!file)return;el.style.backgroundImage=`url("./assets/case004/${file}")`;});
+  root.querySelectorAll("[data-c4-evidence-visual]").forEach(el=>{const file=CASE004_EVIDENCE_IMAGES[el.dataset.c4EvidenceVisual];if(!file)return;el.style.backgroundImage=`url("./assets/case004/${file}")`;el.style.backgroundSize="contain";el.style.backgroundPosition="center";});
+}
+function normalizeCase004State() {
+  const s=case004State();
+  if (!s.novel || typeof s.novel !== "object" || Array.isArray(s.novel)) s.novel={};
+  const n=s.novel;
+  if (!Number.isInteger(n.schema)) n.schema=1;
+  if (typeof n.view!=="string") n.view="intro";
+  if (!Number.isInteger(Number(n.scene))) n.scene=0;
+  if (!n.interrogations || typeof n.interrogations!=="object" || Array.isArray(n.interrogations)) n.interrogations={};
+  if (!n.finalAnswers || typeof n.finalAnswers!=="object" || Array.isArray(n.finalAnswers)) n.finalAnswers={};
+  if (!Array.isArray(n.readEvidence)) n.readEvidence=[];
+  if (!Number.isInteger(Number(n.reconstructionStep))) n.reconstructionStep=0;
+  if (!Number.isInteger(Number(n.finalStep))) n.finalStep=0;
+  if (!n.archiveFilter) n.archiveFilter="all";
+  if (!Array.isArray(s.found)) s.found=[];
+  if (!new Set(["intro","story","crime","archive","suspects","suspect","interrogation","final","reconstruction","ending"]).has(n.view)) n.view="intro";
+  n.scene=Math.max(0,Math.min(CASE004_STORY.length-1,Number(n.scene)));
+  n.reconstructionStep=Math.max(0,Math.min(CASE004_RECONSTRUCTION.length-1,Number(n.reconstructionStep)));
+  n.finalStep=Math.max(0,Math.min(CASE004_FINAL_QUESTIONS.length-1,Number(n.finalStep)));
+  for (const p of CASE_004.suspects) {
+    let h=n.interrogations[p.id];
+    if (!h || typeof h!=="object" || Array.isArray(h)) h=n.interrogations[p.id]={seen:false,asked:[],presented:[],confidence:78,emotion:"нейтральное",lastResponse:""};
+    if (!Array.isArray(h.asked)) h.asked=[];
+    if (!Array.isArray(h.presented)) h.presented=[];
+    const validQuestions=new Set((CASE004_DIALOGUES[p.id]||[]).map(question=>question.id));
+    h.asked=[...new Set(h.asked.map(String).filter(id=>validQuestions.has(id)))];
+    h.presented=[...new Set(h.presented.filter(id=>Boolean(case004Evidence(id))))];
+    h.confidence=Math.max(0,Math.min(100,Number.isFinite(Number(h.confidence))?Number(h.confidence):78));
+    if(!h.seen&&!h.asked.length&&!h.presented.length&&h.confidence===50)h.confidence=78;
+    if (!h.emotion) h.emotion="нейтральное";
+  }
+  s.found=[...new Set(s.found.filter(id=>Boolean(case004Evidence(id))))];
+  n.readEvidence=[...new Set(n.readEvidence.filter(id=>s.found.includes(id)))];
+  if (n.selectedSuspect&&!case004Suspect(n.selectedSuspect)) n.selectedSuspect=null;
+  return s;
+}
+function case004SetView(view) { const n=case004State().novel; n.view=view; saveState(); renderCase004(); document.getElementById("case004Screen").scrollTop=0; }
+function case004Progress() {
+  const s=case004State();
+  document.getElementById("case004ClueCount").textContent=String(s.found.length);
+}
+function renderCase004() {
+  const root=document.getElementById("case004Main"), s=normalizeCase004State(), n=s.novel;
+  if (!root || !n) return;
+  case004Progress();
+  const button=(label,action,secondary=false)=>`<button class="case004-button${secondary?" secondary":""}" type="button" data-c4-action="${action}">${label}</button>`;
+  if (n.view === "intro") {
+    root.innerHTML=`<section class="case004-scene"><div class="case004-art" data-c4-art="cover"><span class="case004-art-label">Галерея Вейла · Нью-Йорк</span></div><div class="case004-copy"><div class="case004-kicker">Дело 004 · Интерактивный детективный роман</div><h1>Смерть между двумя ударами</h1><div class="case004-prose"><p>Адриан Вейл собирал произведения искусства и давал им новую жизнь в мастерской за главным залом своей галереи. В эту ночь тишина мастерской оборвалась — и привычный круг его знакомых оказался втянут в расследование.</p><p>Читайте историю в своём темпе, осматривайте сцены и возвращайтесь к собранным материалам, когда захотите.</p></div><div class="case004-foot"><span class="case004-progress">НОВЫЙ РОМАН · ПРОГРЕСС СОХРАНЯЕТСЯ</span>${button("Начать чтение →","start")}</div></div></section>`;
+    case004BindVisuals(root);
+    return;
+  }
+  if (n.view === "story") {
+    const scene=CASE004_STORY[Math.min(n.scene,CASE004_STORY.length-1)];
+    root.innerHTML=`<section class="case004-scene"><div class="case004-art" data-c4-art="story:${n.scene}"><span class="case004-art-label">${case004Escape(scene.title)}</span></div><div class="case004-copy"><div class="case004-kicker">Пролог · ${n.scene+1} из ${CASE004_STORY.length}</div><h2>${case004Escape(scene.title)}</h2><div class="case004-prose">${case004Paragraphs(scene.text)}</div><div class="case004-foot"><span class="case004-progress">ГЛАВА ${String(n.scene+1).padStart(2,"0")}</span>${button(n.scene===CASE004_STORY.length-1?"К месту происшествия →":"Далее →","next")}</div></div></section>`;
+    case004BindVisuals(root);
+    return;
+  }
+  if (n.view === "crime") {
+    const allRead=s.found.length>=CASE_004.evidence.length;
+    root.innerHTML=`<section class="case004-stage"><div class="case004-image-area"><div class="case004-art" data-c4-art="workshop"><span class="case004-art-label">Мастерская Адриана · место происшествия</span></div>${CASE_004.evidence.map(([id])=>`<button class="case004-hotspot ${s.found.includes(id)?"is-read":""}" type="button" data-c4-evidence="${id}" aria-label="Изучить улику: ${case004Escape(case004Evidence(id)[1])}" title="${case004Escape(case004Evidence(id)[1])}"></button>`).join("")}</div><div class="case004-scene-panel"><div class="case004-kicker">Осмотр мастерской</div><h2 class="case004-title">Комната хранит следы вечера</h2><div class="case004-prose"><p>Изучите предметы и документы, оставшиеся после приезда следствия. Нажмите на мягко подсвеченные области внутри иллюстрации. Полные описания сохранятся в архиве, и к ним можно будет вернуться после допросов.</p></div><div class="case004-foot"><span class="case004-progress">${allRead?"Осмотр завершён · все материалы собраны":`Осмотрено ${s.found.length} из ${CASE_004.evidence.length} материалов`}</span>${allRead?button("Далее →","suspects"):`<button class="case004-button secondary" type="button" disabled aria-disabled="true">Далее · ${s.found.length}/${CASE_004.evidence.length}</button>`}</div></div></section>`;
+    case004BindVisuals(root);
+    return;
+  }
+  if (n.view === "archive") {
+    const categories={all:"Все",physical:"Физические",documents:"Документы",records:"Журналы",testimony:"Записи",expert:"Экспертные"};
+    const visible=s.found.filter(id=>n.archiveFilter==="all"||CASE004_EVIDENCE_META[id]?.category===n.archiveFilter);
+    root.innerHTML=`<div class="case004-kicker">Личные материалы дела</div><h2 class="case004-title">Архив улик</h2><p class="case004-muted">Полные описания изученных материалов остаются здесь. Новые выводы появятся отдельно после допросов.</p><div class="case004-actions">${Object.entries(categories).map(([id,label])=>`<button class="case004-choice" data-c4-filter="${id}" aria-pressed="${n.archiveFilter===id}">${label}</button>`).join("")}</div>${visible.length?`<div>${visible.map(id=>{const e=case004Evidence(id),category=categories[CASE004_EVIDENCE_META[id]?.category]||"Материал";return `<button class="case004-choice case004-evidence-row" data-c4-evidence="${id}"><span class="case004-archive-thumb" data-c4-evidence-visual="${id}"></span><span><b>${case004Escape(e[1])}</b><span class="case004-muted">${category} · ${case004Escape(e[2])}</span></span></button>`}).join("")}</div>`:"<p class=\"case004-muted\">В этой категории пока нет изученных материалов.</p>"}<div class="case004-actions">${button("Вернуться к расследованию","resume",true)}</div>`;
+    case004BindVisuals(root);
+    return;
+  }
+  if (n.view === "suspects") {
+    const allInterrogated=CASE_004.suspects.every(p=>n.interrogations[p.id]?.seen);
+    root.innerHTML=`<div class="case004-kicker">Люди из окружения Адриана</div><h2 class="case004-title">Шесть историй, один вечер</h2><p class="case004-muted">Откройте портрет персонажа, чтобы прочитать его досье и перейти к беседе.</p><div class="case004-grid">${CASE_004.suspects.map(p=>`<article class="case004-card"><button data-c4-suspect="${p.id}"><div class="case004-portrait" data-c4-portrait="${p.id}"></div><div class="case004-card-body"><h3>${case004Escape(p.name)}</h3><div class="case004-muted">${case004Escape(p.role)}</div><div class="case004-muted">${n.interrogations[p.id]?.seen?"Беседа начата":"Досье не изучено"}</div></div></button></article>`).join("")}</div><div class="case004-actions">${allInterrogated?button("Перейти к финальным вопросам →","final",true):`<button class="case004-choice" disabled>Финальные вопросы откроются после бесед со всеми шестью персонажами.</button>`}</div>`;
+    case004BindVisuals(root);
+    return;
+  }
+  if (n.view === "suspect") {
+    const p=case004Suspect(n.selectedSuspect); if(!p){n.view="suspects";renderCase004();return;}
+    root.innerHTML=`<div class="case004-dialog"><div class="case004-dialog-top"><div class="case004-portrait" data-c4-portrait="${p.id}"></div><div><div class="case004-kicker">Досье подозреваемого</div><h2 class="case004-title">${case004Escape(p.name)}</h2><div class="case004-muted">${case004Escape(p.role)}</div></div></div><div class="case004-prose"><p>${case004Escape(p.desc)}</p><p>Вы уже познакомились с тем, как Adrian вписал этого человека в жизнь галереи. Теперь можно услышать его собственную версию вечера.</p></div><div class="case004-actions">${button("Начать беседу","interrogate")}${button("К галерее персонажей","suspects",true)}</div></div>`;
+    case004BindVisuals(root);
+    return;
+  }
+  if (n.view === "interrogation") {
+    const p=case004Suspect(n.selectedSuspect); if(!p){n.view="suspects";renderCase004();return;}
+    const history=n.interrogations[p.id]||(n.interrogations[p.id]={seen:true,asked:[],presented:[],confidence:78,emotion:"нейтральное"});
+    const questions=(CASE004_DIALOGUES[p.id]||[]).filter(q=>(q.requires||[]).every(id=>s.found.includes(id)));
+    const confidence=Math.round(history.confidence);
+    const uncertaintyLabel=confidence<=25?"Сильно сомневается":confidence<=60?"В показаниях появились сомнения":"Держится уверенно";
+    root.innerHTML=`<section class="case004-interview-layout"><div class="case004-interview-figure"><div class="case004-interview-art" data-c4-interview-portrait="${p.id}" role="img" aria-label="${case004Escape(p.name)} сидит за столом в комнате для допроса"></div><div class="case004-interview-caption"><strong>${case004Escape(p.name)}</strong><span>${case004Escape(history.emotion||"нейтральное")}</span></div></div><div class="case004-interview-side"><div class="case004-interview-top"><div><div class="case004-kicker">Комната допроса · дело 004</div><h2>${case004Escape(p.name)}</h2><div class="case004-muted">${case004Escape(p.role)}</div></div></div><div class="case004-uncertainty"><div class="case004-uncertainty-label"><span>Уверенность в своих показаниях</span><strong>${confidence}% · ${uncertaintyLabel}</strong></div><div class="case004-uncertainty-track"><i style="width:${confidence}%;background:${confidence<=25?"#ff5eaa":confidence<=60?"#a98bff":"#52ddf5"}"></i></div></div><div class="case004-interview-dialogue" aria-live="polite"><p>${history.lastResponse?case004Escape(history.lastResponse):`Вы сидите напротив ${case004Escape(p.name)}. Между вами — стол и стеклянная перегородка допросной. Начните с разговора о работе в галерее и истории отношений с Адрианом.`}</p></div><div class="case004-interview-topics"><details open><summary>Задать вопрос · ${questions.length}</summary><div class="case004-actions">${questions.map(q=>`<button class="case004-choice" data-c4-question="${q.id}" ${history.asked.includes(q.id)?"disabled":""}>${case004Escape(q.title)}${history.asked.includes(q.id)?" · задано":""}</button>`).join("")||"<span class=\"case004-muted\">Пока нет новых вопросов. Вернитесь к материалам дела.</span>"}</div></details><details data-c4-panel="evidence" ${history.evidencePanelOpen?"open":""}><summary>Предъявить улику · ${s.found.length}</summary><div class="case004-actions">${s.found.map(id=>{const e=case004Evidence(id);return `<button class="case004-choice" data-c4-present="${id}" ${history.presented.includes(id)?"disabled":""}>${case004Escape(e[1])}${history.presented.includes(id)?" · предъявлена":""}</button>`}).join("")||"<span class=\"case004-muted\">Сначала изучите материалы мастерской.</span>"}</div></details></div><div class="case004-interview-footer">${button("К досье персонажа","suspect",true)}${button("Вернуться к подозреваемым","suspects",true)}</div></div></section>`;
+    const evidencePanel=root.querySelector('[data-c4-panel="evidence"]');
+    if(evidencePanel)evidencePanel.addEventListener("toggle",()=>{history.evidencePanelOpen=evidencePanel.open;saveState();});
+    case004BindVisuals(root);
+    return;
+  }
+  if (n.view === "final") {
+    const q=CASE004_FINAL_QUESTIONS[n.finalStep];
+    if(!q){n.view="reconstruction";n.reconstructionStep=0;saveState();renderCase004();return;}
+    root.innerHTML=`<div class="case004-kicker">Финальные вопросы · ${n.finalStep+1} из ${CASE004_FINAL_QUESTIONS.length}</div><h2 class="case004-title">${case004Escape(q.title)}</h2><p class="case004-prose">${case004Escape(q.prompt)}</p><div class="case004-actions case004-answer-list">${q.options.map(([id,label])=>`<button class="case004-choice" data-c4-answer="${id}">${case004Escape(label)}</button>`).join("")}</div>${n.lastAnswerFeedback?`<p class="case004-feedback" role="status">${case004Escape(n.lastAnswerFeedback)}</p>`:""}<div class="case004-actions">${button("Перечитать материалы","archive",true)}${button("Вернуться к допросам","suspects",true)}</div>`;
+    return;
+  }
+  if (n.view === "reconstruction") {
+    const step=CASE004_RECONSTRUCTION[Math.min(n.reconstructionStep,CASE004_RECONSTRUCTION.length-1)];
+    root.innerHTML=`<section class="case004-scene"><div class="case004-art" data-c4-art="reconstruction:${n.reconstructionStep}"><span class="case004-art-label">Полная реконструкция</span></div><div class="case004-copy"><div class="case004-kicker">Последовательность событий · ${n.reconstructionStep+1} из ${CASE004_RECONSTRUCTION.length}</div><h2>${case004Escape(step.title)}</h2><div class="case004-prose">${case004Paragraphs(step.text)}</div><div class="case004-foot"><span class="case004-progress">ВЕРСИЯ ПОДТВЕРЖДЕНА МАТЕРИАЛАМИ</span>${button(n.reconstructionStep===CASE004_RECONSTRUCTION.length-1?"Эпилог →":"Далее →","reconstructionNext")}</div></div></section>`;
+    case004BindVisuals(root);
+    return;
+  }
+  if (n.view === "ending") {
+    root.innerHTML=`<div class="case004-kicker">Расследование завершено · ${CASE004_FINAL_QUESTIONS.length} из ${CASE004_FINAL_QUESTIONS.length} выводов подтверждены</div><h2 class="case004-title">Два удара. Две отдельные истории.</h2><div class="case004-prose"><p>Томас Рид нанёс первый удар и ушёл, считая Адриана мёртвым. Клэр Беннетт вернулась позже, услышала его голос и решила убить его, чтобы скрыть подделку. Их поступки не были сговором.</p><p>Раскрыто: время и следы первого нападения; непосредственная причина смерти; роль конверта; независимость действий. Неразрешённых вопросов, меняющих вывод, не осталось.</p></div><div class="case004-actions">${button("Вернуться к материалам","archive",true)}${button("Вернуться к допросам","suspects",true)}${button("В архив дел","exit")}</div>`;
+  }
+}
+
+function showCase004Evidence(id) {
+  const e=case004Evidence(id); if(!e) return;
+  const s=case004State(), n=s.novel, modal=document.getElementById("case004Modal");
+  if(!s.found.includes(id))s.found.push(id);
+  if(!n.readEvidence.includes(id))n.readEvidence.push(id);
+  n.returnView=n.view; saveState(); case004Progress();
+  modal.hidden=false;
+  modal.innerHTML=`<article class="case004-modal-card"><div class="case004-evidence-large" data-c4-evidence-visual="${id}" role="img" aria-label="${case004Escape(e[1])}"></div><div class="case004-kicker" style="margin-top:22px">Материал дела · изучено</div><h2 class="case004-title">${case004Escape(e[1])}</h2><div class="case004-prose"><p>${case004Escape(e[2])}</p></div><div class="case004-actions"><button class="case004-button" data-c4-action="closeEvidence">Вернуться к осмотру</button></div></article>`;
+  case004BindVisuals(modal);
+}
+
+function case004Action(action, target) {
+  const s=case004State(), n=s.novel;
+  if(action==="exit"){document.getElementById("case004Screen").classList.add("hidden");renderCatalog();return;}
+  if(action==="archive"){n.returnView=n.view;case004SetView("archive");return;}
+  if(action==="resume"){case004SetView(n.returnView||"crime");return;}
+  if(action==="start"){n.scene=0;case004SetView("story");return;}
+  if(action==="next") { if(n.scene<CASE004_STORY.length-1){n.scene++;n.view="story";}else n.view="crime";s.chapter=n.scene;saveState();renderCase004();document.getElementById("case004Screen").scrollTop=0;return; }
+  if(action==="suspects"){case004SetView("suspects");return;}
+  if(action==="interrogate"){const p=n.selectedSuspect; n.interrogations[p]=n.interrogations[p]||{seen:true,asked:[],presented:[],confidence:78,emotion:"нейтральное"};n.interrogations[p].seen=true;case004SetView("interrogation");return;}
+  if(action==="suspect"){case004SetView("suspect");return;}
+  if(action==="final"){
+    if(!CASE_004.suspects.every(p=>n.interrogations[p.id]?.seen))return;
+    n.finalStep=0;n.lastAnswerFeedback="";case004SetView("final");return;
+  }
+  if(action==="reconstructionNext"){
+    if(n.reconstructionStep<CASE004_RECONSTRUCTION.length-1){n.reconstructionStep++;saveState();renderCase004();document.getElementById("case004Screen").scrollTop=0;return;}
+    if(!s.finished){s.score=100;s.earnedScore=100;state.score=(Number(state.score)||0)+100;}
+    n.reconstructionStep=0;n.view="ending";s.finished=true;s.ending="truth";saveState();renderCase004();return;
+  }
+  if(action==="closeEvidence"){document.getElementById("case004Modal").hidden=true;renderCase004();return;}
+  if(target?.evidence){ if(n.view==="archive")n.returnView="archive";showCase004Evidence(target.evidence);return; }
+  if(target?.suspect){n.selectedSuspect=target.suspect;n.returnView="suspects";case004SetView("suspect");return;}
+  if(target?.answer){
+    const q=CASE004_FINAL_QUESTIONS[n.finalStep]; if(!q)return;
+    if(target.answer!==q.answer){n.lastAnswerFeedback="Эта версия пока не объясняет все найденные материалы. Перечитайте улики или показания и попробуйте ещё раз.";saveState();renderCase004();return;}
+    n.finalAnswers[q.id]=target.answer;n.finalStep++;n.lastAnswerFeedback="Верно. Сопоставьте этот вывод со следующей частью расследования.";
+    if(n.finalStep>=CASE004_FINAL_QUESTIONS.length){n.finalStep=0;n.reconstructionStep=0;n.view="reconstruction";n.lastAnswerFeedback="";}
+    saveState();renderCase004();return;
+  }
+  if(target?.question!==undefined){
+    const p=case004Suspect(n.selectedSuspect),h=n.interrogations[p.id],q=(CASE004_DIALOGUES[p.id]||[]).find(item=>item.id===String(target.question));
+    if(!q||h.asked.includes(q.id)||(q.requires||[]).some(id=>!s.found.includes(id)))return;
+    h.asked.push(q.id);h.lastResponse=q.answer;h.emotion=q.emotion;
+    h.confidence=Math.max(0,Math.min(100,h.confidence+(q.confidence||0)));
+    if(q.id==="thomas_voice"){n.findings=n.findings||{};n.findings.firstEpisode=true;}
+    if(q.id==="claire_second_visit"){n.findings=n.findings||{};n.findings.secondEpisode=true;}
+    saveState();renderCase004();return;
+  }
+  if(target?.present){
+    const p=case004Suspect(n.selectedSuspect),h=n.interrogations[p.id],e=case004Evidence(target.present);
+    if(!e)return;
+    const isNew=!h.presented.includes(target.present);
+    if(isNew)h.presented.push(target.present);
+    const relevant=CASE004_EVIDENCE_META[target.present]?.people.includes(p.id);
+    const replies=CASE004_EVIDENCE_REACTIONS[target.present]||{};
+    const fallbackReplies={
+      julian:`Julian складывает руки. «Этот материал сам по себе ничего не говорит о моих действиях».`,
+      elise:`Elise рассматривает улику, не касаясь её. «Я могу подтвердить только то, что действительно видела».`,
+      thomas:`Thomas возвращает документ. «Это не объясняет, что происходило между Adrian и мной».`,
+      claire:`Claire читает описание молча. «Не приписывайте мне того, чего здесь не записано».`,
+      marcus:`Marcus кивает на дату. «Я не могу подтвердить ничего сверх показаний системы».`,
+      vivian:`Vivian просит не цитировать её до проверки. «Факт должен выдержать независимую проверку».`
+    };
+    h.lastResponse=replies[p.id]||fallbackReplies[p.id];
+    if(isNew&&relevant)h.confidence=Math.max(0,h.confidence-7);
+    if(isNew&&target.present==="recorder"&&["thomas","claire"].includes(p.id)){n.findings=n.findings||{};n.findings[p.id==="thomas"?"firstEpisode":"secondEpisode"]=true;h.emotion="потрясённое";}
+    else if(isNew&&relevant)h.emotion="напряжённое";
+    saveState();renderCase004();
+  }
+}
+
+document.getElementById("case004Screen")?.addEventListener("click", event => {
+  const actionButton=event.target.closest("[data-c4-action]");
+  const evidenceButton=event.target.closest("[data-c4-evidence]");
+  const suspectButton=event.target.closest("[data-c4-suspect]");
+  const questionButton=event.target.closest("[data-c4-question]");
+  const presentButton=event.target.closest("[data-c4-present]");
+  const filterButton=event.target.closest("[data-c4-filter]");
+  const answerButton=event.target.closest("[data-c4-answer]");
+  if(actionButton)case004Action(actionButton.dataset.c4Action);
+  else if(evidenceButton)case004Action("",{evidence:evidenceButton.dataset.c4Evidence});
+  else if(suspectButton)case004Action("",{suspect:suspectButton.dataset.c4Suspect});
+  else if(questionButton)case004Action("",{question:questionButton.dataset.c4Question});
+  else if(presentButton)case004Action("",{present:presentButton.dataset.c4Present});
+  else if(filterButton){case004State().novel.archiveFilter=filterButton.dataset.c4Filter;saveState();renderCase004();}
+  else if(answerButton)case004Action("",{answer:answerButton.dataset.c4Answer});
+});
+
 function renderChapter(){
  const c=CASES.find(x=>x.id===activeId),s=caseState(activeId);
  const ch=c.chapters[chapterIndex];
